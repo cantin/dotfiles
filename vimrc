@@ -3,7 +3,7 @@ source ~/.vimrc.vundle
 set background=dark
 
 "**********************Plugin
-colorscheme base16-default
+colorscheme jellybeans
 "color jellybeans+
 
 "let g:syntastic_ruby_exec = 'ruby20'
