@@ -105,6 +105,12 @@ let g:html_indent_inctags = "html,body,head,tbody"
 nnoremap <D-j> :m .+1<CR>
 nnoremap <D-k> :m .-2<CR>
 
+
+autocmd BufRead,BufNewFile *.rdoc setlocal spell
+autocmd BufRead,BufNewFile *.md setlocal spell
+autocmd BufRead,BufNewFile *.rdoc set complete+=kspell
+autocmd BufRead,BufNewFile *.md set complete+=kspell
+
 if has("gui_macvim")
   " Switch to specific tab numbers with Command-number
   noremap <D-1> :tabn 1<CR>
