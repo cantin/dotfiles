@@ -24,7 +24,7 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/syntastic'
 Plugin 'tpope/vim-rails'
 Plugin 'vim-ruby/vim-ruby'
-Plugin 'lilydjwg/colorizer'
+"Plugin 'lilydjwg/colorizer' slow down large file
 Plugin 'henrik/vim-ruby-runner'
 Plugin 'ervandew/supertab'
 Plugin 'godlygeek/tabular'
