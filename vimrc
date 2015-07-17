@@ -6,7 +6,7 @@ set background=dark
 colorscheme jellybeans
 "color jellybeans+
 
-"let g:syntastic_ruby_exec = 'ruby20'
+let g:syntastic_ruby_exec = 'ruby20'
 
 let g:ctrlp_max_depth = 40
 "let g:ctrlp_by_filename = 1
@@ -16,6 +16,7 @@ let g:ctrlp_custom_ignore = {
       \ 'dir':  '\v[\/]\.(git|hg|svn)$',
       \ 'file': '\.gz$\|\.pyc$\|\.pyo$\|\.rbc$|\.rbo$\|\.class$\|\.o$\|\~$\',
       \ }
+"let g:ctrlp_match_window = 'results:100' " overcome limit imposed by max height
 
 
 "Airline, always open status bar
@@ -25,6 +26,7 @@ map <leader>fw :FixWhitespace<CR>
 map <leader>ct :!ctags -R .<CR>
 map <leader>n :NERDTreeToggle<CR>
 map <leader>rt :TagbarToggle<CR>
+map <leader>cp :CtrlPTag<CR>
 
 let g:syntastic_html_tidy_exec = 'tidy5'
 
@@ -140,6 +142,20 @@ if has("gui_running")
 
   " Don't beep
   set visualbell
+  set lines=999 columns=999
 endif
 
-
+" Zoom / Restore window.
+function! s:ZoomToggle() abort
+    if exists('t:zoomed') && t:zoomed
+        execute t:zoom_winrestcmd
+        let t:zoomed = 0
+    else
+        let t:zoom_winrestcmd = winrestcmd()
+        resize
+        vertical resize
+        let t:zoomed = 1
+    endif
+endfunction
+command! ZoomToggle call s:ZoomToggle()
+map <C-W>o :ZoomToggle<CR>
