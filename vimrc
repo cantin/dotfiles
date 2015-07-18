@@ -190,8 +190,13 @@ endfunction
 
 "run ruby by CMD + r
 command! RunRuby call <SID>RunCommand('!ruby %:p')
-exec 'au FileType ruby noremap <buffer> <D-r> :RunRuby<CR>'
+au FileType ruby noremap <buffer> <D-r> :RunRuby<CR>
 
 "run rails runner by CMD + R
 command! RunRailsRunner call <SID>RunCommand('!bundle exec rails r %:p')
-exec 'au FileType ruby noremap <buffer> <D-R> :RunRailsRunner<CR>'
+au FileType ruby noremap <buffer> <D-R> :RunRailsRunner<CR>
+
+"'SHELL shellcommand', redirect output to buffer
+"command! -nargs=* -complete=shellcmd SH new | setlocal buftype=nofile bufhidden=hide noswapfile | r !<args>
+command! -nargs=* -complete=shellcmd SHELL call <SID>RunCommand('!<args>')
+map <D-H> :SHELL<space>
