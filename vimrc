@@ -27,6 +27,8 @@ map <leader>ct :!ctags -R .<CR>
 map <leader>n :NERDTreeToggle<CR>
 map <leader>rt :TagbarToggle<CR>
 map <leader>cp :CtrlPTag<CR>
+"run rake default task, default is running test in current file
+map <leader>rk :.Rake<CR>
 
 let g:syntastic_html_tidy_exec = 'tidy5'
 
@@ -159,3 +161,37 @@ function! s:ZoomToggle() abort
 endfunction
 command! ZoomToggle call s:ZoomToggle()
 map <C-W>o :ZoomToggle<CR>
+
+
+"run command and redirect output to buffer on top
+function! s:RunCommand(cmd)
+  let temp_reg = @"
+  redir @"
+  silent execute a:cmd
+  redir END
+  let output = copy(@")
+  let @" = temp_reg
+
+  " Reuse or create new buffer. Based on code in Decho
+  " http://www.vim.org/scripts/script.php?script_id=120
+  if exists('t:rrbufnr') && bufwinnr(t:rrbufnr) > 0
+    exec 'keepjumps' bufwinnr(t:rrbufnr) 'wincmd W'
+    exec 'normal! ggdG'
+  else
+    exec 'keepjumps silent! new'
+    let t:rrbufnr=bufnr('%')
+  end
+
+  setlocal buftype=nofile bufhidden=wipe noswapfile nobuflisted nomodified
+  silent put=output
+
+  noremap <buffer> q ZZ
+endfunction
+
+"run ruby by CMD + r
+command! RunRuby call <SID>RunCommand('!ruby %:p')
+exec 'au FileType ruby noremap <buffer> <D-r> :RunRuby<CR>'
+
+"run rails runner by CMD + R
+command! RunRailsRunner call <SID>RunCommand('!bundle exec rails r %:p')
+exec 'au FileType ruby noremap <buffer> <D-R> :RunRailsRunner<CR>'
