@@ -163,6 +163,8 @@ command! ZoomToggle call s:ZoomToggle()
 map <C-W>o :ZoomToggle<CR>
 
 
+"let s:output_file = '/tmp/ruby_runner_output.txt'
+
 "run command and redirect output to buffer on top
 function! s:RunCommand(cmd)
   let temp_reg = @"
@@ -171,6 +173,8 @@ function! s:RunCommand(cmd)
   redir END
   let output = copy(@")
   let @" = temp_reg
+
+  "silent execute '' a:cmd ' > ' s:output_file '2>&1'
 
   " Reuse or create new buffer. Based on code in Decho
   " http://www.vim.org/scripts/script.php?script_id=120
@@ -184,6 +188,8 @@ function! s:RunCommand(cmd)
 
   setlocal buftype=nofile bufhidden=wipe noswapfile nobuflisted nomodified
   silent put=output
+  silent exec '%s/$//'
+  "exec 'read' s:output_file
 
   noremap <buffer> q ZZ
 endfunction
