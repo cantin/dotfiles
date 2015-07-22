@@ -55,9 +55,9 @@ function Rand()
   unlet! s:file
 endfunction
 
-set undofile
-set undodir=~/.vim/_undodir
-set undolevels=1000 "maximum number of changes that can be undone
+"set undofile
+"set undodir=~/.vim/_undodir
+"set undolevels=1000 "maximum number of changes that can be undone
 
 "be able to C-] into definitions for any gem in your Gemfile
 set tags+=gems.tags
@@ -206,3 +206,6 @@ au FileType ruby noremap <buffer> <D-R> :RunRailsRunner<CR>
 "command! -nargs=* -complete=shellcmd SH new | setlocal buftype=nofile bufhidden=hide noswapfile | r !<args>
 command! -nargs=* -complete=shellcmd SHELL call <SID>RunCommand('!<args>')
 map <D-H> :SHELL<space>
+
+command! LcdToCurrentFilePath lcd %:p:h
+map <leader>cd :LcdToCurrentFilePath<CR>
