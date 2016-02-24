@@ -144,7 +144,7 @@ if has("gui_running")
 
   " Don't beep
   set visualbell
-  set lines=999 columns=999
+  "set lines=999 columns=999
 endif
 
 " Zoom / Restore window.
