@@ -41,7 +41,7 @@ Plugin 'garbas/vim-snipmate'
 Plugin 'tpope/vim-endwise'
 Plugin 'honza/vim-snippets'
 Plugin 'jeetsukumaran/vim-buffergator'
-
+"Plugin 'ternjs/tern_for_vim'
 
 
 

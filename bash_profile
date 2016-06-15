@@ -19,6 +19,7 @@ alias gdc="git diff --cached"
 alias gs="git status"
 alias gco="git checkout"
 alias gitlogp="git log --graph --pretty=format:'%C(yellow)%h%C(cyan)%d%Creset %s %C(blue)- %an, %ar%Creset' --abbrev-commit --all --decorate"
+alias gm="git show -s --format=%B"
 
 if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 
