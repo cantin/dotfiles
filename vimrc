@@ -32,6 +32,8 @@ map <leader>rk :.Rake<CR>
 
 let g:syntastic_html_tidy_exec = 'tidy5'
 
+let g:jsx_ext_required = 0
+
 let g:ragtag_global_maps = 1
 
 "**********************Plugin
@@ -212,3 +214,8 @@ command! LcdToCurrentFilePath lcd %:p:h
 map <leader>cd :LcdToCurrentFilePath<CR>
 
 nnoremap <leader>f :!echo -n % \| pbcopy<cr>
+
+"copy selected area to system clipboard for cli vi
+"+y :w !pbcopy<CR><CR>
+vmap <leader>y :w !pbcopy<CR><CR>
+noremap <leader>y :w !pbcopy<CR><CR>
