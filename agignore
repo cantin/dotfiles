@@ -1,0 +1,8 @@
+tags
+coverage/index.html
+*/coverage/index.html
+*.min.js
+**/*.log
+*.gz
+node_modules/*
+tmp/*
