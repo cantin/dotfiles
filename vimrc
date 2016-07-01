@@ -13,7 +13,7 @@ let g:ctrlp_max_depth = 40
 "let g:ctrlp_root_markers = ['']
 let g:ctrlp_working_path_mode = 0
 let g:ctrlp_custom_ignore = {
-      \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+      \ 'dir':  '\v[\/]\.(git|hg|svn)$|\v[\/]tmp$|\v[\/]node_modules$',
       \ 'file': '\.gz$\|\.pyc$\|\.pyo$\|\.rbc$|\.rbo$\|\.class$\|\.o$\|\~$\',
       \ }
 "let g:ctrlp_match_window = 'results:100' " overcome limit imposed by max height
@@ -35,6 +35,18 @@ let g:syntastic_html_tidy_exec = 'tidy5'
 let g:jsx_ext_required = 0
 
 let g:ragtag_global_maps = 1
+
+let g:jellybeans_overrides = {
+\    'rubyRegexp': { 'guifg': 'f0f000',
+\              'ctermfg': 'Yellow', 'ctermbg': 'Black',
+\              'attr': 'bold' },
+\    'rubyRegexpDelimiter': { 'guifg': 'f0f000',
+\              'ctermfg': 'Yellow', 'ctermbg': 'Black',
+\              'attr': 'bold' },
+\    'rubyRegexpSpecial': { 'guifg': 'f0f000',
+\              'ctermfg': 'Yellow', 'ctermbg': 'Black',
+\              'attr': 'bold' },
+\}
 
 "**********************Plugin
 
