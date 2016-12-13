@@ -48,7 +48,8 @@ let g:jellybeans_overrides = {
 \              'attr': 'bold' },
 \}
 
-"autocmd BufRead,BufNewFile *.js set ft=javascript.jsx.html
+autocmd BufRead,BufNewFile *.js set ft=javascript.jsx.html
+autocmd BufRead,BufNewFile *.jsx set ft=javascript.jsx.html
 
 "**********************Plugin
 

@@ -45,6 +45,7 @@ Plugin 'jeetsukumaran/vim-buffergator'
 "Plugin 'ternjs/tern_for_vim'
 Plugin 'pangloss/vim-javascript'
 Plugin 'mxw/vim-jsx'
+Plugin 'skywind3000/asyncrun.vim'
 
 
 
