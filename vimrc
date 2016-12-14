@@ -228,7 +228,7 @@ map <D-H> :SHELL<space>
 command! LcdToCurrentFilePath lcd %:p:h
 map <leader>cd :LcdToCurrentFilePath<CR>
 
-nnoremap <leader>f :!echo -n % \| pbcopy<cr>
+nnoremap <leader>f :!echo -n %:p \| pbcopy<cr>
 
 "copy selected area to system clipboard for cli vi
 "+y :w !pbcopy<CR><CR>
