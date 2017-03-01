@@ -51,6 +51,9 @@ let g:jellybeans_overrides = {
 autocmd BufRead,BufNewFile *.js set ft=javascript.jsx.html
 autocmd BufRead,BufNewFile *.jsx set ft=javascript.jsx.html
 
+" Open ag.vim
+nnoremap <leader>a :Ag<space>
+
 "**********************Plugin
 
 "color bigbang
@@ -234,3 +237,6 @@ nnoremap <leader>f :!echo -n %:p \| pbcopy<cr>
 "+y :w !pbcopy<CR><CR>
 vmap <leader>y :w !pbcopy<CR><CR>
 noremap <leader>y :w !pbcopy<CR><CR>
+
+set wildmenu " visual autocomplete for command menu
+set showmatch " highlight matching [{()}]
