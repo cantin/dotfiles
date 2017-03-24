@@ -53,6 +53,13 @@ autocmd BufRead,BufNewFile *.jsx set ft=javascript.jsx.html
 
 " Open ag.vim
 nnoremap <leader>a :Ag<space>
+" Open quickfix widnow & type AsyncRun in command line
+nnoremap <leader>R :call asyncrun#quickfix_toggle(8)<cr>:AsyncRun<space>
+
+" Make AsyncRun works with vim-fugitive, comment out because has side effect for rails.vim
+"command! -bang -nargs=* -complete=file Make AsyncRun -program=make @ <args>
+" Let Airline display status of AsyncRun
+let g:airline_section_error = airline#section#create_right(['%{g:asyncrun_status}'])
 
 "**********************Plugin
 
@@ -239,4 +246,7 @@ vmap <leader>y :w !pbcopy<CR><CR>
 noremap <leader>y :w !pbcopy<CR><CR>
 
 set wildmenu " visual autocomplete for command menu
-set showmatch " highlight matching [{()}]
+"set showmatch " highlight matching [{()}]
+
+"set shell command options 'bash -ilc' so ~/.bash_profile get loaded
+set shellcmdflag=-ilc
