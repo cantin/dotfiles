@@ -6,12 +6,12 @@ set background=dark
 colorscheme jellybeans
 "color jellybeans+
 
-let g:syntastic_ruby_exec = 'ruby20'
+"let g:syntastic_ruby_exec = 'ruby20'
+"let g:syntastic_html_tidy_exec = 'tidy5'
 
-let g:ctrlp_max_depth = 40
 "let g:ctrlp_by_filename = 1
 "let g:ctrlp_root_markers = ['']
-let g:ctrlp_working_path_mode = 0
+"let g:ctrlp_working_path_mode = 0
 let g:ctrlp_custom_ignore = {
       \ 'dir':  '\v[\/]\.(git|hg|svn)$|\v[\/]tmp$|\v[\/]node_modules$',
       \ 'file': '\.gz$\|\.pyc$\|\.pyo$\|\.rbc$|\.rbo$\|\.class$\|\.o$\|\~$\',
@@ -22,19 +22,26 @@ let g:ctrlp_custom_ignore = {
 "Airline, always open status bar
 set laststatus=2
 
-map <leader>fw :FixWhitespace<CR>
-map <leader>ct :!ctags -R .<CR>
-map <leader>n :NERDTreeToggle<CR>
-map <leader>rt :TagbarToggle<CR>
-map <leader>cp :CtrlPTag<CR>
+noremap <leader>fw :FixWhitespace<CR>
+noremap <leader>ct :!ctags -R .<CR>
+noremap <leader>crt :!ctags -R -f gems.tags $(bundle show --paths)<CR>
+noremap <leader>n :NERDTreeToggle<CR>
+noremap <leader>rt :TagbarToggle<CR>
+noremap <leader>cp :CtrlPTag<CR>
 "run rake default task, default is running test in current file
-map <leader>rk :.Rake<CR>
+noremap <leader>rk :.Rake<CR>
 
-let g:syntastic_html_tidy_exec = 'tidy5'
+" ALE don't linting on every changes
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_insert_leave = 1
+"let g:ale_open_list= 1
+" disable rubocop & erb check
+let g:ale_linters = {
+\   'ruby': ['brakeman', 'rails_best_practices', 'reek', 'ruby'],
+\   'eruby': []
+\}
 
 let g:jsx_ext_required = 0
-
-let g:ragtag_global_maps = 1
 
 let g:jellybeans_overrides = {
 \    'rubyRegexp': { 'guifg': 'f0f000',
@@ -48,8 +55,14 @@ let g:jellybeans_overrides = {
 \              'attr': 'bold' },
 \}
 
-autocmd BufRead,BufNewFile *.js set ft=javascript.jsx.html
-autocmd BufRead,BufNewFile *.jsx set ft=javascript.jsx.html
+augroup customer_my_autocmd
+  autocmd BufRead,BufNewFile *.js set ft=javascript.jsx
+  autocmd BufRead,BufNewFile *.jsx set ft=javascript.jsx
+  autocmd BufRead,BufNewFile *.rdoc setlocal spell
+  autocmd BufRead,BufNewFile *.md setlocal spell
+  autocmd BufRead,BufNewFile *.rdoc set complete+=kspell
+  autocmd BufRead,BufNewFile *.md set complete+=kspell
+augroup END
 
 " Open ag.vim
 nnoremap <leader>a :Ag<space>
@@ -64,28 +77,28 @@ let g:airline_section_error = airline#section#create_right(['%{g:asyncrun_status
 "**********************Plugin
 
 "color bigbang
-let did_load_csvfiletype=0
+"let did_load_csvfiletype=0
 
-function Rand()
-  let s:color_file_list = split(substitute(globpath(&runtimepath, 'colors/*.vim'), '\', '/', 'g'), '\n')
+"function Rand()
+  "let s:color_file_list = split(substitute(globpath(&runtimepath, 'colors/*.vim'), '\', '/', 'g'), '\n')
 
-  redir => s:b
-  ruby print "#{rand(Time.now.to_i % 60)}"
-  redir END
+  "redir => s:b
+  "ruby print "#{rand(Time.now.to_i % 60)}"
+  "redir END
 
-  let s:b = split(s:b, '\n')[0]
-  let s:file = s:color_file_list[s:b]
+  "let s:b = split(s:b, '\n')[0]
+  "let s:file = s:color_file_list[s:b]
 
-  exec 'source' s:file
-  unlet! s:color_file_list
-  unlet! s:b
-  unlet! s:file
-endfunction
+  "exec 'source' s:file
+  "unlet! s:color_file_list
+  "unlet! s:b
+  "unlet! s:file
+"endfunction
 
 "set undofile
 set undodir=~/.vim/_undodir
 set undofile
-set undolevels=1000 "maximum number of changes that can be undone
+set undolevels=500 "maximum number of changes that can be undone
 
 "be able to C-] into definitions for any gem in your Gemfile
 set tags+=gems.tags
@@ -138,10 +151,6 @@ nnoremap <D-j> :m .+1<CR>
 nnoremap <D-k> :m .-2<CR>
 
 
-autocmd BufRead,BufNewFile *.rdoc setlocal spell
-autocmd BufRead,BufNewFile *.md setlocal spell
-autocmd BufRead,BufNewFile *.rdoc set complete+=kspell
-autocmd BufRead,BufNewFile *.md set complete+=kspell
 
 if has("gui_macvim")
   " Switch to specific tab numbers with Command-number
@@ -188,7 +197,7 @@ function! s:ZoomToggle() abort
     endif
 endfunction
 command! ZoomToggle call s:ZoomToggle()
-map <C-W>o :ZoomToggle<CR>
+noremap <C-W>o :ZoomToggle<CR>
 
 
 "let s:output_file = '/tmp/ruby_runner_output.txt'
@@ -217,6 +226,7 @@ function! s:RunCommand(cmd)
   setlocal buftype=nofile bufhidden=wipe noswapfile nobuflisted nomodified
   silent put=output
   silent exec '%s/$//'
+  silent normal gg
   "exec 'read' s:output_file
 
   noremap <buffer> q ZZ
@@ -226,6 +236,11 @@ endfunction
 command! RunRuby call <SID>RunCommand('!ruby %:p')
 au FileType ruby noremap <buffer> <D-r> :RunRuby<CR>
 
+"Redirect output of ri to buffer when pressing K
+if has("gui_running") && !has("gui_win32")
+  au FileType ruby setlocal keywordprg=:SHELL\ ri\ -T\ -f\ markdown
+endif
+
 "run rails runner by CMD + R
 command! RunRailsRunner call <SID>RunCommand('!bundle exec rails r %:p')
 au FileType ruby noremap <buffer> <D-R> :RunRailsRunner<CR>
@@ -233,16 +248,18 @@ au FileType ruby noremap <buffer> <D-R> :RunRailsRunner<CR>
 "'SHELL shellcommand', redirect output to buffer
 "command! -nargs=* -complete=shellcmd SH new | setlocal buftype=nofile bufhidden=hide noswapfile | r !<args>
 command! -nargs=* -complete=shellcmd SHELL call <SID>RunCommand('!<args>')
-map <D-H> :SHELL<space>
+noremap <D-H> :SHELL<space>
 
 command! LcdToCurrentFilePath lcd %:p:h
-map <leader>cd :LcdToCurrentFilePath<CR>
+noremap <leader>cd :LcdToCurrentFilePath<CR>
 
 nnoremap <leader>f :!echo -n %:p \| pbcopy<cr>
 
+"Set vertical line indicator for yaml & haml files
+au FileType yaml,haml setlocal cursorcolumn
+
 "copy selected area to system clipboard for cli vi
 "+y :w !pbcopy<CR><CR>
-vmap <leader>y :w !pbcopy<CR><CR>
 noremap <leader>y :w !pbcopy<CR><CR>
 
 set wildmenu " visual autocomplete for command menu
@@ -250,3 +267,7 @@ set wildmenu " visual autocomplete for command menu
 
 "set shell command options 'bash -ilc' so ~/.bash_profile get loaded
 set shellcmdflag=-ilc
+
+" set highlight style for quickfix & cursorcolumn
+highlight! link QuickFixLine StatusLineNC
+highlight! link CursorColumn StatusLineNC

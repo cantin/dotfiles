@@ -22,7 +22,7 @@ Plugin 'nanotech/jellybeans.vim'
 Plugin 'int3/vim-extradite'
 Plugin 'rking/ag.vim'
 Plugin 'scrooloose/nerdtree'
-Plugin 'scrooloose/syntastic'
+"Plugin 'scrooloose/syntastic'
 Plugin 'tpope/vim-rails'
 Plugin 'vim-ruby/vim-ruby'
 "Plugin 'lilydjwg/colorizer' slow down large file
@@ -47,6 +47,8 @@ Plugin 'pangloss/vim-javascript'
 Plugin 'mxw/vim-jsx'
 Plugin 'skywind3000/asyncrun.vim'
 Plugin 'terryma/vim-multiple-cursors'
+"Plugin 'danchoi/ri.vim'
+Plugin 'w0rp/ale'
 
 
 
