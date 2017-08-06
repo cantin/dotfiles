@@ -1,8 +1,7 @@
 HISTFILESIZE=5000
 export HISTSIZE=5000
 
-export PATH=/usr/local/bin:$PATH
-export PATH="/usr/local/share/npm/bin:$PATH" #add npm global bin
+export PATH="$PATH:/usr/local/share/npm/bin" #add npm global bin
 export PATH="$PATH:./bin" #add current directory bin
 
 export LANG=zh_CN.UTF-8

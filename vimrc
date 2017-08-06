@@ -66,6 +66,7 @@ augroup END
 
 " Open ag.vim
 nnoremap <leader>a :Ag<space>
+nnoremap <leader>A :Ag <cword><cr>
 " Open quickfix widnow & type AsyncRun in command line
 nnoremap <leader>R :call asyncrun#quickfix_toggle(8)<cr>:AsyncRun<space>
 
@@ -170,7 +171,7 @@ endif
 if has("gui_running")
   "set guifont=monaco:h12
   set guifont=Anonymous\ Pro:h14
-  set go=aAce              " 去掉难看的工具栏和滑动条
+  set guioptions=Ace              " 去掉难看的工具栏和滑动条
   "set showtabline=2        " 开启自带的tab栏
   set transparency=20       "设置透明度
   set linespace=2
