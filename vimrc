@@ -65,10 +65,26 @@ augroup customer_my_autocmd
 augroup END
 
 " Open ag.vim
-nnoremap <leader>a :Ag<space>
-nnoremap <leader>A :Ag <cword><cr>
+"nnoremap <leader>a :Ag<space>
+nnoremap <leader>a :set operatorfunc=<SID>AgOperator<cr>g@
+vnoremap <leader>a  :<c-u>call <SID>AgOperator(visualmode())<cr>
+nnoremap <leader>A :Ag<space>
 " Open quickfix widnow & type AsyncRun in command line
 nnoremap <leader>R :call asyncrun#quickfix_toggle(8)<cr>:AsyncRun<space>
+
+function! s:AgOperator(type)
+  let prev_saved_val = @@
+  if a:type ==# 'v'
+    normal! `<v`>y
+  elseif a:type ==# 'char'
+    normal! `[v`]y
+  else
+    return
+  endif
+
+  silent execute "Ag -Q " . shellescape(@@) . ""
+  let @@ = prev_saved_val
+endfunction
 
 " Make AsyncRun works with vim-fugitive, comment out because has side effect for rails.vim
 "command! -bang -nargs=* -complete=file Make AsyncRun -program=make @ <args>
@@ -76,25 +92,6 @@ nnoremap <leader>R :call asyncrun#quickfix_toggle(8)<cr>:AsyncRun<space>
 let g:airline_section_error = airline#section#create_right(['%{g:asyncrun_status}'])
 
 "**********************Plugin
-
-"color bigbang
-"let did_load_csvfiletype=0
-
-"function Rand()
-  "let s:color_file_list = split(substitute(globpath(&runtimepath, 'colors/*.vim'), '\', '/', 'g'), '\n')
-
-  "redir => s:b
-  "ruby print "#{rand(Time.now.to_i % 60)}"
-  "redir END
-
-  "let s:b = split(s:b, '\n')[0]
-  "let s:file = s:color_file_list[s:b]
-
-  "exec 'source' s:file
-  "unlet! s:color_file_list
-  "unlet! s:b
-  "unlet! s:file
-"endfunction
 
 "set undofile
 set undodir=~/.vim/_undodir
@@ -121,9 +118,9 @@ set listchars=""                  " Reset the listchars
 set listchars=tab:\ \             " a tab should display as "  ", trailing whitespace as "."
 set listchars+=trail:.            " show trailing spaces as dots
 set listchars+=extends:>          " The character to show in the last column when wrap is
-                                  " off and the line continues beyond the right of the screen
+" off and the line continues beyond the right of the screen
 set listchars+=precedes:<         " The character to show in the last column when wrap is
-                                  " off and the line continues beyond the left of the screen
+" off and the line continues beyond the left of the screen
 
 set nowrap                        "nowarp for long line
 set nu                            "line number
@@ -272,3 +269,16 @@ set shellcmdflag=-ilc
 " set highlight style for quickfix & cursorcolumn
 highlight! link QuickFixLine StatusLineNC
 highlight! link CursorColumn StatusLineNC
+
+" press // in visual mode will earch visual selected area
+vnoremap // :<c-u>set hlsearch \| :call <SID>searchVirualSelected()<cr>
+function! s:searchVirualSelected()
+  let prev_saved_val = @"
+  normal! `<v`>y
+  let @/ = @"
+  let @" = prev_saved_val
+endfunction
+
+" Map ctrl + a to navigate to beginning of command line
+cnoremap <C-a> <Home>
+

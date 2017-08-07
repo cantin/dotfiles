@@ -1,4 +1,5 @@
 tags
+gem.tags
 coverage/index.html
 */coverage/index.html
 *.min.js
