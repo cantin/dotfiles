@@ -66,9 +66,10 @@ augroup END
 
 " Open ag.vim
 "nnoremap <leader>a :Ag<space>
-nnoremap <leader>a :set operatorfunc=<SID>AgOperator<cr>g@
+"nnoremap <leader>a :set operatorfunc=<SID>AgOperator<cr>g@
+nnoremap <leader>a  :Ag! <cword><cr>
 vnoremap <leader>a  :<c-u>call <SID>AgOperator(visualmode())<cr>
-nnoremap <leader>A :Ag<space>
+nnoremap <leader>A :Ag!<space>
 " Open quickfix widnow & type AsyncRun in command line
 nnoremap <leader>R :call asyncrun#quickfix_toggle(8)<cr>:AsyncRun<space>
 
@@ -82,7 +83,7 @@ function! s:AgOperator(type)
     return
   endif
 
-  silent execute "Ag -Q " . shellescape(@@) . ""
+  silent execute "Ag! -Q " . shellescape(@@) . ""
   let @@ = prev_saved_val
 endfunction
 
