@@ -62,6 +62,8 @@ augroup customer_my_autocmd
   autocmd BufRead,BufNewFile *.md setlocal spell
   autocmd BufRead,BufNewFile *.rdoc set complete+=kspell
   autocmd BufRead,BufNewFile *.md set complete+=kspell
+  autocmd BufRead,BufNewFile *.html.* set foldmethod=indent
+  autocmd BufRead,BufNewFile *.yml set foldmethod=indent
 augroup END
 
 " Open ag.vim
@@ -283,3 +285,20 @@ endfunction
 " Map ctrl + a to navigate to beginning of command line
 cnoremap <C-a> <Home>
 
+
+" set fold method to syntax, default fold on top level
+set foldmethod=syntax
+set foldlevelstart=1
+nnoremap <space> :call <SID>toggleFold()<cr>
+vnoremap <space> za
+" Open all nested folds if not on top foldlevel & nested folds all in one page
+function! s:toggleFold()
+  let l:num = foldclosed(expand('.'))
+  let l:level = foldlevel(expand('.'))
+  let l:foldlevel = &foldlevelstart
+  if (l:num != -1) && (l:level != l:foldlevel) && (v:foldend - v:foldstart) < &lines
+    silent! normal zO
+  else
+    silent! normal za
+  endif
+endfunction
