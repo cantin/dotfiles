@@ -296,8 +296,14 @@ function! s:toggleFold()
   let l:num = foldclosed(expand('.'))
   let l:level = foldlevel(expand('.'))
   let l:foldlevel = &foldlevelstart
-  if (l:num != -1) && (l:level != l:foldlevel) && (v:foldend - v:foldstart) < &lines
-    silent! normal zO
+  if (l:num != -1) && (l:level != l:foldlevel)
+    " +---- 9 lines blah blah ----------- " take 9 to l:results
+    let l:result = split(foldtextresult(expand('.')), '')[1]
+    if l:result > &lines
+      silent! normal za
+    else
+      silent! normal zO
+    endif
   else
     silent! normal za
   endif
