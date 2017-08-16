@@ -295,10 +295,11 @@ vnoremap <space> za
 function! s:toggleFold()
   let l:num = foldclosed(expand('.'))
   let l:level = foldlevel(expand('.'))
-  let l:foldlevel = &foldlevelstart
+  let l:foldlevel = &foldlevel
   if (l:num != -1) && (l:level != l:foldlevel)
-    " +---- 9 lines blah blah ----------- " take 9 to l:results
-    let l:result = split(foldtextresult(expand('.')), '')[1]
+    " +----999 lines blah blah -----------  or +---- 999 lines blah blah -----------  take 999 to l:result
+    let l:result = split(substitute(foldtextresult(expand('.')), '-', ' ', 'g'), '')[1]
+    echo l:result
     if l:result > &lines
       silent! normal za
     else
