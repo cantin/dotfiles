@@ -62,8 +62,6 @@ augroup customer_my_autocmd
   autocmd BufRead,BufNewFile *.md setlocal spell
   autocmd BufRead,BufNewFile *.rdoc set complete+=kspell
   autocmd BufRead,BufNewFile *.md set complete+=kspell
-  autocmd BufRead,BufNewFile *.html.* set foldmethod=indent
-  autocmd BufRead,BufNewFile *.yml set foldmethod=indent
 augroup END
 
 " Open ag.vim
@@ -285,10 +283,22 @@ endfunction
 " Map ctrl + a to navigate to beginning of command line
 cnoremap <C-a> <Home>
 
-
 " set fold method to syntax, default fold on top level
 set foldmethod=syntax
 set foldlevelstart=1
+augroup customer_folding_autocmd
+  autocmd InsertEnter * setl foldmethod=manual
+  autocmd BufWritePost * setl foldmethod=syntax
+
+  autocmd BufRead,BufNewFile *.html* setl foldmethod=indent
+  autocmd BufWritePost *.html* setl foldmethod=indent
+
+  " Don't screw up folds when inserting text that might affect them, until
+  " leaving insert mode. Foldmethod is local to the window. Protect against
+  " screwing up folding when switching between windows.
+  "autocmd InsertEnter * if !exists('w:last_fdm') | let w:last_fdm=&foldmethod | setlocal foldmethod=manual | endif
+  "autocmd InsertLeave,WinLeave * if exists('w:last_fdm') | let &l:foldmethod=w:last_fdm | unlet w:last_fdm | endif
+augroup END
 nnoremap <space> :call <SID>toggleFold()<cr>
 vnoremap <space> za
 " Open all nested folds if not on top foldlevel & nested folds all in one page
