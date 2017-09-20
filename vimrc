@@ -11,7 +11,7 @@ colorscheme jellybeans
 
 "let g:ctrlp_by_filename = 1
 "let g:ctrlp_root_markers = ['']
-"let g:ctrlp_working_path_mode = 0
+let g:ctrlp_working_path_mode = 0
 let g:ctrlp_custom_ignore = {
       \ 'dir':  '\v[\/]\.(git|hg|svn)$|\v[\/]tmp$|\v[\/]node_modules$',
       \ 'file': '\.gz$\|\.pyc$\|\.pyo$\|\.rbc$|\.rbo$\|\.class$\|\.o$\|\~$\',
@@ -91,7 +91,11 @@ endfunction
 "command! -bang -nargs=* -complete=file Make AsyncRun -program=make @ <args>
 " Let Airline display status of AsyncRun
 let g:airline_section_error = airline#section#create_right(['%{g:asyncrun_status}'])
-
+" no bells and whistles
+let g:airline_extensions = []
+" cache airline highlight
+let g:airline_highlighting_cache = 1
+let g:airline#extensions#tagbar#enabled = 0
 "**********************Plugin
 
 "set undofile
@@ -181,6 +185,9 @@ if has("gui_running")
   " Don't beep
   set visualbell
   "set lines=999 columns=999
+
+  "set shell command options 'bash -ilc' so ~/.bash_profile get loaded
+  set shellcmdflag=-ilc
 endif
 
 " Zoom / Restore window.
@@ -264,9 +271,6 @@ noremap <leader>y :w !pbcopy<CR><CR>
 set wildmenu " visual autocomplete for command menu
 "set showmatch " highlight matching [{()}]
 
-"set shell command options 'bash -ilc' so ~/.bash_profile get loaded
-set shellcmdflag=-ilc
-
 " set highlight style for quickfix & cursorcolumn
 highlight! link QuickFixLine StatusLineNC
 highlight! link CursorColumn StatusLineNC
@@ -288,10 +292,13 @@ set foldmethod=syntax
 set foldlevelstart=1
 augroup customer_folding_autocmd
   autocmd InsertEnter * setl foldmethod=manual
+
   autocmd BufWritePost * setl foldmethod=syntax
 
   autocmd BufRead,BufNewFile *.html* setl foldmethod=indent
   autocmd BufWritePost *.html* setl foldmethod=indent
+  autocmd BufRead,BufNewFile *.yml setl foldmethod=indent
+  autocmd BufWritePost *.yml setl foldmethod=indent
 
   " Don't screw up folds when inserting text that might affect them, until
   " leaving insert mode. Foldmethod is local to the window. Protect against
@@ -319,3 +326,19 @@ function! s:toggleFold()
     silent! normal za
   endif
 endfunction
+
+
+" jump to split without press ctrl-w
+"nnoremap <leader>v <C-w>v<C-w>l
+nnoremap <leader>v <C-w>v
+nnoremap <leader>s <C-w>s
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+
+" Profile shortcut
+"nnoremap <silent> <leader>DD :exe ":profile start profile.log"<cr>:exe ":profile func *"<cr>:exe ":profile file *"<cr>
+"nnoremap <silent> <leader>DP :exe ":profile pause"<cr>
+"nnoremap <silent> <leader>DC :exe ":profile continue"<cr>
+"nnoremap <silent> <leader>DQ :exe ":profile pause"<cr>:noautocmd qall!<cr>
