@@ -9,6 +9,7 @@ export LC_CTYPE=C
 export LC_ALL=en_US.UTF-8
 
 export EDITOR=mvim
+export GIT_EDITOR=vim
 export PS1="\u:\W\$ "
 
 alias bc='bundle exec'
@@ -29,3 +30,9 @@ if [ -f ~/.git-completion.bash ]; then
   # Add git completion to aliases
   __git_complete gco _git_checkout
 fi
+
+bind -x '"\C-g":"fg"'
+bind -x '"\C-xf":"fg"'
+bind -x '"\C-xb":"bg"'
+bind -x '"\C-xj":"jobs"'
+bind -x '"\C-xk":"kill %1"'
