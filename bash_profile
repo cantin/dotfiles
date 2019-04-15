@@ -24,6 +24,9 @@ alias gm="git show -s --format=%B"
 
 if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 
+#gurobi
+export GRB_LICENSE_FILE="/Users/Cantin/WorkSpace/gurobi.lic"
+
 if [ -f ~/.git-completion.bash ]; then
   source ~/.git-completion.bash
 
@@ -33,6 +36,17 @@ fi
 
 bind -x '"\C-g":"fg"'
 bind -x '"\C-xf":"fg"'
-bind -x '"\C-xb":"bg"'
 bind -x '"\C-xj":"jobs"'
 bind -x '"\C-xk":"kill %1"'
+bind -x '"\C-xb":"bg"'
+
+psall() {
+  ps aux | grep "${1}" | grep -v "grep"
+}
+
+killbyname() {
+  psall $1 | awk '{print $2}' | xargs kill $2
+}
+
+
+export GOPATH=$HOME/Workspace/gocode

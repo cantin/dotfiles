@@ -49,6 +49,7 @@ Plugin 'skywind3000/asyncrun.vim'
 Plugin 'terryma/vim-multiple-cursors'
 "Plugin 'danchoi/ri.vim'
 Plugin 'w0rp/ale'
+Plugin 'fatih/vim-go'
 
 
 

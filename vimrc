@@ -13,7 +13,7 @@ colorscheme jellybeans
 "let g:ctrlp_root_markers = ['']
 let g:ctrlp_working_path_mode = 0
 let g:ctrlp_custom_ignore = {
-      \ 'dir':  '\v[\/]\.(git|hg|svn)$|\v[\/]tmp$|\v[\/]node_modules$',
+      \ 'dir':  '\v[\/]\.(git|hg|svn)$|\v[\/]tmp$|\v[\/]node_modules$|\v[\/]public/packs',
       \ 'file': '\.gz$\|\.pyc$\|\.pyo$\|\.rbc$|\.rbo$\|\.class$\|\.o$\|\~$\',
       \ }
 "let g:ctrlp_match_window = 'results:100' " overcome limit imposed by max height
@@ -57,7 +57,7 @@ let g:jellybeans_overrides = {
 
 augroup customer_my_autocmd
   autocmd BufRead,BufNewFile *.js set ft=javascript.jsx
-  autocmd BufRead,BufNewFile *.jsx set ft=javascript.jsx
+  autocmd BufRead,BufNewFile *.jsx set ft=javascript.jsx.html
   autocmd BufRead,BufNewFile *.rdoc setlocal spell
   autocmd BufRead,BufNewFile *.md setlocal spell
   autocmd BufRead,BufNewFile *.rdoc set complete+=kspell
@@ -261,8 +261,9 @@ noremap <leader>cd :LcdToCurrentFilePath<CR>
 
 nnoremap <leader>f :!echo -n %:p \| pbcopy<cr>
 
+" Comment it out because of slowness even less than 100 lines
 "Set vertical line indicator for yaml & haml files
-au FileType yaml,haml setlocal cursorcolumn
+"au FileType yaml,haml setlocal cursorcolumn
 
 "copy selected area to system clipboard for cli vi
 "+y :w !pbcopy<CR><CR>
@@ -337,8 +338,13 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
+" don't highlight search
+nnoremap <Leader><space> :nohlsearch<Enter>
+
 " Profile shortcut
 "nnoremap <silent> <leader>DD :exe ":profile start profile.log"<cr>:exe ":profile func *"<cr>:exe ":profile file *"<cr>
 "nnoremap <silent> <leader>DP :exe ":profile pause"<cr>
 "nnoremap <silent> <leader>DC :exe ":profile continue"<cr>
 "nnoremap <silent> <leader>DQ :exe ":profile pause"<cr>:noautocmd qall!<cr>
+
+nnoremap <leader>g :GoRun %<cr>
