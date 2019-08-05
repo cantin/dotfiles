@@ -1,8 +1,307 @@
-source ~/.vimrc.vundle
+"source ~/.vimrc.vundle
+
+call plug#begin('~/.vim/plugged')
+Plug 'tpope/vim-fugitive'
+Plug 'bling/vim-airline'
+Plug 'nanotech/jellybeans.vim'
+Plug 'int3/vim-extradite'
+Plug 'rking/ag.vim'
+Plug 'scrooloose/nerdtree'
+"Plug 'scrooloose/syntastic'
+Plug 'tpope/vim-rails'
+Plug 'vim-ruby/vim-ruby'
+"Plug 'lilydjwg/colorizer' slow down large file
+"Plug 'henrik/vim-ruby-runner'
+"Plug 'cantin/vim-ruby-runner'
+"Plug 'ervandew/supertab'
+Plug 'godlygeek/tabular'
+"Plug 'vim-scripts/ZoomWin'
+"Plug 'regedarek/ZoomWin' "v25
+Plug 'bronson/vim-trailing-whitespace'
+Plug 'scrooloose/nerdcommenter'
+Plug 'majutsushi/tagbar'
+Plug 'kien/ctrlp.vim'
+Plug 'MarcWeber/vim-addon-mw-utils'
+Plug 'tomtom/tlib_vim'
+"Plug 'garbas/vim-snipmate'
+"Plug 'tpope/vim-endwise'
+Plug 'honza/vim-snippets'
+"Plug 'jeetsukumaran/vim-buffergator'
+Plug 'pangloss/vim-javascript'
+Plug 'mxw/vim-jsx'
+Plug 'skywind3000/asyncrun.vim'
+"Plug 'terryma/vim-multiple-cursors'
+"Plug 'danchoi/ri.vim'
+Plug 'w0rp/ale'
+Plug 'fatih/vim-go', { 'for': 'go' }
+Plug '/usr/local/opt/fzf'
+Plug 'junegunn/fzf.vim'
+
+"Plug 'BrandonRoehl/auto-omni'
+
+"Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh', }
+" (Optional) Multi-entry selection UI.
+"Plug 'junegunn/fzf'
+
+Plug 'roxma/vim-hug-neovim-rpc'
+Plug 'ncm2/ncm2'
+Plug 'roxma/nvim-yarp'
+"Plug 'ncm2/ncm2-snipmate'
+Plug 'ncm2/ncm2-syntax'
+Plug 'Shougo/neco-syntax'
+Plug 'fgrsnau/ncm2-otherbuf', { 'branch': 'ncm2' }
+Plug 'ncm2/ncm2-bufword'
+Plug 'ncm2/ncm2-path'
+
+Plug 'ncm2/ncm2-ultisnips'
+Plug 'SirVer/ultisnips'
+"Plug 'jiangmiao/auto-pairs'
+
+"Plug 'prabirshrestha/async.vim'
+"Plug 'prabirshrestha/vim-lsp'
+"Plug 'ncm2/ncm2-vim-lsp'
+
+call plug#end()
 
 set background=dark
 
 "**********************Plugin
+
+" Required for operations modifying multiple buffers like rename.
+"set hidden
+
+"let g:LanguageClient_serverCommands = {
+    "\ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
+    "\ 'javascript': ['/usr/local/bin/javascript-typescript-stdio'],
+    "\ 'javascript.jsx': ['/usr/local/bin/javascript-typescript-stdio'],
+    "\ 'javascript.jsx.html': ['/usr/local/bin/javascript-typescript-stdio'],
+    "\ 'python': ['/usr/local/bin/pyls'],
+    "\ 'ruby': ['~/.rbenv/shims/solargraph', 'stdio'],
+    "\ }
+
+"nnoremap <F5> :call LanguageClient_contextMenu()<CR>
+"" Or map each action separately
+"nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
+"nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+"nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+
+"autocmd FileType ruby setlocal omnifunc=LanguageClient#complete
+"autocmd FileType javascript setlocal omnifunc=LanguageClient#complete
+"autocmd FileType javascript.jsx setlocal omnifunc=LanguageClient#complete
+"autocmd FileType javascript.jsx.html setlocal omnifunc=LanguageClient#complete
+
+
+"gem install solargraph
+"if executable('solargraph')
+  "" gem install solargraph
+  "au User lsp_setup call lsp#register_server({
+        "\ 'name': 'solargraph',
+        "\ 'cmd': {server_info->[&shell, &shellcmdflag, 'solargraph stdio']},
+        "\ 'initialization_options': {"diagnostics": "true"},
+        "\ 'whitelist': ['ruby'],
+        "\ })
+"endif
+
+"if executable('javascript-typescript-stdio')
+  "au User lsp_setup call lsp#register_server({
+        "\ 'name': 'javascript support using typescript-language-server',
+        "\ 'cmd': { server_info->[&shell, &shellcmdflag, 'javascript-typescript-stdio --trace --logfile /Volumes/kude/fsdirect/jslangserver.log']},
+        "\ 'root_uri': { server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_directory(lsp#utils#get_buffer_path(), '.git/..'))},
+        "\ 'whitelist': ['javascript', 'javascript.jsx', 'javascript.jsx.html']
+        "\ })
+"endif
+
+"npm install -g typescript typescript-language-server
+"\ 'cmd': { server_info->[&shell, &shellcmdflag, 'typescript-language-server --stdio --tsserver-log-file /Volumes/kude/fsdirect/jslangserver.log']},
+"if executable('typescript-language-server')
+    "au User lsp_setup call lsp#register_server({
+      "\ 'name': 'javascript support using typescript-language-server',
+      "\ 'cmd': { server_info->[&shell, &shellcmdflag, 'typescript-language-server --stdio']},
+      "\ 'root_uri': { server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_directory(lsp#utils#get_buffer_path(), '.git/..'))},
+      "\ 'whitelist': ['javascript', 'javascript.jsx', 'javascript.jsx.html']
+      "\ })
+"endif
+
+let g:lsp_diagnostics_enabled = 0         " disable diagnostics support
+
+"autocmd FileType ruby setlocal omnifunc=lsp#complete
+"autocmd FileType javascript setlocal omnifunc=lsp#complete
+"autocmd FileType javascript.jsx setlocal omnifunc=lsp#complete
+"autocmd FileType javascript.jsx.html setlocal omnifunc=lsp#complete
+
+
+"inoremap <silent> <expr> <CR> ncm2_snipmate#expand_or("\<CR>", 'n')
+" wrap <Plug>snipMateTrigger so that it works for both completin and normal snippet
+"inoremap <expr> <c-u> ncm2_snipmate#expand_or("\<Plug>snipMateTrigger", "m")
+"let g:snips_no_mappings = 1
+"vmap <c-j> <Plug>snipMateNextOrTrigger
+"vmap <c-k> <Plug>snipMateBack
+"imap <expr> <c-k> pumvisible() ? "\<c-y>\<Plug>snipMateBack" : "\<Plug>snipMateBack"
+"imap <expr> <c-j> pumvisible() ? "\<c-y>\<Plug>snipMateNextOrTrigger" : "\<Plug>snipMateNextOrTrigger"
+" c-j c-k for moving completion & snippet
+
+" Press enter key to trigger snippet expansion
+" The parameters are the same as `:help feedkeys()`
+"imap <silent> <expr> <CR> pumvisible() ? ncm2_ultisnips#expand_or("\<Plug>(MyCR)", 'im') : "\<CR>"
+
+" c-j c-k for moving in snippet
+" let g:UltiSnipsExpandTrigger		= "<Plug>(ultisnips_expand)"
+let g:UltiSnipsJumpForwardTrigger	= "<c-]>"
+let g:UltiSnipsJumpBackwardTrigger	= "<c-[>"
+let g:UltiSnipsExpandTrigger="<c-,>"
+let g:UltiSnipsRemoveSelectModeMappings = 0
+inoremap <expr> <c-j> pumvisible() ? "\<C-n>" : "\<c-j>"
+inoremap <expr> <c-k> pumvisible() ? "\<C-p>" : "\<c-k>"
+
+let g:AutoPairsMapCR=0
+
+"inoremap <silent> <Plug>(MyCR) <CR><C-R>=AutoPairsReturn()<CR>
+inoremap <silent> <Plug>(MyCR) <CR>
+"inoremap <silent> <Plug>(MyCR) <C-R>=AutoPairsReturn()<CR> "without noselect
+" example
+"imap <expr> <CR> (pumvisible() ? "\<C-Y>\<Plug>(MyCR)" : "\<Plug>(MyCR)")
+"imap <silent> <expr> <CR> pumvisible() ? ncm2_ultisnips#expand_or("\<Plug>(MyCR)", 'im') : "\<CR>"
+"imap <silent> <expr> <CR> ncm2_ultisnips#expand_or("\<CR>\<C-R>=AutoPairsReturn()<CR>", 'im')
+"imap <silent> <expr> <CR> pumvisible() ? ncm2_ultisnips#expand_or("\<Plug>(MyCR)", 'im') : "\<CR>"
+imap <silent> <expr> <CR> ncm2_ultisnips#expand_or("\<Plug>(MyCR)", 'im')
+"inoremap <silent> <expr> <CR> ((pumvisible() && empty(v:completed_item)) ?  "\<c-y><c-\>" : (!empty(v:completed_item) ? ncm2_ultisnips#expand_or("\<Plug>(MyCR)", 'im') : "\<CR>" ))
+
+"inoremap <silent> <expr> <c-\> ncm2_ultisnips#expand_or("\<Plug>(MyCR)", 'im')
+
+
+let g:ncm2#complete_length=[[1,2],[7,2]]
+autocmd BufEnter * call ncm2#enable_for_buffer()
+au User Ncm2PopupOpen set completeopt=noinsert,menuone,noselect
+"au User Ncm2PopupOpen set completeopt=noinsert,menuone
+au User Ncm2PopupClose set completeopt=noinsert,menuone
+"set shortmess+=c
+
+"inoremap <Tab> <C-R>=CleverTab()<CR>
+"inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+"noremap <leader>lc :LspWorkspaceSymbol<CR>
+"noremap <leader>ls :LspDocumentSymbol<CR>
+"noremap <leader>lh :LspHover<CR>
+"noremap <leader>ld :LspDefinition<CR>
+"noremap <leader>ll :LspReferences<CR>
+"noremap <leader>ln :LspNextReference<CR>
+"noremap <leader>lp :LspPreviousReference<CR>
+autocmd WinEnter * if &buftype == 'quickfix' | nnoremap <buffer> <silent> q :ccl<CR> | endif
+
+let g:stop_autocomplete=0
+
+function! CleverTab(type)
+  if a:type=='omni'
+    if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
+      let g:stop_autocomplete=1
+      return "\<TAB>"
+    elseif !pumvisible() && !&omnifunc
+      return "\<C-X>\<C-O>"
+    endif
+  elseif a:type=='keyword' && !pumvisible() && !g:stop_autocomplete
+    return "\<C-X>\<C-N>\<C-P>"
+  elseif a:type=='next'
+    if g:stop_autocomplete
+      let g:stop_autocomplete=0
+    else
+      return "\<C-N>"
+    endif
+  endif
+  return ''
+endfunction
+
+imap <expr> <TAB> pumvisible() ? "\<C-N>" : "\<C-R>=CleverTab('omni')<CR><C-R>=CleverTab('keyword')<CR><C-R>=CleverTab('next')<CR>"
+imap <c-o> <C-X><C-O>
+
+
+"function! CleverTab()
+  "if pumvisible()
+    "return "\<C-N>"
+  "endif
+  "if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
+    "return "\<Tab>"
+  "elseif exists('&omnifunc') && &omnifunc != ''
+    "return "\<C-X>\<C-O>"
+  "else
+    "return "\<C-N>"
+  "endif
+"endfunction
+
+"noremap <c-p> :Files<cr>
+"noremap <leader>cp :Tags<CR>
+"function! s:ag_with_opts(arg, bang)
+  "let tokens  = split(a:arg)
+  "let ag_opts = join(filter(copy(tokens), 'v:val =~ "^-"'))
+  "let query   = join(filter(copy(tokens), 'v:val !~ "^-"'))
+  "call fzf#vim#ag(query, ag_opts, a:bang ? {} : {'down': '40%'})
+"endfunction
+
+"function! s:AgOperator(type)
+  "let prev_saved_val = @@
+  "if a:type ==# 'v'
+    "normal! `<v`>y
+  "elseif a:type ==# 'char'
+    "normal! `[v`]y
+  "else
+    "return
+  "endif
+
+  "silent execute "Ag! " . shellescape(@@) . ""
+  "let @@ = prev_saved_val
+"endfunction
+"nnoremap <leader>a  :call s:ag_with_opts(expand("<cword>")
+"nnoremap <leader>a  :exec "call fzf#vim#ag(expand('<cword>'))"<cr>
+"vnoremap <leader>a  :<c-u>call <SID>AgOperator(visualmode())<cr>
+"nnoremap <leader>A :Ag!<space>
+nnoremap <leader>fl :Lines<cr>
+nnoremap <leader>fb :BLines<cr>
+nnoremap <leader>b :Buffers<cr>
+let g:fzf_history_dir = '~/.vim/fzf-history'
+"autocmd VimEnter * command! -nargs=* -bang Ag call s:ag_with_opts(<q-args>, <bang>0)
+
+let g:fzf_colors =
+\ { 'fg':      ['fg', 'Normal'],
+  \ 'bg':      ['bg', 'Normal'],
+  \ 'hl':      ['fg', 'Comment'],
+  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'hl+':     ['fg', 'Statement'],
+  \ 'info':    ['fg', 'PreProc'],
+  \ 'border':  ['fg', 'Ignore'],
+  \ 'prompt':  ['fg', 'Conditional'],
+  \ 'pointer': ['fg', 'Exception'],
+  \ 'marker':  ['fg', 'Keyword'],
+  \ 'spinner': ['fg', 'Label'],
+  \ 'header':  ['fg', 'Comment'] }
+
+"let g:SuperTabContextDefaultCompletionType = "<c-n>"
+"let g:SuperTabDefaultCompletionType = "context"
+"autocmd FileType *
+      "\ if &omnifunc != '' |
+      "\   call SuperTabChain(&omnifunc, "<c-p>", 1) |
+      "\ endif
+" open omni completion menu closing previous if open and opening new menu without changing the text
+"inoremap <expr> <C-Space> (pumvisible() ? (col('.') > 1 ? '<Esc>i<Right>' : '<Esc>i') : '') .
+            "\ '<C-x><C-o><C-r>=pumvisible() ? "\<lt>C-n>\<lt>C-p>\<lt>Down>" : ""<CR>'
+"" open user completion menu closing previous if open and opening new menu without changing the text
+"inoremap <expr> <S-Space> (pumvisible() ? (col('.') > 1 ? '<Esc>i<Right>' : '<Esc>i') : '') .
+            "\ '<C-x><C-u><C-r>=pumvisible() ? "\<lt>C-n>\<lt>C-p>\<lt>Down>" : ""<CR>'
+
+"function MyTagContext()
+  "if filereadable(expand('%:p:h') . '/tags')
+    "return "\<c-x>\<c-]>"
+  "endif
+  "" no return will result in the evaluation of the next
+  "" configured context
+"endfunction
+"let g:SuperTabCompletionContexts = ['MyTagContext', 's:ContextText', 's:ContextDiscover']
+
+"let g:SuperTabDefaultCompletionType = "context"
+  "autocmd FileType *
+    "\ if &omnifunc != '' |
+    "\   call SuperTabChain(&omnifunc, "<c-p>") |
+    "\ endif
+
 colorscheme jellybeans
 "color jellybeans+
 
@@ -11,17 +310,19 @@ colorscheme jellybeans
 
 "let g:ctrlp_by_filename = 1
 "let g:ctrlp_root_markers = ['']
+let g:ctrlp_cmd = 'CtrlPMixed'
 let g:ctrlp_working_path_mode = 0
 let g:ctrlp_custom_ignore = {
-      \ 'dir':  '\v[\/]\.(git|hg|svn)$|\v[\/]tmp$|\v[\/]node_modules$|\v[\/]public/packs',
+      \ 'dir':  '\v[\/]\.(git|hg|svn)$|\v[\/]tmp$|\v[\/]node_modules$|\v[\/]public/packs|\v[\/]storage$',
       \ 'file': '\.gz$\|\.pyc$\|\.pyo$\|\.rbc$|\.rbo$\|\.class$\|\.o$\|\~$\',
       \ }
 "let g:ctrlp_match_window = 'results:100' " overcome limit imposed by max height
 
-
 "Airline, always open status bar
 set laststatus=2
 
+noremap gb :bp<cr>
+noremap gB :bn<cr>
 noremap <leader>fw :FixWhitespace<CR>
 noremap <leader>ct :!ctags -R .<CR>
 noremap <leader>crt :!ctags -R -f gems.tags $(bundle show --paths)<CR>
@@ -30,6 +331,8 @@ noremap <leader>rt :TagbarToggle<CR>
 noremap <leader>cp :CtrlPTag<CR>
 "run rake default task, default is running test in current file
 noremap <leader>rk :.Rake<CR>
+
+command! Vimrc :vs $MYVIMRC
 
 " ALE don't linting on every changes
 let g:ale_lint_on_text_changed = 'never'
@@ -62,11 +365,14 @@ augroup customer_my_autocmd
   autocmd BufRead,BufNewFile *.md setlocal spell
   autocmd BufRead,BufNewFile *.rdoc set complete+=kspell
   autocmd BufRead,BufNewFile *.md set complete+=kspell
+
+  autocmd BufRead,BufNewFile *.md setlocal omnifunc=
+  au FileType markdown setlocal omnifunc=
 augroup END
 
+
+
 " Open ag.vim
-"nnoremap <leader>a :Ag<space>
-"nnoremap <leader>a :set operatorfunc=<SID>AgOperator<cr>g@
 nnoremap <leader>a  :Ag! <cword><cr>
 vnoremap <leader>a  :<c-u>call <SID>AgOperator(visualmode())<cr>
 nnoremap <leader>A :Ag!<space>
@@ -153,7 +459,29 @@ let g:html_indent_inctags = "html,body,head,tbody"
 nnoremap <D-j> :m .+1<CR>
 nnoremap <D-k> :m .-2<CR>
 
+" Pair ("'[ in selected visual block
+vnoremap ( <esc>`<i(<esc>`>la)<esc>
+vnoremap " <esc>`<i"<esc>`>la"<esc>
+vnoremap ' <esc>`<i'<esc>`>la'<esc>
+vnoremap [ <esc>`<i[<esc>`>la]<esc>
+vnoremap { <esc>`<i{<space><esc>`>a<space>}<esc>
 
+function! SimpleAutoPair(first, second)
+  execute "normal \<esc>`<"
+
+  let l:part = matchstr(getline('.'), '\%' . col('.') . 'c.')
+  if (l:part=~'\s')
+    execute 'normal ' "\<esc>lr" . a:first . "\<esc>`>r" . a:second . "\<esc>"
+  else
+    execute 'normal ' "\<esc>r" . a:first . "\<esc>`>r" . a:second . "\<esc>"
+  endif
+endfunction
+
+vnoremap r( :call SimpleAutoPair('(', ')')<CR>
+vnoremap r{ :call SimpleAutoPair('{', '}')<CR>
+vnoremap r[ :call SimpleAutoPair('[', ']')<CR>
+vnoremap r" :call SimpleAutoPair('"', '"')<CR>
+vnoremap r' :call SimpleAutoPair("'", "'")<CR>
 
 if has("gui_macvim")
   " Switch to specific tab numbers with Command-number
@@ -348,3 +676,4 @@ nnoremap <Leader><space> :nohlsearch<Enter>
 "nnoremap <silent> <leader>DQ :exe ":profile pause"<cr>:noautocmd qall!<cr>
 
 nnoremap <leader>g :GoRun %<cr>
+

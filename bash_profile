@@ -34,6 +34,16 @@ if [ -f ~/.git-completion.bash ]; then
   __git_complete gco _git_checkout
 fi
 
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+alias f="fzf"
+export FZF_DEFAULT_COMMAND='ag -l'
+#export FZF_DEFAULT_OPTS="--height=70% --reverse --inline-info --preview 'head -200 {} 2>/dev/null' --preview-window=right:60%:wrap -m --bind='ctrl-d:half-page-down,ctrl-u:half-page-up,ctrl-y:execute-silent(echo {+} | pbcopy)'"
+#export FZF_CTRL_T_OPTS="-m --preview 'head -200 {} 2>/dev/null'"
+
+export FZF_DEFAULT_OPTS="--height=70% --reverse --inline-info -m --preview 'head -200 {} 2>/dev/null' --preview-window 'right:hidden:wrap' --bind 'ctrl-o:toggle-preview,ctrl-f:half-page-down,ctrl-b:half-page-up,ctrl-y:execute-silent(echo {+} | pbcopy)'"
+export FZF_CTRL_T_OPTS="-m --preview 'head -200 {} 2>/dev/null'"
+
 bind -x '"\C-g":"fg"'
 bind -x '"\C-xf":"fg"'
 bind -x '"\C-xj":"jobs"'

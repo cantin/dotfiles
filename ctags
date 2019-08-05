@@ -7,8 +7,12 @@
 --exclude=build
 --exclude=publish
 --exclude=public
+--exclude=storage
 --exclude=db
 --exclude=*.html
+--exclude=*.scss
+--exclude=*.css
+--exclude=*.json
 
 --regex-ruby=/^[[:blank:]]+private[[:blank:]]+def[[:blank:]]+([a-zA-Z0-9_]+[?!]?)/\1/f,method/
 --regex-ruby=/^[[:blank:]]+protected[[:blank:]]+def[[:blank:]]+([a-zA-Z0-9_]+[?!]?)/\1/f,method/
