@@ -10,6 +10,7 @@ Plug 'scrooloose/nerdtree'
 "Plug 'scrooloose/syntastic'
 Plug 'tpope/vim-rails'
 Plug 'vim-ruby/vim-ruby'
+Plug 'mbbill/undotree'
 "Plug 'lilydjwg/colorizer' slow down large file
 "Plug 'henrik/vim-ruby-runner'
 "Plug 'cantin/vim-ruby-runner'
@@ -19,16 +20,17 @@ Plug 'godlygeek/tabular'
 "Plug 'regedarek/ZoomWin' "v25
 Plug 'bronson/vim-trailing-whitespace'
 Plug 'scrooloose/nerdcommenter'
-Plug 'majutsushi/tagbar'
+"Plug 'majutsushi/tagbar'
 Plug 'kien/ctrlp.vim'
-Plug 'MarcWeber/vim-addon-mw-utils'
-Plug 'tomtom/tlib_vim'
+"Plug 'MarcWeber/vim-addon-mw-utils'
+"Plug 'tomtom/tlib_vim'
 "Plug 'garbas/vim-snipmate'
 "Plug 'tpope/vim-endwise'
 Plug 'honza/vim-snippets'
 "Plug 'jeetsukumaran/vim-buffergator'
 Plug 'pangloss/vim-javascript'
-Plug 'mxw/vim-jsx'
+"Plug 'mxw/vim-jsx'
+Plug 'maxmellon/vim-jsx-pretty'
 Plug 'skywind3000/asyncrun.vim'
 "Plug 'terryma/vim-multiple-cursors'
 "Plug 'danchoi/ri.vim'
@@ -36,6 +38,8 @@ Plug 'w0rp/ale'
 Plug 'fatih/vim-go', { 'for': 'go' }
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
+
+Plug 'tpope/vim-bundler'
 
 "Plug 'BrandonRoehl/auto-omni'
 
@@ -46,12 +50,16 @@ Plug 'junegunn/fzf.vim'
 Plug 'roxma/vim-hug-neovim-rpc'
 Plug 'ncm2/ncm2'
 Plug 'roxma/nvim-yarp'
+Plug 'google/vim-searchindex'
+
 "Plug 'ncm2/ncm2-snipmate'
-Plug 'ncm2/ncm2-syntax'
-Plug 'Shougo/neco-syntax'
+"Plug 'ncm2/ncm2-syntax'
+"Plug 'Shougo/neco-syntax'
+Plug 'ncm2/ncm2-tagprefix'
 Plug 'fgrsnau/ncm2-otherbuf', { 'branch': 'ncm2' }
 Plug 'ncm2/ncm2-bufword'
-Plug 'ncm2/ncm2-path'
+Plug 'ncm2/ncm2-cssomni'
+"Plug 'ncm2/ncm2-path'
 
 Plug 'ncm2/ncm2-ultisnips'
 Plug 'SirVer/ultisnips'
@@ -64,6 +72,26 @@ Plug 'SirVer/ultisnips'
 call plug#end()
 
 set background=dark
+
+"au User Ncm2Plugin call ncm2#register_source({
+      "\ 'name' : 'ruby',
+      "\ 'priority': 6,
+      "\ 'scope': ['ruby'],
+      "\ 'mark': 'ruby',
+      "\ 'word_pattern': '[\w_]+',
+      "\ 'complete_pattern': '\.',
+      "\ 'on_complete': ['ncm2#on_complete#delay', 180, 'ncm2#on_complete#omni', 'rubycomplete#Complete'],
+      "\ })
+
+"au User Ncm2Plugin call ncm2#register_source({
+      "\ 'name' : 'javascript',
+      "\ 'priority': 6,
+      "\ 'scope': ['javascript', 'javascript.jsx.html', 'javascript.jsx', 'js'],
+      "\ 'mark': 'javascript',
+      "\ 'word_pattern': '[\w_]+',
+      "\ 'complete_pattern': '\.',
+      "\ 'on_complete': ['ncm2#on_complete#delay', 180', ncm2#on_complete#omni', 'javascriptcomplete#CompleteJS'],
+      "\ })
 
 "**********************Plugin
 
@@ -122,7 +150,7 @@ set background=dark
       "\ })
 "endif
 
-let g:lsp_diagnostics_enabled = 0         " disable diagnostics support
+"let g:lsp_diagnostics_enabled = 0         " disable diagnostics support
 
 "autocmd FileType ruby setlocal omnifunc=lsp#complete
 "autocmd FileType javascript setlocal omnifunc=lsp#complete
@@ -148,12 +176,17 @@ let g:lsp_diagnostics_enabled = 0         " disable diagnostics support
 " let g:UltiSnipsExpandTrigger		= "<Plug>(ultisnips_expand)"
 let g:UltiSnipsJumpForwardTrigger	= "<c-]>"
 let g:UltiSnipsJumpBackwardTrigger	= "<c-[>"
-let g:UltiSnipsExpandTrigger="<c-,>"
+let g:UltiSnipsExpandTrigger="<leader><tab>"
 let g:UltiSnipsRemoveSelectModeMappings = 0
 inoremap <expr> <c-j> pumvisible() ? "\<C-n>" : "\<c-j>"
 inoremap <expr> <c-k> pumvisible() ? "\<C-p>" : "\<c-k>"
 
-let g:AutoPairsMapCR=0
+" Map ctrl-x_ctrl-p to keyword completin in complete, so that it matches words in other buffers.
+inoremap <expr> <c-x><c-p> pumvisible() ? "\<c-e>\<c-p>" : "\<c-p>"
+
+let g:ncm2#complete_delay=60
+let g:ncm2#popup_delay=100
+
 
 "inoremap <silent> <Plug>(MyCR) <CR><C-R>=AutoPairsReturn()<CR>
 inoremap <silent> <Plug>(MyCR) <CR>
@@ -173,8 +206,9 @@ let g:ncm2#complete_length=[[1,2],[7,2]]
 autocmd BufEnter * call ncm2#enable_for_buffer()
 au User Ncm2PopupOpen set completeopt=noinsert,menuone,noselect
 "au User Ncm2PopupOpen set completeopt=noinsert,menuone
-au User Ncm2PopupClose set completeopt=noinsert,menuone
+au User Ncm2PopupClose set completeopt=menuone
 "set shortmess+=c
+set dictionary+=/usr/share/dict/words
 
 "inoremap <Tab> <C-R>=CleverTab()<CR>
 "inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
@@ -195,23 +229,28 @@ function! CleverTab(type)
     if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
       let g:stop_autocomplete=1
       return "\<TAB>"
-    elseif !pumvisible() && !&omnifunc
+    elseif !pumvisible() && !!&omnifunc
       return "\<C-X>\<C-O>"
     endif
   elseif a:type=='keyword' && !pumvisible() && !g:stop_autocomplete
-    return "\<C-X>\<C-N>\<C-P>"
+    "return "\<C-X>\<C-N>\<C-P>"
+    return "\<C-N>"
   elseif a:type=='next'
     if g:stop_autocomplete
       let g:stop_autocomplete=0
     else
-      return "\<C-N>"
+      "return "\<C-N>" "No need because we set it outside in <TAB> mapping
     endif
   endif
   return ''
 endfunction
 
 imap <expr> <TAB> pumvisible() ? "\<C-N>" : "\<C-R>=CleverTab('omni')<CR><C-R>=CleverTab('keyword')<CR><C-R>=CleverTab('next')<CR>"
-imap <c-o> <C-X><C-O>
+"imap <c-o> <C-X><C-O>
+
+nnoremap <leader>u :UndotreeToggle<cr>
+let g:undotree_WindowLayout = 2
+let g:undotree_SetFocusWhenToggle = 1
 
 
 "function! CleverTab()
@@ -253,9 +292,12 @@ imap <c-o> <C-X><C-O>
 "nnoremap <leader>a  :exec "call fzf#vim#ag(expand('<cword>'))"<cr>
 "vnoremap <leader>a  :<c-u>call <SID>AgOperator(visualmode())<cr>
 "nnoremap <leader>A :Ag!<space>
-nnoremap <leader>fl :Lines<cr>
-nnoremap <leader>fb :BLines<cr>
+nnoremap <leader>fl :BLines<cr>
+nnoremap <leader>fL :Lines<cr>
+nnoremap <leader>m :Marks<cr>
 nnoremap <leader>b :Buffers<cr>
+nnoremap <leader>ft :BTags<cr>
+nnoremap <leader>fT :Tags<cr>
 let g:fzf_history_dir = '~/.vim/fzf-history'
 "autocmd VimEnter * command! -nargs=* -bang Ag call s:ag_with_opts(<q-args>, <bang>0)
 
@@ -310,7 +352,8 @@ colorscheme jellybeans
 
 "let g:ctrlp_by_filename = 1
 "let g:ctrlp_root_markers = ['']
-let g:ctrlp_cmd = 'CtrlPMixed'
+"let g:ctrlp_cmd = 'CtrlPMixed'
+let g:ctrlp_match_window = 'min:0,max:20,results:50'
 let g:ctrlp_working_path_mode = 0
 let g:ctrlp_custom_ignore = {
       \ 'dir':  '\v[\/]\.(git|hg|svn)$|\v[\/]tmp$|\v[\/]node_modules$|\v[\/]public/packs|\v[\/]storage$',
@@ -321,18 +364,26 @@ let g:ctrlp_custom_ignore = {
 "Airline, always open status bar
 set laststatus=2
 
-noremap gb :bp<cr>
-noremap gB :bn<cr>
+noremap gb <c-^>
+noremap ]b :bn<cr>
+noremap [b :bp<cr>
 noremap <leader>fw :FixWhitespace<CR>
 noremap <leader>ct :!ctags -R .<CR>
-noremap <leader>crt :!ctags -R -f gems.tags $(bundle show --paths)<CR>
+noremap <leader>cT :!ctags -R -f gems.tags $(bundle show --paths)<CR>
 noremap <leader>n :NERDTreeToggle<CR>
-noremap <leader>rt :TagbarToggle<CR>
-noremap <leader>cp :CtrlPTag<CR>
+"noremap <leader>rt :TagbarToggle<CR>
+noremap <leader>rl :set relativenumber!<CR>
+noremap <leader>cp :let g:ctrlptag_type='project' <bar> CtrlPTag<CR>
+noremap <leader>cP :let g:ctrlptag_type='all' <bar> CtrlPTag<CR>
 "run rake default task, default is running test in current file
 noremap <leader>rk :.Rake<CR>
 
 command! Vimrc :vs $MYVIMRC
+
+augroup numbertoggle
+  autocmd BufEnter,FocusGained,InsertLeave * if &l:number == 1 | set relativenumber | endif
+  autocmd BufLeave,FocusLost,InsertEnter   * if &l:number == 1 | set norelativenumber | endif
+augroup END
 
 " ALE don't linting on every changes
 let g:ale_lint_on_text_changed = 'never'
@@ -344,7 +395,7 @@ let g:ale_linters = {
 \   'eruby': []
 \}
 
-let g:jsx_ext_required = 0
+let g:jsx_ext_required = 1
 
 let g:jellybeans_overrides = {
 \    'rubyRegexp': { 'guifg': 'f0f000',
@@ -359,7 +410,7 @@ let g:jellybeans_overrides = {
 \}
 
 augroup customer_my_autocmd
-  autocmd BufRead,BufNewFile *.js set ft=javascript.jsx
+  autocmd BufRead,BufNewFile *.js set ft=javascript
   autocmd BufRead,BufNewFile *.jsx set ft=javascript.jsx.html
   autocmd BufRead,BufNewFile *.rdoc setlocal spell
   autocmd BufRead,BufNewFile *.md setlocal spell
@@ -410,6 +461,7 @@ set undofile
 set undolevels=500 "maximum number of changes that can be undone
 
 "be able to C-] into definitions for any gem in your Gemfile
+set tags+=./gems.tags
 set tags+=gems.tags
 set nowrap
 
@@ -460,11 +512,29 @@ nnoremap <D-j> :m .+1<CR>
 nnoremap <D-k> :m .-2<CR>
 
 " Pair ("'[ in selected visual block
-vnoremap ( <esc>`<i(<esc>`>la)<esc>
-vnoremap " <esc>`<i"<esc>`>la"<esc>
-vnoremap ' <esc>`<i'<esc>`>la'<esc>
-vnoremap [ <esc>`<i[<esc>`>la]<esc>
-vnoremap { <esc>`<i{<space><esc>`>a<space>}<esc>
+vnoremap <leader>( :call SimpleAppendPair('(', ')')<CR>
+vnoremap <leader>{ :call SimpleAppendPair('{', '}')<CR>
+vnoremap <leader>[ :call SimpleAppendPair('[', ']')<CR>
+vnoremap <leader>" :call SimpleAppendPair('"', '"')<CR>
+vnoremap <leader>' :call SimpleAppendPair("'", "'")<CR>
+
+" Replace pair in selected visual block
+vnoremap <leader>r( :call SimpleAutoPair('(', ')')<CR>
+vnoremap <leader>r{ :call SimpleAutoPair('{', '}')<CR>
+vnoremap <leader>r[ :call SimpleAutoPair('[', ']')<CR>
+vnoremap <leader>r" :call SimpleAutoPair('"', '"')<CR>
+vnoremap <leader>r' :call SimpleAutoPair("'", "'")<CR>
+
+
+function! SimpleAppendPair(first, second)
+  execute "normal \<esc>`<i" . a:first  . "\<esc>`>"
+
+  if col(".") == col("$")-1
+    execute "normal a" . a:second  . "\<esc>`>"
+  else
+    execute "normal la" . a:second  . "\<esc>`>"
+  endif
+endfunction
 
 function! SimpleAutoPair(first, second)
   execute "normal \<esc>`<"
@@ -476,12 +546,6 @@ function! SimpleAutoPair(first, second)
     execute 'normal ' "\<esc>r" . a:first . "\<esc>`>r" . a:second . "\<esc>"
   endif
 endfunction
-
-vnoremap r( :call SimpleAutoPair('(', ')')<CR>
-vnoremap r{ :call SimpleAutoPair('{', '}')<CR>
-vnoremap r[ :call SimpleAutoPair('[', ']')<CR>
-vnoremap r" :call SimpleAutoPair('"', '"')<CR>
-vnoremap r' :call SimpleAutoPair("'", "'")<CR>
 
 if has("gui_macvim")
   " Switch to specific tab numbers with Command-number
@@ -572,7 +636,11 @@ au FileType ruby noremap <buffer> <D-r> :RunRuby<CR>
 
 "Redirect output of ri to buffer when pressing K
 if has("gui_running") && !has("gui_win32")
-  au FileType ruby setlocal keywordprg=:SHELL\ ri\ -T\ -f\ markdown
+  au FileType ruby,haml setlocal keywordprg=:SHELL\ ri\ -T\ -f\ markdown
+
+  "Generate ri documentation for gems in Gemfile. Note: bundler list --name-only is not working
+  let g:ri_command='for gem in $(bc ruby -e "Bundler.load.specs.each {|s| puts s.name.to_s + ''&'' + s.version.to_s }"); do name=$(cut -d''&'' -f1 <<< $gem); version=$(cut -d''&'' -f2 <<< $gem); gem rdoc --ri $name -v $version ;done'
+  command! Ri call asyncrun#quickfix_toggle(8) | execute "AsyncRun " . g:ri_command
 endif
 
 "run rails runner by CMD + R
@@ -587,7 +655,8 @@ noremap <D-H> :SHELL<space>
 command! LcdToCurrentFilePath lcd %:p:h
 noremap <leader>cd :LcdToCurrentFilePath<CR>
 
-nnoremap <leader>f :!echo -n %:p \| pbcopy<cr>
+nnoremap <leader>fn :!echo -n %:. \| pbcopy<cr>
+nnoremap <leader>fN :!echo -n %:p \| pbcopy<cr>
 
 " Comment it out because of slowness even less than 100 lines
 "Set vertical line indicator for yaml & haml files
@@ -604,7 +673,7 @@ set wildmenu " visual autocomplete for command menu
 highlight! link QuickFixLine StatusLineNC
 highlight! link CursorColumn StatusLineNC
 
-" press // in visual mode will earch visual selected area
+" press // in visual mode will search visual selected area
 vnoremap // :<c-u>set hlsearch \| :call <SID>searchVirualSelected()<cr>
 function! s:searchVirualSelected()
   let prev_saved_val = @"
@@ -620,9 +689,12 @@ cnoremap <C-a> <Home>
 set foldmethod=syntax
 set foldlevelstart=1
 augroup customer_folding_autocmd
-  autocmd InsertEnter * setl foldmethod=manual
+  "autocmd InsertEnter * setl foldmethod=manual
+  "autocmd BufWritePost * setl foldmethod=syntax
 
-  autocmd BufWritePost * setl foldmethod=syntax
+  autocmd WinLeave * setl fdm=manual
+  autocmd InsertEnter * let b:last_fdm=&foldmethod | setlocal foldmethod=manual
+  autocmd BufWritePost * if exists('b:last_fdm') | let &l:foldmethod=b:last_fdm | endif
 
   autocmd BufRead,BufNewFile *.html* setl foldmethod=indent
   autocmd BufWritePost *.html* setl foldmethod=indent

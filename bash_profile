@@ -15,17 +15,20 @@ export PS1="\u:\W\$ "
 alias bc='bundle exec'
 alias ctags="`brew --prefix`/bin/ctags"
 
+alias gdt="git difftool"
+alias gdtc="git difftool --cached"
 alias gd="git diff"
 alias gdc="git diff --cached"
 alias gs="git status"
 alias gco="git checkout"
 alias gitlogp="git log --graph --pretty=format:'%C(yellow)%h%C(cyan)%d%Creset %s %C(blue)- %an, %ar%Creset' --abbrev-commit --all --decorate"
+alias gitlogs="git log --pretty=format:'[%h] %ae, %ar: %s' --stat"
 alias gm="git show -s --format=%B"
+alias gp="git pull"
+alias gdd="git diff > diff"
+alias gdcd="gdc > diff"
 
 if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
-
-#gurobi
-export GRB_LICENSE_FILE="/Users/Cantin/WorkSpace/gurobi.lic"
 
 if [ -f ~/.git-completion.bash ]; then
   source ~/.git-completion.bash
@@ -37,7 +40,7 @@ fi
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
 alias f="fzf"
-export FZF_DEFAULT_COMMAND='ag -l'
+export FZF_DEFAULT_COMMAND='ag -l -U'
 #export FZF_DEFAULT_OPTS="--height=70% --reverse --inline-info --preview 'head -200 {} 2>/dev/null' --preview-window=right:60%:wrap -m --bind='ctrl-d:half-page-down,ctrl-u:half-page-up,ctrl-y:execute-silent(echo {+} | pbcopy)'"
 #export FZF_CTRL_T_OPTS="-m --preview 'head -200 {} 2>/dev/null'"
 

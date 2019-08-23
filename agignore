@@ -7,3 +7,7 @@ coverage/index.html
 *.gz
 node_modules/*
 tmp/*
+storage/*
+public/assets
+public/packs
+public/packs-test
