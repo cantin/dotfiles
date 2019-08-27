@@ -511,28 +511,36 @@ let g:html_indent_inctags = "html,body,head,tbody"
 nnoremap <D-j> :m .+1<CR>
 nnoremap <D-k> :m .-2<CR>
 
+" When enter command-line mode from visual mode, Vim automatically inserts this range: '<,'>
+" It will make the call to execute the function for each line in the range.
+" Use <c-u> to discard that range
 " Pair ("'[ in selected visual block
-vnoremap <leader>( :call SimpleAppendPair('(', ')')<CR>
-vnoremap <leader>{ :call SimpleAppendPair('{', '}')<CR>
-vnoremap <leader>[ :call SimpleAppendPair('[', ']')<CR>
-vnoremap <leader>" :call SimpleAppendPair('"', '"')<CR>
-vnoremap <leader>' :call SimpleAppendPair("'", "'")<CR>
+vnoremap <leader>( :<c-u>call SimpleAppendPair('(', ')')<CR>
+vnoremap <leader>{ :<c-u>call SimpleAppendPair('{ ', ' }')<CR>
+vnoremap <leader>[ :<c-u>call SimpleAppendPair('[', ']')<CR>
+vnoremap <leader>" :<c-u>call SimpleAppendPair('"', '"')<CR>
+vnoremap <leader>' :<c-u>call SimpleAppendPair("'", "'")<CR>
 
 " Replace pair in selected visual block
-vnoremap <leader>r( :call SimpleAutoPair('(', ')')<CR>
-vnoremap <leader>r{ :call SimpleAutoPair('{', '}')<CR>
-vnoremap <leader>r[ :call SimpleAutoPair('[', ']')<CR>
-vnoremap <leader>r" :call SimpleAutoPair('"', '"')<CR>
-vnoremap <leader>r' :call SimpleAutoPair("'", "'")<CR>
+vnoremap <leader>r( :<c-u>call SimpleAutoPair('(', ')')<CR>
+vnoremap <leader>r{ :<c-u>call SimpleAutoPair('{', '}')<CR>
+vnoremap <leader>r[ :<c-u>call SimpleAutoPair('[', ']')<CR>
+vnoremap <leader>r" :<c-u>call SimpleAutoPair('"', '"')<CR>
+vnoremap <leader>r' :<c-u>call SimpleAutoPair("'", "'")<CR>
 
 
 function! SimpleAppendPair(first, second)
+  echom '1'
   execute "normal \<esc>`<i" . a:first  . "\<esc>`>"
 
   if col(".") == col("$")-1
     execute "normal a" . a:second  . "\<esc>`>"
   else
-    execute "normal la" . a:second  . "\<esc>`>"
+    if a:first == '{ '
+      execute "normal lla" . a:second  . "\<esc>`>"
+    else
+      execute "normal la" . a:second  . "\<esc>`>"
+    endif
   endif
 endfunction
 
