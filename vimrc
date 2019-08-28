@@ -163,12 +163,12 @@ hi link EasyMotionTarget Search
 
 "inoremap <silent> <expr> <CR> ncm2_snipmate#expand_or("\<CR>", 'n')
 " wrap <Plug>snipMateTrigger so that it works for both completin and normal snippet
-"inoremap <expr> <c-u> ncm2_snipmate#expand_or("\<Plug>snipMateTrigger", "m")
+"inoremap <expr> <c-b> ncm2_snipmate#expand_or("\<Plug>snipMateTrigger", "m")
 "let g:snips_no_mappings = 1
 "vmap <c-j> <Plug>snipMateNextOrTrigger
 "vmap <c-k> <Plug>snipMateBack
-"imap <expr> <c-k> pumvisible() ? "\<c-y>\<Plug>snipMateBack" : "\<Plug>snipMateBack"
-"imap <expr> <c-j> pumvisible() ? "\<c-y>\<Plug>snipMateNextOrTrigger" : "\<Plug>snipMateNextOrTrigger"
+"imap <expr> <c-j> pumvisible() ? "\<c-n>" : "\<Plug>snipMateNextOrTrigger"
+"imap <expr> <c-k> pumvisible() ? "\<c-p>" : "\<Plug>snipMateBack"
 " c-j c-k for moving completion & snippet
 
 " Press enter key to trigger snippet expansion
@@ -177,12 +177,12 @@ hi link EasyMotionTarget Search
 
 " c-j c-k for moving in snippet
 " let g:UltiSnipsExpandTrigger		= "<Plug>(ultisnips_expand)"
-let g:UltiSnipsJumpForwardTrigger	= "<c-]>"
-let g:UltiSnipsJumpBackwardTrigger	= "<c-[>"
+"let g:UltiSnipsJumpForwardTrigger	= "<c-]>"
+"let g:UltiSnipsJumpBackwardTrigger	= "<c-[>"
 let g:UltiSnipsExpandTrigger="<c-b>"
 let g:UltiSnipsRemoveSelectModeMappings = 0
-inoremap <expr> <c-j> pumvisible() ? "\<C-n>" : "\<c-j>"
-inoremap <expr> <c-k> pumvisible() ? "\<C-p>" : "\<c-k>"
+inoremap <expr> <c-j> pumvisible() ? "\<C-n>" : UltiSnips#JumpForwards()
+inoremap <expr> <c-k> pumvisible() ? "\<C-p>" : UltiSnips#JumpBackwards()
 
 " Map ctrl-x_ctrl-p to keyword completin in complete, so that it matches words in other buffers.
 inoremap <expr> <c-x><c-p> pumvisible() ? "\<c-e>\<c-p>" : "\<c-p>"
@@ -193,13 +193,13 @@ let g:ncm2#popup_delay=100
 
 "inoremap <silent> <Plug>(MyCR) <CR><C-R>=AutoPairsReturn()<CR>
 inoremap <silent> <Plug>(MyCR) <CR>
+imap <silent> <expr> <CR> ncm2_ultisnips#expand_or("\<Plug>(MyCR)", 'im')
 "inoremap <silent> <Plug>(MyCR) <C-R>=AutoPairsReturn()<CR> "without noselect
 " example
 "imap <expr> <CR> (pumvisible() ? "\<C-Y>\<Plug>(MyCR)" : "\<Plug>(MyCR)")
 "imap <silent> <expr> <CR> pumvisible() ? ncm2_ultisnips#expand_or("\<Plug>(MyCR)", 'im') : "\<CR>"
 "imap <silent> <expr> <CR> ncm2_ultisnips#expand_or("\<CR>\<C-R>=AutoPairsReturn()<CR>", 'im')
 "imap <silent> <expr> <CR> pumvisible() ? ncm2_ultisnips#expand_or("\<Plug>(MyCR)", 'im') : "\<CR>"
-imap <silent> <expr> <CR> ncm2_ultisnips#expand_or("\<Plug>(MyCR)", 'im')
 "inoremap <silent> <expr> <CR> ((pumvisible() && empty(v:completed_item)) ?  "\<c-y><c-\>" : (!empty(v:completed_item) ? ncm2_ultisnips#expand_or("\<Plug>(MyCR)", 'im') : "\<CR>" ))
 
 "inoremap <silent> <expr> <c-\> ncm2_ultisnips#expand_or("\<Plug>(MyCR)", 'im')
