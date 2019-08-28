@@ -63,6 +63,7 @@ Plug 'ncm2/ncm2-cssomni'
 
 Plug 'ncm2/ncm2-ultisnips'
 Plug 'SirVer/ultisnips'
+Plug 'easymotion/vim-easymotion'
 "Plug 'jiangmiao/auto-pairs'
 
 "Plug 'prabirshrestha/async.vim'
@@ -72,6 +73,8 @@ Plug 'SirVer/ultisnips'
 call plug#end()
 
 set background=dark
+
+hi link EasyMotionTarget Search
 
 "au User Ncm2Plugin call ncm2#register_source({
       "\ 'name' : 'ruby',
@@ -176,7 +179,7 @@ set background=dark
 " let g:UltiSnipsExpandTrigger		= "<Plug>(ultisnips_expand)"
 let g:UltiSnipsJumpForwardTrigger	= "<c-]>"
 let g:UltiSnipsJumpBackwardTrigger	= "<c-[>"
-let g:UltiSnipsExpandTrigger="<leader><tab>"
+let g:UltiSnipsExpandTrigger="<c-b>"
 let g:UltiSnipsRemoveSelectModeMappings = 0
 inoremap <expr> <c-j> pumvisible() ? "\<C-n>" : "\<c-j>"
 inoremap <expr> <c-k> pumvisible() ? "\<C-p>" : "\<c-k>"
@@ -304,14 +307,14 @@ let g:fzf_history_dir = '~/.vim/fzf-history'
 let g:fzf_colors =
 \ { 'fg':      ['fg', 'Normal'],
   \ 'bg':      ['bg', 'Normal'],
-  \ 'hl':      ['fg', 'Comment'],
+  \ 'hl':      ['fg', 'InSearch'],
   \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-  \ 'hl+':     ['fg', 'Statement'],
+  \ 'bg+':     ['bg', 'StatusLine'],
+  \ 'hl+':     ['fg', 'InSearch'],
   \ 'info':    ['fg', 'PreProc'],
   \ 'border':  ['fg', 'Ignore'],
-  \ 'prompt':  ['fg', 'Conditional'],
-  \ 'pointer': ['fg', 'Exception'],
+  \ 'prompt':  ['fg', 'Cursor'],
+  \ 'pointer': ['fg', 'Cursor'],
   \ 'marker':  ['fg', 'Keyword'],
   \ 'spinner': ['fg', 'Label'],
   \ 'header':  ['fg', 'Comment'] }
@@ -353,13 +356,14 @@ colorscheme jellybeans
 "let g:ctrlp_by_filename = 1
 "let g:ctrlp_root_markers = ['']
 "let g:ctrlp_cmd = 'CtrlPMixed'
+let g:ctrlp_user_command = 'ag %s -l -U -g ""' " Use custom user command for list files, use .ignore in project to ignore files
 let g:ctrlp_match_window = 'min:0,max:20,results:50'
 let g:ctrlp_working_path_mode = 0
-let g:ctrlp_custom_ignore = {
-      \ 'dir':  '\v[\/]\.(git|hg|svn)$|\v[\/]tmp$|\v[\/]node_modules$|\v[\/]public/packs|\v[\/]storage$',
-      \ 'file': '\.gz$\|\.pyc$\|\.pyo$\|\.rbc$|\.rbo$\|\.class$\|\.o$\|\~$\',
-      \ }
-"let g:ctrlp_match_window = 'results:100' " overcome limit imposed by max height
+" g:ctrlp_custom_ignore is not working if g:ctrlp_user_command is set.
+"let g:ctrlp_custom_ignore = {
+      "\ 'dir':  '\v[\/]\.(git|hg|svn)$|\v[\/]tmp$|\v[\/]node_modules$|\v[\/]public/packs|\v[\/]storage$',
+      "\ 'file': '\.gz$\|\.pyc$\|\.pyo$\|\.rbc$|\.rbo$\|\.class$\|\.o$\|\~$\',
+      "\ }
 
 "Airline, always open status bar
 set laststatus=2
