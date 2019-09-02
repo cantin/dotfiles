@@ -1,8 +1,16 @@
 "source ~/.vimrc.vundle
 
+" Don't load matchparens standard plugin
+"let loaded_matchparen = 1
+"autocmd VimEnter * NoMatchParen
+"Call :DoMatchParen to enable it again
+let g:matchparen_timeout=150
+
 call plug#begin('~/.vim/plugged')
+"Plug 'andymass/vim-matchup'
 Plug 'tpope/vim-fugitive'
-Plug 'bling/vim-airline'
+"Plug 'bling/vim-airline'
+Plug 'itchyny/lightline.vim'
 Plug 'nanotech/jellybeans.vim'
 Plug 'int3/vim-extradite'
 Plug 'rking/ag.vim'
@@ -50,7 +58,7 @@ Plug 'tpope/vim-bundler'
 Plug 'roxma/vim-hug-neovim-rpc'
 Plug 'ncm2/ncm2'
 Plug 'roxma/nvim-yarp'
-Plug 'google/vim-searchindex'
+"Plug 'google/vim-searchindex'
 
 "Plug 'ncm2/ncm2-snipmate'
 "Plug 'ncm2/ncm2-syntax'
@@ -73,6 +81,10 @@ Plug 'easymotion/vim-easymotion'
 call plug#end()
 
 set background=dark
+
+set lazyredraw
+
+set shortmess-=S
 
 hi link EasyMotionTarget Search
 
@@ -295,6 +307,7 @@ let g:undotree_SetFocusWhenToggle = 1
 "nnoremap <leader>a  :exec "call fzf#vim#ag(expand('<cword>'))"<cr>
 "vnoremap <leader>a  :<c-u>call <SID>AgOperator(visualmode())<cr>
 "nnoremap <leader>A :Ag!<space>
+nnoremap <leader>fd :set foldmethod=syntax<cr>
 nnoremap <leader>fl :BLines<cr>
 nnoremap <leader>fL :Lines<cr>
 nnoremap <leader>m :Marks<cr>
@@ -451,12 +464,12 @@ endfunction
 " Make AsyncRun works with vim-fugitive, comment out because has side effect for rails.vim
 "command! -bang -nargs=* -complete=file Make AsyncRun -program=make @ <args>
 " Let Airline display status of AsyncRun
-let g:airline_section_error = airline#section#create_right(['%{g:asyncrun_status}'])
+"let g:airline_section_error = airline#section#create_right(['%{g:asyncrun_status}'])
 " no bells and whistles
-let g:airline_extensions = []
+"let g:airline_extensions = []
 " cache airline highlight
-let g:airline_highlighting_cache = 1
-let g:airline#extensions#tagbar#enabled = 0
+"let g:airline_highlighting_cache = 1
+"let g:airline#extensions#tagbar#enabled = 0
 "**********************Plugin
 
 "set undofile
