@@ -55,22 +55,22 @@ Plug 'tpope/vim-bundler'
 " (Optional) Multi-entry selection UI.
 "Plug 'junegunn/fzf'
 
-Plug 'roxma/vim-hug-neovim-rpc'
-Plug 'ncm2/ncm2'
-Plug 'roxma/nvim-yarp'
+"Plug 'roxma/vim-hug-neovim-rpc'
+"Plug 'ncm2/ncm2'
+"Plug 'roxma/nvim-yarp'
 "Plug 'google/vim-searchindex'
 
 "Plug 'ncm2/ncm2-snipmate'
 "Plug 'ncm2/ncm2-syntax'
 "Plug 'Shougo/neco-syntax'
-Plug 'ncm2/ncm2-tagprefix'
-Plug 'fgrsnau/ncm2-otherbuf', { 'branch': 'ncm2' }
-Plug 'ncm2/ncm2-bufword'
-Plug 'ncm2/ncm2-cssomni'
+"Plug 'ncm2/ncm2-tagprefix'
+"Plug 'fgrsnau/ncm2-otherbuf', { 'branch': 'ncm2' }
+"Plug 'ncm2/ncm2-bufword'
+"Plug 'ncm2/ncm2-cssomni'
 "Plug 'ncm2/ncm2-path'
 
-Plug 'ncm2/ncm2-ultisnips'
-Plug 'SirVer/ultisnips'
+"Plug 'ncm2/ncm2-ultisnips'
+"Plug 'SirVer/ultisnips'
 Plug 'easymotion/vim-easymotion'
 "Plug 'jiangmiao/auto-pairs'
 
@@ -78,15 +78,83 @@ Plug 'easymotion/vim-easymotion'
 "Plug 'prabirshrestha/vim-lsp'
 "Plug 'ncm2/ncm2-vim-lsp'
 
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
 call plug#end()
 
+set hidden
 set background=dark
-
 set lazyredraw
 
 set shortmess-=S
 
 hi link EasyMotionTarget Search
+
+
+"let g:lightline = {
+      "\ 'component_function': {
+      "\   'filename': 'LightlineFilename',
+      "\ }
+      "\ }
+
+function! LightlineFilename()
+  return expand('%:.')
+endfunction
+
+" Use K to show documentation in preview window
+nnoremap <silent> <leader>K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+
+" You will have bad experience for diagnostic messages when it's default 4000.
+set updatetime=500
+" Highlight symbol under cursor on CursorHold
+"autocmd CursorHold * silent call CocActionAsync('highlight')
+" Remap keys for gotos
+nmap <silent> <leader>gh :call CocActionAsync('highlight')<cr>
+nmap <silent> <leader>gd <Plug>(coc-definition)
+nmap <silent> <leader>gy <Plug>(coc-type-definition)
+nmap <silent> <leader>gi <Plug>(coc-implementation)
+nmap <silent> <leader>gr <Plug>(coc-references)
+nmap <leader>rn <Plug>(coc-rename)
+imap <C-b> <Plug>(coc-snippets-expand)
+" Use <C-j> for select text for visual placeholder of snippet.
+vmap <C-j> <Plug>(coc-snippets-select)
+" Use <C-j> for jump to next placeholder, it's default of coc.nvim
+let g:coc_snippet_next = '<c-j>'
+" Use <C-k> for jump to previous placeholder, it's default of coc.nvim
+let g:coc_snippet_prev = '<c-k>'
+
+"inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+inoremap <silent><expr> <c-space> coc#refresh()
+autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
+
+inoremap <expr> <c-j> pumvisible() ? "\<C-n>" : "\<c-j>"
+inoremap <expr> <c-k> pumvisible() ? "\<C-p>" : "\<c-k>"
+
+function! CocCurrentFunction()
+    return get(b:, 'coc_current_function', '')
+endfunction
+
+let g:lightline = {
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'cocstatus', 'currentfunction', 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'component_function': {
+      \   'cocstatus': 'coc#status',
+      \   'currentfunction': 'CocCurrentFunction',
+      \   'filename': 'LightlineFilename',
+      \ },
+      \ }
 
 "au User Ncm2Plugin call ncm2#register_source({
       "\ 'name' : 'ruby',
@@ -191,21 +259,21 @@ hi link EasyMotionTarget Search
 " let g:UltiSnipsExpandTrigger		= "<Plug>(ultisnips_expand)"
 "let g:UltiSnipsJumpForwardTrigger	= "<c-]>"
 "let g:UltiSnipsJumpBackwardTrigger	= "<c-[>"
-let g:UltiSnipsExpandTrigger="<c-b>"
-let g:UltiSnipsRemoveSelectModeMappings = 0
-inoremap <expr> <c-j> pumvisible() ? "\<C-n>" : UltiSnips#JumpForwards()
-inoremap <expr> <c-k> pumvisible() ? "\<C-p>" : UltiSnips#JumpBackwards()
+"let g:UltiSnipsExpandTrigger="<c-b>"
+"let g:UltiSnipsRemoveSelectModeMappings = 0
+"inoremap <expr> <c-j> pumvisible() ? "\<C-n>" : UltiSnips#JumpForwards()
+"inoremap <expr> <c-k> pumvisible() ? "\<C-p>" : UltiSnips#JumpBackwards()
 
 " Map ctrl-x_ctrl-p to keyword completin in complete, so that it matches words in other buffers.
 inoremap <expr> <c-x><c-p> pumvisible() ? "\<c-e>\<c-p>" : "\<c-p>"
 
-let g:ncm2#complete_delay=60
-let g:ncm2#popup_delay=100
+"let g:ncm2#complete_delay=60
+"let g:ncm2#popup_delay=100
 
 
 "inoremap <silent> <Plug>(MyCR) <CR><C-R>=AutoPairsReturn()<CR>
-inoremap <silent> <Plug>(MyCR) <CR>
-imap <silent> <expr> <CR> ncm2_ultisnips#expand_or("\<Plug>(MyCR)", 'im')
+"inoremap <silent> <Plug>(MyCR) <CR>
+"imap <silent> <expr> <CR> ncm2_ultisnips#expand_or("\<Plug>(MyCR)", 'im')
 "inoremap <silent> <Plug>(MyCR) <C-R>=AutoPairsReturn()<CR> "without noselect
 " example
 "imap <expr> <CR> (pumvisible() ? "\<C-Y>\<Plug>(MyCR)" : "\<Plug>(MyCR)")
@@ -217,11 +285,10 @@ imap <silent> <expr> <CR> ncm2_ultisnips#expand_or("\<Plug>(MyCR)", 'im')
 "inoremap <silent> <expr> <c-\> ncm2_ultisnips#expand_or("\<Plug>(MyCR)", 'im')
 
 
-let g:ncm2#complete_length=[[1,2],[7,2]]
-autocmd BufEnter * call ncm2#enable_for_buffer()
-au User Ncm2PopupOpen set completeopt=noinsert,menuone,noselect
-"au User Ncm2PopupOpen set completeopt=noinsert,menuone
-au User Ncm2PopupClose set completeopt=menuone
+"let g:ncm2#complete_length=[[1,2],[7,2]]
+"autocmd BufEnter * call ncm2#enable_for_buffer()
+"au User Ncm2PopupOpen set completeopt=noinsert,menuone,noselect
+"au User Ncm2PopupClose set completeopt=menuone
 "set shortmess+=c
 set dictionary+=/usr/share/dict/words
 
@@ -427,8 +494,9 @@ let g:jellybeans_overrides = {
 \}
 
 augroup customer_my_autocmd
-  autocmd BufRead,BufNewFile *.js set ft=javascript
-  autocmd BufRead,BufNewFile *.jsx set ft=javascript.jsx.html
+  "autocmd BufRead,BufNewFile *.js set ft=javascript
+  "autocmd BufRead,BufNewFile *.jsx set ft=javascript.jsx.html
+  autocmd BufRead,BufNewFile *.jsx set ft=javascript.jsx
   autocmd BufRead,BufNewFile *.rdoc setlocal spell
   autocmd BufRead,BufNewFile *.md setlocal spell
   autocmd BufRead,BufNewFile *.rdoc set complete+=kspell
@@ -465,7 +533,7 @@ endfunction
 "command! -bang -nargs=* -complete=file Make AsyncRun -program=make @ <args>
 " Let Airline display status of AsyncRun
 "let g:airline_section_error = airline#section#create_right(['%{g:asyncrun_status}'])
-" no bells and whistles
+
 "let g:airline_extensions = []
 " cache airline highlight
 "let g:airline_highlighting_cache = 1
@@ -772,5 +840,5 @@ nnoremap <Leader><space> :nohlsearch<Enter>
 "nnoremap <silent> <leader>DC :exe ":profile continue"<cr>
 "nnoremap <silent> <leader>DQ :exe ":profile pause"<cr>:noautocmd qall!<cr>
 
-nnoremap <leader>g :GoRun %<cr>
+nnoremap <D-g> :GoRun %<cr>
 

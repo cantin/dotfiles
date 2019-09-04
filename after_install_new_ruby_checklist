@@ -1,6 +1,0 @@
-// Install gem-ctags and run ctags to generate tags for each gems
-gem install gem-ctags
-gem ctags
-
-// Generate ri documentation for pressing K in vim
-gem rdoc --ri --all --overwrite

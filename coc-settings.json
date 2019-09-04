@@ -1,0 +1,10 @@
+{
+  "coc.preferences.extensionUpdateCheck": "never",
+  "snippets.extends": {
+    "javascriptreact": ["javascript", "html"],
+    "typescript": ["javascript"]
+  },
+  "coc.source.specificTag.enable": false,
+  "coc.source.tag.enable": true,
+  "coc.source.tag.priority": 1
+}

@@ -6,4 +6,5 @@ cp ~/.bash_profile ./bash_profile
 cp ~/.agignore ./agignore
 cp ~/.ctags ./ctags
 cp -r ~/.vim/autoload/ctrlp ./vim/autoload/ctrlp
-cp -r ~/.vim/autoload/ncm2_tagprefix.vim ./vim/autoload/ncm2_tagprefix.vim
+#cp -r ~/.vim/autoload/ncm2_tagprefix.vim ./vim/autoload/ncm2_tagprefix.vim
+cp ~/.vim/coc-settings.json coc-settings.json

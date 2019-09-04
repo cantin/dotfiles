@@ -1,0 +1,26 @@
+#!/usr/bin/env sh
+
+# For ruby language server
+gem install solargraph
+
+# Install gem-ctags and run ctags to generate tags for each gems
+gem install gem-ctags
+gem ctags
+
+# Generate ri documentation for pressing K in vim
+gem rdoc --ri --all --overwrite
+
+cp agignore ~/.agignore
+cp ctags ~/.ctags
+#cp bash_profile ~/.bash_profile
+cp vimrc ~/.vimrc
+cp coc-setting.json ~/.vim/coc-settings.json
+
+mkdir .vim/autoload/ctrlp
+cp vim/autoload/ctrlp/tag.vim .vim/autoload/ctrlp/tag.vim
+
+# Install vim-plug
+curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+# Install coc extension in vim
+vim -c 'CocInstall -sync coc-snippets coc-tag coc-json coc-pairs coc-syntax coc-css coc-html coc-solargraph coc-tsserver|q'
