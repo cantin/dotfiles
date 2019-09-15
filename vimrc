@@ -12,7 +12,7 @@ Plug 'tpope/vim-fugitive'
 "Plug 'bling/vim-airline'
 Plug 'itchyny/lightline.vim'
 Plug 'nanotech/jellybeans.vim'
-Plug 'int3/vim-extradite'
+"Plug 'int3/vim-extradite'
 Plug 'rking/ag.vim'
 Plug 'scrooloose/nerdtree'
 "Plug 'scrooloose/syntastic'
@@ -29,7 +29,7 @@ Plug 'godlygeek/tabular'
 Plug 'bronson/vim-trailing-whitespace'
 Plug 'scrooloose/nerdcommenter'
 "Plug 'majutsushi/tagbar'
-Plug 'kien/ctrlp.vim'
+"Plug 'kien/ctrlp.vim'
 "Plug 'MarcWeber/vim-addon-mw-utils'
 "Plug 'tomtom/tlib_vim'
 "Plug 'garbas/vim-snipmate'
@@ -90,6 +90,10 @@ set shortmess-=S
 
 hi link EasyMotionTarget Search
 
+"let g:extradite_resize=0
+"let g:extradite_diff_split='belowright vertical split'
+"let g:extradite_showhash=1
+
 
 "let g:lightline = {
       "\ 'component_function': {
@@ -133,8 +137,8 @@ let g:coc_snippet_next = '<c-j>'
 let g:coc_snippet_prev = '<c-k>'
 
 "inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-inoremap <silent><expr> <c-space> coc#refresh()
+inoremap <expr> <cr> pumvisible() && coc#expandable() ? "\<C-y>" : "\<C-g>u\<CR>"
+inoremap <silent><expr> <d-i> coc#refresh()
 autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
 
 inoremap <expr> <c-j> pumvisible() ? "\<C-n>" : "\<c-j>"
@@ -348,8 +352,8 @@ let g:undotree_SetFocusWhenToggle = 1
   "endif
 "endfunction
 
-"noremap <c-p> :Files<cr>
-"noremap <leader>cp :Tags<CR>
+noremap <c-p> :Files<cr>
+noremap <leader>cp :Tags<CR>
 "function! s:ag_with_opts(arg, bang)
   "let tokens  = split(a:arg)
   "let ag_opts = join(filter(copy(tokens), 'v:val =~ "^-"'))
@@ -387,10 +391,10 @@ let g:fzf_history_dir = '~/.vim/fzf-history'
 let g:fzf_colors =
 \ { 'fg':      ['fg', 'Normal'],
   \ 'bg':      ['bg', 'Normal'],
-  \ 'hl':      ['fg', 'InSearch'],
+  \ 'hl':      ['fg', 'IncSearch'],
   \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-  \ 'bg+':     ['bg', 'StatusLine'],
-  \ 'hl+':     ['fg', 'InSearch'],
+  \ 'bg+':     ['bg', 'TabLine'],
+  \ 'hl+':     ['fg', 'IncSearch'],
   \ 'info':    ['fg', 'PreProc'],
   \ 'border':  ['fg', 'Ignore'],
   \ 'prompt':  ['fg', 'Cursor'],
@@ -457,8 +461,8 @@ noremap <leader>cT :!ctags -R -f gems.tags $(bundle show --paths)<CR>
 noremap <leader>n :NERDTreeToggle<CR>
 "noremap <leader>rt :TagbarToggle<CR>
 noremap <leader>rl :set relativenumber!<CR>
-noremap <leader>cp :let g:ctrlptag_type='project' <bar> CtrlPTag<CR>
-noremap <leader>cP :let g:ctrlptag_type='all' <bar> CtrlPTag<CR>
+"noremap <leader>cp :let g:ctrlptag_type='project' <bar> CtrlPTag<CR>
+"noremap <leader>cP :let g:ctrlptag_type='all' <bar> CtrlPTag<CR>
 "run rake default task, default is running test in current file
 noremap <leader>rk :.Rake<CR>
 
@@ -657,7 +661,7 @@ endif
 
 if has("gui_running")
   "set guifont=monaco:h12
-  set guifont=Anonymous\ Pro:h14
+  set guifont=Anonymous\ Pro:h15
   set guioptions=Ace              " 去掉难看的工具栏和滑动条
   "set showtabline=2        " 开启自带的tab栏
   set transparency=20       "设置透明度
@@ -734,6 +738,7 @@ if has("gui_running") && !has("gui_win32")
   "Generate ri documentation for gems in Gemfile. Note: bundler list --name-only is not working
   let g:ri_command='for gem in $(bc ruby -e "Bundler.load.specs.each {|s| puts s.name.to_s + ''&'' + s.version.to_s }"); do name=$(cut -d''&'' -f1 <<< $gem); version=$(cut -d''&'' -f2 <<< $gem); gem rdoc --ri $name -v $version ;done'
   command! Ri call asyncrun#quickfix_toggle(8) | execute "AsyncRun " . g:ri_command
+  command! RubyDoc setlocal keywordprg=:SHELL\ ri\ -T\ -f\ markdown
 endif
 
 "run rails runner by CMD + R

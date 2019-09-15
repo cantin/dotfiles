@@ -4,7 +4,8 @@
     "javascriptreact": ["javascript", "html"],
     "typescript": ["javascript"]
   },
-  "coc.source.specificTag.enable": false,
-  "coc.source.tag.enable": true,
-  "coc.source.tag.priority": 1
+  "coc.source.around.priority": 5,
+  "coc.source.buffer.priority": 5,
+  "coc.source.tag.priority": 1,
+  "snippets.ultisnips.usePythonx": false
 }
