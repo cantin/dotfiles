@@ -467,6 +467,9 @@ noremap <leader>rl :set relativenumber!<CR>
 noremap <leader>rk :.Rake<CR>
 
 command! Vimrc :vs $MYVIMRC
+command! Terminal :terminal /bin/bash -il
+
+"set shell=/bin/bash\ -il
 
 augroup numbertoggle
   autocmd BufEnter,FocusGained,InsertLeave * if &l:number == 1 | set relativenumber | endif
@@ -517,7 +520,11 @@ nnoremap <leader>a  :Ag! <cword><cr>
 vnoremap <leader>a  :<c-u>call <SID>AgOperator(visualmode())<cr>
 nnoremap <leader>A :Ag!<space>
 " Open quickfix widnow & type AsyncRun in command line
-nnoremap <leader>R :call asyncrun#quickfix_toggle(8)<cr>:AsyncRun<space>
+let g:asyncrun_open = 16
+nnoremap <d-A> :AsyncRun -raw<space>
+"vnoremap <d-r> :<c-u>'<,'>AsyncRun -raw ruby<cr>
+"vnoremap <leader>R :<c-u>'<,'>AsyncRun -raw ruby<cr>
+"nnoremap <leader>R :call asyncrun#quickfix_toggle(8)<cr>:AsyncRun<space>
 
 function! s:AgOperator(type)
   let prev_saved_val = @@
@@ -619,7 +626,6 @@ vnoremap <leader>r' :<c-u>call SimpleAutoPair("'", "'")<CR>
 
 
 function! SimpleAppendPair(first, second)
-  echom '1'
   execute "normal \<esc>`<i" . a:first  . "\<esc>`>"
 
   if col(".") == col("$")-1
@@ -694,8 +700,48 @@ endfunction
 command! ZoomToggle call s:ZoomToggle()
 noremap <C-W>o :ZoomToggle<CR>
 
+function ExitCb(job, status)
+  "exec 'keepjumps' bufwinnr('Asynccmdbuf') 'wincmd W'
+  "normal gg
+  "exec 'wincmd p'
+endfunction
+function! s:RunCommandAsync(cmd)
+	if exists('s:async_job')
+    if job_status(s:async_job) == 'run'
+      if job_stop(s:async_job, 'term')
+        unlet s:async_job
+      end
+    endif
+  endif
+  "echom '/bin/bash -ilc ' . escape(a:cmd) . '"'
+  echom ['/bin/bash -ilc', a:cmd]
+  let s:async_job = job_start(['/bin/bash', '-ilc', a:cmd], {'out_io': 'buffer', 'out_name': 'Asynccmdbuf', 'err_io': 'buffer', 'err_name': 'Asynccmdbuf', 'exit_cb': 'ExitCb'})
+  if bufwinnr('Asynccmdbuf') > 0
+    exec 'keepjumps' bufwinnr('Asynccmdbuf') 'wincmd W'
+    exec 'normal! ggdG'
+    silent put=('$ '. a:cmd)
+    silent put=''
+    exec 'wincmd p'
+  else
+    sbuffer Asynccmdbuf
+    setlocal buftype=nofile bufhidden=wipe noswapfile nobuflisted nomodified
+    silent normal gg
+    silent put=('$ '. a:cmd)
+    silent put=''
+    noremap <buffer> q ZZ
+    exec 'wincmd p'
+  endif
+endfunction
 
-"let s:output_file = '/tmp/ruby_runner_output.txt'
+function! VisualSelection()
+  try
+    let a_save = @a
+    silent! normal! gv"ay
+    return @a
+  finally
+    let @a = a_save
+  endtry
+endfunction
 
 "run command and redirect output to buffer on top
 function! s:RunCommand(cmd)
@@ -728,26 +774,32 @@ function! s:RunCommand(cmd)
 endfunction
 
 "run ruby by CMD + r
-command! RunRuby call <SID>RunCommand('!ruby %:p')
-au FileType ruby noremap <buffer> <D-r> :RunRuby<CR>
+"command! RunRuby call <SID>RunCommand('!ruby %:p')
+command! RunRuby call <SID>RunCommandAsync('ruby '. expand('%:p'))
+au FileType ruby nnoremap <buffer> <D-r> :RunRuby<CR>
+vnoremap <D-r> :<c-u>call <SID>RunCommandAsync('ruby -e "' . escape(VisualSelection(), '"') . '"')<cr>
 
 "Redirect output of ri to buffer when pressing K
 if has("gui_running") && !has("gui_win32")
   au FileType ruby,haml setlocal keywordprg=:SHELL\ ri\ -T\ -f\ markdown
 
   "Generate ri documentation for gems in Gemfile. Note: bundler list --name-only is not working
-  let g:ri_command='for gem in $(bc ruby -e "Bundler.load.specs.each {|s| puts s.name.to_s + ''&'' + s.version.to_s }"); do name=$(cut -d''&'' -f1 <<< $gem); version=$(cut -d''&'' -f2 <<< $gem); gem rdoc --ri $name -v $version ;done'
-  command! Ri call asyncrun#quickfix_toggle(8) | execute "AsyncRun " . g:ri_command
+  "let g:ri_command='for gem in $(bc ruby -e "Bundler.load.specs.each {|s| puts s.name.to_s + ''&'' + s.version.to_s }"); do name=$(cut -d''&'' -f1 <<< $gem); version=$(cut -d''&'' -f2 <<< $gem); gem rdoc --ri $name -v $version ;done'
+  "command! Ri call asyncrun#quickfix_toggle(8) | execute "AsyncRun " . g:ri_command
+  command! Ri :SHELL for gem in $(bc ruby -e "Bundler.load.specs.each {|s| puts s.name.to_s + ''&'' + s.version.to_s }"); do name=$(cut -d''&'' -f1 <<< $gem); version=$(cut -d''&'' -f2 <<< $gem); gem rdoc --ri $name -v $version ;done
   command! RubyDoc setlocal keywordprg=:SHELL\ ri\ -T\ -f\ markdown
 endif
 
 "run rails runner by CMD + R
-command! RunRailsRunner call <SID>RunCommand('!bundle exec rails r %:p')
-au FileType ruby noremap <buffer> <D-R> :RunRailsRunner<CR>
+"command! RunRailsRunner call <SID>RunCommand('!bundle exec rails r %:p')
+command! RunRailsRunner call <SID>RunCommandAsync('bundle exec rails r ' . expand('%:p'))
+au FileType ruby nnoremap <buffer> <D-R> :RunRailsRunner<CR>
+vnoremap <D-R> :<c-u>call <SID>RunCommandAsync('bundle exec rails r "' . escape(VisualSelection(), '"') . '"')<cr>
 
 "'SHELL shellcommand', redirect output to buffer
 "command! -nargs=* -complete=shellcmd SH new | setlocal buftype=nofile bufhidden=hide noswapfile | r !<args>
-command! -nargs=* -complete=shellcmd SHELL call <SID>RunCommand('!<args>')
+"command! -nargs=* -complete=shellcmd SHELL call <SID>RunCommand('!<args>')
+command! -nargs=* -complete=shellcmd SHELL call <SID>RunCommandAsync('<args>')
 noremap <D-H> :SHELL<space>
 
 command! LcdToCurrentFilePath lcd %:p:h
