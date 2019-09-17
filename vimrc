@@ -663,6 +663,8 @@ if has("gui_macvim")
   noremap <D-9> :tabn 9<CR>
   " Command-0 goes to the last tab
   noremap <D-0> :tablast<CR>
+
+  set transparency=20       "设置透明度
 endif
 
 if has("gui_running")
@@ -670,7 +672,6 @@ if has("gui_running")
   set guifont=Anonymous\ Pro:h15
   set guioptions=Ace              " 去掉难看的工具栏和滑动条
   "set showtabline=2        " 开启自带的tab栏
-  set transparency=20       "设置透明度
   set linespace=2
 
   "call Rand()
@@ -714,23 +715,21 @@ function! s:RunCommandAsync(cmd)
     endif
   endif
   "echom '/bin/bash -ilc ' . escape(a:cmd) . '"'
-  echom ['/bin/bash -ilc', a:cmd]
+  "echom ['/bin/bash -ilc', a:cmd]
   let s:async_job = job_start(['/bin/bash', '-ilc', a:cmd], {'out_io': 'buffer', 'out_name': 'Asynccmdbuf', 'err_io': 'buffer', 'err_name': 'Asynccmdbuf', 'exit_cb': 'ExitCb'})
   if bufwinnr('Asynccmdbuf') > 0
     exec 'keepjumps' bufwinnr('Asynccmdbuf') 'wincmd W'
     exec 'normal! ggdG'
-    silent put=('$ '. a:cmd)
-    silent put=''
-    exec 'wincmd p'
   else
     sbuffer Asynccmdbuf
-    setlocal buftype=nofile bufhidden=wipe noswapfile nobuflisted nomodified
     silent normal gg
-    silent put=('$ '. a:cmd)
-    silent put=''
-    noremap <buffer> q ZZ
-    exec 'wincmd p'
   endif
+
+  setlocal buftype=nofile filetype= bufhidden=wipe noswapfile nobuflisted nomodified
+  silent put=('$ '. a:cmd)
+  silent put=''
+  noremap <buffer> q ZZ
+  exec 'wincmd p'
 endfunction
 
 function! VisualSelection()
@@ -780,7 +779,7 @@ au FileType ruby nnoremap <buffer> <D-r> :RunRuby<CR>
 vnoremap <D-r> :<c-u>call <SID>RunCommandAsync('ruby -e "' . escape(VisualSelection(), '"') . '"')<cr>
 
 "Redirect output of ri to buffer when pressing K
-if has("gui_running") && !has("gui_win32")
+"if has("gui_running") && !has("gui_win32")
   au FileType ruby,haml setlocal keywordprg=:SHELL\ ri\ -T\ -f\ markdown
 
   "Generate ri documentation for gems in Gemfile. Note: bundler list --name-only is not working
@@ -788,7 +787,7 @@ if has("gui_running") && !has("gui_win32")
   "command! Ri call asyncrun#quickfix_toggle(8) | execute "AsyncRun " . g:ri_command
   command! Ri :SHELL for gem in $(bc ruby -e "Bundler.load.specs.each {|s| puts s.name.to_s + ''&'' + s.version.to_s }"); do name=$(cut -d''&'' -f1 <<< $gem); version=$(cut -d''&'' -f2 <<< $gem); gem rdoc --ri $name -v $version ;done
   command! RubyDoc setlocal keywordprg=:SHELL\ ri\ -T\ -f\ markdown
-endif
+"endif
 
 "run rails runner by CMD + R
 "command! RunRailsRunner call <SID>RunCommand('!bundle exec rails r %:p')
@@ -801,6 +800,7 @@ vnoremap <D-R> :<c-u>call <SID>RunCommandAsync('bundle exec rails r "' . escape(
 "command! -nargs=* -complete=shellcmd SHELL call <SID>RunCommand('!<args>')
 command! -nargs=* -complete=shellcmd SHELL call <SID>RunCommandAsync('<args>')
 noremap <D-H> :SHELL<space>
+vnoremap <D-H> :<c-u>call <SID>RunCommandAsync('' . escape(VisualSelection(), '"'))<cr>
 
 command! LcdToCurrentFilePath lcd %:p:h
 noremap <leader>cd :LcdToCurrentFilePath<CR>
@@ -867,7 +867,6 @@ function! s:toggleFold()
   if (l:num != -1) && (l:level != l:foldlevel)
     " +----999 lines blah blah -----------  or +---- 999 lines blah blah -----------  take 999 to l:result
     let l:result = split(substitute(foldtextresult(expand('.')), '-', ' ', 'g'), '')[1]
-    echo l:result
     if l:result > &lines
       silent! normal za
     else

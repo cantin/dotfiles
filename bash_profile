@@ -23,7 +23,7 @@ alias gs="git status"
 alias gco="git checkout"
 alias ga="git add"
 alias gp="git pull"
-alias gpd="echo 'git push origin develop'; git push origin develop"
+alias gpo='branch=$(git rev-parse --abbrev-ref HEAD); echo "git push origin $branch"; git push origin $branch'
 alias gitlogp="git log --graph --pretty=format:'%C(yellow)%h%C(cyan)%d%Creset %s %C(blue)- %an, %ar%Creset' --abbrev-commit --all --decorate"
 alias gitlogs="git log --pretty=format:'[%h] %ae, %ar: %s' --stat"
 alias gm="git show -s --format=%B"
