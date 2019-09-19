@@ -726,6 +726,8 @@ function! s:RunCommandAsync(cmd)
   endif
 
   setlocal buftype=nofile filetype= bufhidden=wipe noswapfile nobuflisted nomodified
+  autocmd! * <buffer>
+  autocmd BufWinLeave <buffer> if exists('s:async_job') && job_status(s:async_job) == 'run' | call job_stop(s:async_job, 'term') | endif
   silent put=('$ '. a:cmd)
   silent put=''
   noremap <buffer> q ZZ
