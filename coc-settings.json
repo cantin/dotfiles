@@ -7,5 +7,18 @@
   "coc.source.around.priority": 5,
   "coc.source.buffer.priority": 5,
   "coc.source.tag.priority": 1,
-  "snippets.ultisnips.usePythonx": false
+  "snippets.ultisnips.usePythonx": false,
+  "typescript.validate.enable": false,
+  "typescript.suggestionActions.enabled": false,
+  "typescript.suggest.enabled": false,
+  "javascript.suggestionActions.enabled": false,
+  "yank.highlight.enable": false,
+  "yank.priority": 1,
+  //"solargraph.useBundler": true,
+  "translator.engines": [
+    "bing",
+    "google",
+    "youdao",
+    "haici"
+  ]
 }

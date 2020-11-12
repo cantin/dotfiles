@@ -32,6 +32,8 @@ alias gdcd="gdc > diff"
 
 if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 
+[[ -r "$(brew --prefix)/etc/profile.d/bash_completion.sh" ]] && . "$(brew --prefix)/etc/profile.d/bash_completion.sh"
+
 if [ -f ~/.git-completion.bash ]; then
   source ~/.git-completion.bash
 
@@ -49,6 +51,7 @@ export FZF_DEFAULT_COMMAND='ag -l -U'
 export FZF_DEFAULT_OPTS="--height=70% --reverse --inline-info -m --preview 'head -200 {} 2>/dev/null' --preview-window 'right:hidden:wrap' --bind 'ctrl-o:toggle-preview,ctrl-f:half-page-down,ctrl-b:half-page-up,ctrl-y:execute-silent(echo {+} | pbcopy)'"
 export FZF_CTRL_T_OPTS="-m --preview 'head -200 {} 2>/dev/null'"
 
+
 bind -x '"\C-g":"fg"'
 bind -x '"\C-xf":"fg"'
 bind -x '"\C-xj":"jobs"'
@@ -63,5 +66,15 @@ killbyname() {
   psall $1 | awk '{print $2}' | xargs kill $2
 }
 
+kill9byname() {
+  psall $1 | awk '{print $2}' | xargs kill -9 $2
+}
+
+
 
 export GOPATH=$HOME/Workspace/gocode
+
+# ruby-build installs a non-Homebrew OpenSSL for each Ruby version installed and these are never upgraded.
+# To link Rubies to Homebrew's OpenSSL 1.1 (which is upgraded) add the following
+# to your /Users/Cantin/.bash_profile:
+export RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@1.1)"

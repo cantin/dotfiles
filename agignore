@@ -8,7 +8,9 @@ coverage/index.html
 /node_modules/*
 /tmp/*
 /storage/*
+/pages/*.gz
 public/assets
 public/packs
 public/packs-test
 .DS_Store
+/*/node_modules/*

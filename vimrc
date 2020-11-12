@@ -12,6 +12,7 @@ Plug 'tpope/vim-fugitive'
 "Plug 'bling/vim-airline'
 Plug 'itchyny/lightline.vim'
 Plug 'nanotech/jellybeans.vim'
+Plug 'morhetz/gruvbox'
 "Plug 'int3/vim-extradite'
 Plug 'rking/ag.vim'
 Plug 'scrooloose/nerdtree'
@@ -42,12 +43,14 @@ Plug 'maxmellon/vim-jsx-pretty'
 Plug 'skywind3000/asyncrun.vim'
 "Plug 'terryma/vim-multiple-cursors'
 "Plug 'danchoi/ri.vim'
-Plug 'w0rp/ale'
+"Plug 'w0rp/ale'
+Plug 'dense-analysis/ale'
 Plug 'fatih/vim-go', { 'for': 'go' }
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
 
 Plug 'tpope/vim-bundler'
+Plug 'othree/eregex.vim' "Use Perl/Ruby style regexp
 
 "Plug 'BrandonRoehl/auto-omni'
 
@@ -79,8 +82,25 @@ Plug 'easymotion/vim-easymotion'
 "Plug 'ncm2/ncm2-vim-lsp'
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+"Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
+"Plug 'neoclide/coc-snippets', {'do': 'yarn install --frozen-lockfile'}
+""Plug 'neoclide/coc-tag', {'do': 'yarn install --frozen-lockfile'}
+"Plug 'neoclide/coc-json', {'do': 'yarn install --frozen-lockfile'}
+"Plug 'neoclide/coc-pairs', {'do': 'yarn install --frozen-lockfile'}
+""Plug 'neoclide/coc-syntax', {'do': 'yarn install --frozen-lockfile'}
+"Plug 'neoclide/coc-css', {'do': 'yarn install --frozen-lockfile'}
+"Plug 'neoclide/coc-html', {'do': 'yarn install --frozen-lockfile'}
+"Plug 'neoclide/coc-solargraph', {'do': 'yarn install --frozen-lockfile'}
+"Plug 'neoclide/coc-yank', {'do': 'yarn install --frozen-lockfile'}
+"Plug 'voldikss/coc-translator', {'do': 'yarn install --frozen-lockfile'}
+"Plug 'josa42/coc-sh', {'do': 'yarn install --frozen-lockfile'}
+"Plug 'coc-extensions/coc-omnisharp', {'do': 'yarn install --frozen-lockfile'}
+"Plug 'iamcco/coc-spell-checker', {'do': 'yarn install --frozen-lockfile'}
 
 call plug#end()
+set rtp+=/usr/local/opt/fzf
+
+let g:coc_global_extensions = ["coc-snippets", "coc-tag", "coc-json", "coc-pairs", "coc-syntax", "coc-css", "coc-html", "coc-solargraph", "coc-tsserver", "coc-translator", "coc-sh", "coc-yank", "coc-spell-checker"]
 
 set hidden
 set background=dark
@@ -89,6 +109,11 @@ set lazyredraw
 set shortmess-=S
 
 hi link EasyMotionTarget Search
+
+let g:eregex_default_enable = 0
+
+noremap <leader>/ :M/
+noremap <leader>? :M?
 
 "let g:extradite_resize=0
 "let g:extradite_diff_split='belowright vertical split'
@@ -116,6 +141,7 @@ function! s:show_documentation()
   endif
 endfunction
 
+nmap <silent> <leader>df :execute "!git diff --cached > diff" <bar> :e diff<cr>
 
 " You will have bad experience for diagnostic messages when it's default 4000.
 set updatetime=500
@@ -128,7 +154,8 @@ nmap <silent> <leader>gy <Plug>(coc-type-definition)
 nmap <silent> <leader>gi <Plug>(coc-implementation)
 nmap <silent> <leader>gr <Plug>(coc-references)
 nmap <leader>rn <Plug>(coc-rename)
-imap <C-b> <Plug>(coc-snippets-expand)
+imap <expr> <C-e> pumvisible() ? coc#_select_confirm() : "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand',''])\<CR>"
+"<Plug>(coc-snippets-expand)
 " Use <C-j> for select text for visual placeholder of snippet.
 vmap <C-j> <Plug>(coc-snippets-select)
 " Use <C-j> for jump to next placeholder, it's default of coc.nvim
@@ -141,8 +168,8 @@ inoremap <expr> <cr> pumvisible() && coc#expandable() ? "\<C-y>" : "\<C-g>u\<CR>
 inoremap <silent><expr> <d-i> coc#refresh()
 autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
 
-inoremap <expr> <c-j> pumvisible() ? "\<C-n>" : "\<c-j>"
-inoremap <expr> <c-k> pumvisible() ? "\<C-p>" : "\<c-k>"
+"inoremap <expr> <c-j> pumvisible() ? "\<C-n>" : "\<c-j>"
+"inoremap <expr> <c-k> pumvisible() ? "\<C-p>" : "\<c-k>"
 
 function! CocCurrentFunction()
     return get(b:, 'coc_current_function', '')
@@ -338,6 +365,10 @@ nnoremap <leader>u :UndotreeToggle<cr>
 let g:undotree_WindowLayout = 2
 let g:undotree_SetFocusWhenToggle = 1
 
+" Empty value to disable preview window altogether
+let g:fzf_preview_window = ''
+let g:fzf_layout = { 'down': '~40%' }
+
 
 "function! CleverTab()
   "if pumvisible()
@@ -388,20 +419,22 @@ nnoremap <leader>fT :Tags<cr>
 let g:fzf_history_dir = '~/.vim/fzf-history'
 "autocmd VimEnter * command! -nargs=* -bang Ag call s:ag_with_opts(<q-args>, <bang>0)
 
-let g:fzf_colors =
-\ { 'fg':      ['fg', 'Normal'],
-  \ 'bg':      ['bg', 'Normal'],
-  \ 'hl':      ['fg', 'IncSearch'],
-  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-  \ 'bg+':     ['bg', 'TabLine'],
-  \ 'hl+':     ['fg', 'IncSearch'],
-  \ 'info':    ['fg', 'PreProc'],
-  \ 'border':  ['fg', 'Ignore'],
-  \ 'prompt':  ['fg', 'Cursor'],
-  \ 'pointer': ['fg', 'Cursor'],
-  \ 'marker':  ['fg', 'Keyword'],
-  \ 'spinner': ['fg', 'Label'],
-  \ 'header':  ['fg', 'Comment'] }
+set history=5000
+
+"let g:fzf_colors =
+"\ { 'fg':      ['fg', 'Normal'],
+  "\ 'bg':      ['bg', 'Normal'],
+  "\ 'hl':      ['fg', 'IncSearch'],
+  "\ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  "\ 'bg+':     ['bg', 'TabLine'],
+  "\ 'hl+':     ['fg', 'IncSearch'],
+  "\ 'info':    ['fg', 'PreProc'],
+  "\ 'border':  ['fg', 'Ignore'],
+  "\ 'prompt':  ['fg', 'Cursor'],
+  "\ 'pointer': ['fg', 'Cursor'],
+  "\ 'marker':  ['fg', 'Keyword'],
+  "\ 'spinner': ['fg', 'Label'],
+  "\ 'header':  ['fg', 'Comment'] }
 
 "let g:SuperTabContextDefaultCompletionType = "<c-n>"
 "let g:SuperTabDefaultCompletionType = "context"
@@ -431,7 +464,9 @@ let g:fzf_colors =
     "\   call SuperTabChain(&omnifunc, "<c-p>") |
     "\ endif
 
-colorscheme jellybeans
+"colorscheme jellybeans
+colorscheme gruvbox
+
 "color jellybeans+
 
 "let g:syntastic_ruby_exec = 'ruby20'
@@ -457,7 +492,9 @@ noremap ]b :bn<cr>
 noremap [b :bp<cr>
 noremap <leader>fw :FixWhitespace<CR>
 noremap <leader>ct :!ctags -R .<CR>
-noremap <leader>cT :!ctags -R -f gems.tags $(bundle show --paths)<CR>
+"noremap <leader>cT :!ctags -R -f gems.tags $(bundle show --paths)<CR>
+"Load private gems tags
+noremap <leader>cT :!ctags -R -f gems.tags $(bundle list --paths \| grep bundler)<CR>
 noremap <leader>n :NERDTreeToggle<CR>
 "noremap <leader>rt :TagbarToggle<CR>
 noremap <leader>rl :set relativenumber!<CR>
@@ -468,6 +505,9 @@ noremap <leader>rk :.Rake<CR>
 
 command! Vimrc :vs $MYVIMRC
 command! Terminal :terminal /bin/bash -il
+nnoremap <leader>T :Terminal<cr>
+tnoremap <c-q> <c-\><c-n>:bd!<cr>
+tnoremap <c-o> <C-W>N
 
 "set shell=/bin/bash\ -il
 
@@ -483,7 +523,7 @@ let g:ale_lint_on_insert_leave = 1
 " disable rubocop & erb check
 let g:ale_linters = {
 \   'ruby': ['brakeman', 'rails_best_practices', 'reek', 'ruby'],
-\   'eruby': []
+\   'eruby': [],
 \}
 
 let g:jsx_ext_required = 1
@@ -511,6 +551,11 @@ augroup customer_my_autocmd
 
   autocmd BufRead,BufNewFile *.md setlocal omnifunc=
   au FileType markdown setlocal omnifunc=
+  au FileType cs setlocal tabstop=4  shiftwidth=4
+  " The tsserver 1.5.1 validation would toggle the signcolumn very quickly. That makes main content jumps.
+  " Make signcolumn always be there fixes the jumps
+  au FileType javascript setlocal signcolumn=yes
+  au FileType javascript.jsx setlocal signcolumn=yes
 augroup END
 
 
@@ -683,8 +728,12 @@ if has("gui_running")
   "set lines=999 columns=999
 
   "set shell command options 'bash -ilc' so ~/.bash_profile get loaded
-  set shellcmdflag=-ilc
+  "set shellcmdflag=-ilc
+
 endif
+
+autocmd FileType fugitive setlocal shellcmdflag=-c
+nnoremap <leader>G :Gstatus<cr>
 
 " Zoom / Restore window.
 function! s:ZoomToggle() abort
@@ -774,6 +823,10 @@ function! s:RunCommand(cmd)
   noremap <buffer> q ZZ
 endfunction
 
+command! Light set bg=light transparency=0
+command! Dark set bg=dark transparency=20 | highlight Normal guibg=black | highlight Normal ctermbg=None
+
+
 "run ruby by CMD + r
 "command! RunRuby call <SID>RunCommand('!ruby %:p')
 command! RunRuby call <SID>RunCommandAsync('ruby '. expand('%:p'))
@@ -787,8 +840,30 @@ vnoremap <D-r> :<c-u>call <SID>RunCommandAsync('ruby -e "' . escape(VisualSelect
   "Generate ri documentation for gems in Gemfile. Note: bundler list --name-only is not working
   "let g:ri_command='for gem in $(bc ruby -e "Bundler.load.specs.each {|s| puts s.name.to_s + ''&'' + s.version.to_s }"); do name=$(cut -d''&'' -f1 <<< $gem); version=$(cut -d''&'' -f2 <<< $gem); gem rdoc --ri $name -v $version ;done'
   "command! Ri call asyncrun#quickfix_toggle(8) | execute "AsyncRun " . g:ri_command
-  command! Ri :SHELL for gem in $(bc ruby -e "Bundler.load.specs.each {|s| puts s.name.to_s + ''&'' + s.version.to_s }"); do name=$(cut -d''&'' -f1 <<< $gem); version=$(cut -d''&'' -f2 <<< $gem); gem rdoc --ri $name -v $version ;done
+  command! RiAll :SHELL for gem in $(bc ruby -e "Bundler.load.specs.each {|s| puts s.name.to_s + ''&'' + s.version.to_s }"); do name=$(cut -d''&'' -f1 <<< $gem); version=$(cut -d''&'' -f2 <<< $gem); gem rdoc --ri $name -v $version; yard gems $name; done
   command! RubyDoc setlocal keywordprg=:SHELL\ ri\ -T\ -f\ markdown
+
+  "Generate ri, yard documentation and .solargraph.yml for specific gems
+  ":Ri rails
+  command! -nargs=* Ri call <SID>GenerateRi('<args>')
+  function! s:GenerateRi(gems)
+    let gems = a:gems
+    if gems == '' | let gems = '^rails$' | endif
+    exec "SHELL " . "IFS=$''\\n''; bundle exec gem dependency " . gems . "; for gem in $(bundle exec gem dependency " . gems . " --pipe); do name=$(cut -d '' '' -f1 <<< $gem); version=$(cut -d '' '' -f3-10 <<< $gem);" . "eval \"gem rdoc --ri $name -v $version; yard gems $name\"; done;
+          \ if [ ! -e .solargraph.yml ]; then bundle exec ruby -e \" require %{yaml}; names = Bundler.load.specs.select { |s| s.loaded_from =~ /bundler\\/gems/ }.map(&:name); File.write(%{.solargraph.yml}, { %{include} => [%{\"**/*.rb\"}] + names.map { |n| %{../#{n}/**/*.rb}}, %{exclude} => names.map { |n| %{../#{n}/test/**/*}} }.to_yaml) \";
+          \ fi; echo Done"
+
+          "\ if [ ! -e .solargraph.yml ]; then echo --- > .solargraph.yml; echo include: >> .solargraph.yml; echo " . a . "  >> .solargraph.yml; bundle list --paths  | grep bundler | rev |  cut -d / -f 1 | cut -d - -f 2-5 | rev | xargs -I {} echo ''  - ../{}/**/*.rb'' >> .solargraph.yml;
+          "\ echo exclude: >> .solargraph.yml; bundle list --paths  | grep bundler | rev |  cut -d / -f 1 | cut -d - -f 2-5 | rev | xargs -I {} echo ''  - ../{}/test/**/*'' >> .solargraph.yml;
+    "exec 'normal \cT'
+  endfunction
+
+  command! -nargs=* RTags call <SID>GenerateTag('<args>')
+  function! s:GenerateTag(gems)
+    let gems = a:gems
+    if strlen(gems) == 0 | let gems = 'actioncable actionmailbox actionmailer actionpack actiontext actionview activejob activemodel activerecord activestorage activesupport' | endif
+    exec "SHELL " . " for gem in " . gems . "; do path=$(bundle info --paths $gem) && cd $path; echo $path; ctags -R .\; cd -; done; echo Done;"
+  endfunction
 "endif
 
 "run rails runner by CMD + R
@@ -816,7 +891,8 @@ nnoremap <leader>fN :!echo -n %:p \| pbcopy<cr>
 
 "copy selected area to system clipboard for cli vi
 "+y :w !pbcopy<CR><CR>
-noremap <leader>y :w !pbcopy<CR><CR>
+"noremap <leader>y :w !pbcopy<CR><CR>
+noremap <leader>y "+y
 
 set wildmenu " visual autocomplete for command menu
 "set showmatch " highlight matching [{()}]
@@ -824,6 +900,9 @@ set wildmenu " visual autocomplete for command menu
 " set highlight style for quickfix & cursorcolumn
 highlight! link QuickFixLine StatusLineNC
 highlight! link CursorColumn StatusLineNC
+
+highlight! link CocDiagnosticsError ModeMsg
+highlight! link CocErrorFloat ModeMsg
 
 " press // in visual mode will search visual selected area
 vnoremap // :<c-u>set hlsearch \| :call <SID>searchVirualSelected()<cr>
@@ -889,6 +968,14 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
+
+inoremap <C-h> <left>
+inoremap <expr> <c-j> pumvisible() ? "\<C-n>" : "\<down>"
+inoremap <expr> <c-k> pumvisible() ? "\<C-p>" : "\<up>"
+"inoremap <C-j> <down>
+"inoremap <C-k> <up>
+inoremap <C-l> <right>
+
 " don't highlight search
 nnoremap <Leader><space> :nohlsearch<Enter>
 
@@ -900,3 +987,51 @@ nnoremap <Leader><space> :nohlsearch<Enter>
 
 nnoremap <D-g> :GoRun %<cr>
 
+"Set background to black for gruvbox
+highlight Normal guibg=black
+highlight Normal ctermbg=None
+
+"coc-yank
+nnoremap <silent> <leader><leader>y  :<C-u>CocList -A --normal yank<cr>
+
+"coc-translator
+" popup
+nmap <Leader><Leader>t <Plug>(coc-translator-p)
+vmap <Leader><Leader>t <Plug>(coc-translator-pv)
+" echo
+nmap <Leader><Leader>e <Plug>(coc-translator-e)
+vmap <Leader><Leader>e <Plug>(coc-translator-ev)
+" replace
+nmap <Leader><Leader>r <Plug>(coc-translator-r)
+vmap <Leader><Leader>r <Plug>(coc-translator-rv)
+
+"coc-spell-checker
+vmap <leader><leader>a <Plug>(coc-codeaction-selected)
+nmap <leader><leader>a <Plug>(coc-codeaction-selected)
+
+nnoremap <leader>C q:?
+
+" Use coc to get documentation
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+" Map \K to original keyword lookup
+nnoremap <leader>K :<C-u>exec &keywordprg . " " . expand('<cword>')<cr>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
+  else
+    execute &keywordprg . " " . expand('<cword>')
+  endif
+endfunction
+
+" Remap <C-f> and <C-b> for scroll float windows/popups.
+" Note coc#float#scroll works on neovim >= 0.4.0 or vim >= 8.2.0750
+nnoremap <nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+nnoremap <nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+inoremap <nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+inoremap <nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+
+" Search workspace symbols.
+nnoremap <silent><nowait> <leader><leader>s  :<C-u>CocList -I symbols<cr>
