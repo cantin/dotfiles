@@ -18,10 +18,23 @@ then
 fi
 
 # Install softwares
-brew install fzf the_silver_searcher macvim bash_completion yarn universal-ctags watchman wget readline rbenv ruby-build postgresql node
+brew install fzf autojump the_silver_searcher macvim bash bash_completion@2 yarn universal-ctags watchman wget readline rbenv ruby-build postgresql node
+
+# zsh alternative, run command zsh manually
+brew install zsh
+curl -L git.io/antigen > ~/.antigen.zsh
+cp zshrc ~/.zshrc
+
+# Whitelist the new bash for login shells
+sudo echo /usr/local/bin/bash >> /etc/shells
+
+# change the default shell to new bash
+chsh -s /usr/local/bin/bash
 
 # Fetch git-completion.bash
 curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash > ~/.git-completion.bash
+
+#curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.zsh > ~/.git-completion.zsh
 
 #To install useful keybindings and fuzzy completion
 /usr/local/opt/fzf/install

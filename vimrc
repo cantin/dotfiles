@@ -130,18 +130,11 @@ function! LightlineFilename()
   return expand('%:.')
 endfunction
 
-" Use K to show documentation in preview window
-nnoremap <silent> <leader>K :call <SID>show_documentation()<CR>
-
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
-endfunction
-
+"Press \df to get the cached git diff
 nmap <silent> <leader>df :execute "!git diff --cached > diff" <bar> :e diff<cr>
+
+" Press \gs with cursor undder the commit sha to get the commit detail
+nmap <silent> <leader>gs :exec 'Gsplit '. expand('<cword>')<cr>
 
 " You will have bad experience for diagnostic messages when it's default 4000.
 set updatetime=500
@@ -561,7 +554,7 @@ augroup END
 
 
 " Open ag.vim
-nnoremap <leader>a  :Ag! <cword><cr>
+nnoremap <leader>a  :<C-u>let cmd = 'Ag! ' . expand('<cword>') <bar> call histadd('cmd', cmd) <bar> execute cmd<cr>
 vnoremap <leader>a  :<c-u>call <SID>AgOperator(visualmode())<cr>
 nnoremap <leader>A :Ag!<space>
 " Open quickfix widnow & type AsyncRun in command line
@@ -581,6 +574,8 @@ function! s:AgOperator(type)
     return
   endif
 
+  " Add ag command to history
+  call histadd('cmd', "Ag! -Q " . shellescape(@@) . "")
   silent execute "Ag! -Q " . shellescape(@@) . ""
   let @@ = prev_saved_val
 endfunction
@@ -1009,7 +1004,10 @@ vmap <Leader><Leader>r <Plug>(coc-translator-rv)
 vmap <leader><leader>a <Plug>(coc-codeaction-selected)
 nmap <leader><leader>a <Plug>(coc-codeaction-selected)
 
-nnoremap <leader>C q:?
+
+"Use fzf to search in command history
+nnoremap <leader>C :<c-U>History:<cr>
+"nnoremap <leader>C q:?
 
 " Use coc to get documentation
 nnoremap <silent> K :call <SID>show_documentation()<CR>
@@ -1035,3 +1033,10 @@ inoremap <nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(
 
 " Search workspace symbols.
 nnoremap <silent><nowait> <leader><leader>s  :<C-u>CocList -I symbols<cr>
+
+" Change branch by fugitive & fzf
+function! s:changebranch(branch)
+  execute 'Git checkout' . a:branch
+  "call feedkeys("i")
+endfunction
+command! -bang Gbranch call fzf#run(fzf#wrap({ 'source': 'git branch -a --no-color | grep -v "^\* " ', 'sink': function('s:changebranch') }))

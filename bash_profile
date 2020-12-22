@@ -41,7 +41,10 @@ if [ -f ~/.git-completion.bash ]; then
   __git_complete gco _git_checkout
 fi
 
+# Script installed by fzf install
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+[ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
 
 alias f="fzf"
 export FZF_DEFAULT_COMMAND='ag -l -U'
@@ -51,12 +54,31 @@ export FZF_DEFAULT_COMMAND='ag -l -U'
 export FZF_DEFAULT_OPTS="--height=70% --reverse --inline-info -m --preview 'head -200 {} 2>/dev/null' --preview-window 'right:hidden:wrap' --bind 'ctrl-o:toggle-preview,ctrl-f:half-page-down,ctrl-b:half-page-up,ctrl-y:execute-silent(echo {+} | pbcopy)'"
 export FZF_CTRL_T_OPTS="-m --preview 'head -200 {} 2>/dev/null'"
 
+# https://github.com/junegunn/fzf/wiki/Examples#autojump
+j() {
+  if [[ "$#" -ne 0 ]]; then
+    cd $(autojump $@)
+    return
+  fi
+  cd "$(autojump -s | sort -k1gr | awk '$1 ~ /[0-9]:/ && $2 ~ /^\// { for (i=2; i<=NF; i++) { print $(i) } }' |  fzf --height 40% --reverse --inline-info)" 
+}
+# opt-c to autojump with fzf
+bind -x '"ç":"j"'
 
 bind -x '"\C-g":"fg"'
 bind -x '"\C-xf":"fg"'
 bind -x '"\C-xj":"jobs"'
 bind -x '"\C-xk":"kill %1"'
 bind -x '"\C-xb":"bg"'
+
+# For bash > 4
+# If there are multiple matches for completion, Tab should cycle through them
+bind 'TAB':menu-complete
+# Display a list of the matching files
+bind "set show-all-if-ambiguous on"
+# Perform partial completion on the first Tab press,
+# only start cycling full results on the second Tab press
+bind "set menu-complete-display-prefix on"
 
 psall() {
   ps aux | grep "${1}" | grep -v "grep"
@@ -69,7 +91,6 @@ killbyname() {
 kill9byname() {
   psall $1 | awk '{print $2}' | xargs kill -9 $2
 }
-
 
 
 export GOPATH=$HOME/Workspace/gocode

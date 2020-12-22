@@ -2,6 +2,7 @@
 
 cp ~/.vimrc ./vimrc
 cp ~/.bash_profile ./bash_profile
+cp ~/.zshrc ./zshrc
 #cp ~/.vimrc.vundle ./vimrc.vundle
 cp ~/.agignore ./agignore
 cp ~/.ctags ./ctags
