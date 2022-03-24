@@ -10,3 +10,5 @@ cp ~/.ctags.d/default.ctags ./ctags
 #cp -r ~/.vim/autoload/ctrlp ./vim/autoload/ctrlp
 #cp -r ~/.vim/autoload/ncm2_tagprefix.vim ./vim/autoload/ncm2_tagprefix.vim
 cp ~/.vim/coc-settings.json coc-settings.json
+
+vim -c 'PlugSnapshot | wq! ./plug_snapshot | q!'
