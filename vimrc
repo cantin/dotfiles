@@ -19,6 +19,7 @@ Plug 'scrooloose/nerdtree'
 "Plug 'scrooloose/syntastic'
 Plug 'tpope/vim-rails'
 Plug 'vim-ruby/vim-ruby'
+Plug 'tpope/vim-haml'
 Plug 'mbbill/undotree'
 "Plug 'lilydjwg/colorizer' slow down large file
 "Plug 'henrik/vim-ruby-runner'
@@ -46,7 +47,8 @@ Plug 'skywind3000/asyncrun.vim'
 "Plug 'w0rp/ale'
 Plug 'dense-analysis/ale'
 Plug 'fatih/vim-go', { 'for': 'go' }
-Plug '/usr/local/opt/fzf'
+Plug '/opt/homebrew/opt/fzf'
+"Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
 
 Plug 'tpope/vim-bundler'
@@ -100,7 +102,12 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 call plug#end()
 set rtp+=/usr/local/opt/fzf
 
-let g:coc_global_extensions = ["coc-snippets", "coc-tag", "coc-json", "coc-pairs", "coc-syntax", "coc-css", "coc-html", "coc-solargraph", "coc-tsserver", "coc-translator", "coc-sh", "coc-yank", "coc-spell-checker"]
+"let g:plug_threads = 2
+
+let g:coc_global_extensions = ["coc-snippets", "coc-tag", "coc-json", "coc-pairs", "coc-syntax", "coc-css", "coc-html", "coc-solargraph", "coc-tsserver", "coc-translator", "coc-sh", "coc-yank"]
+
+"scrooloose/nerdcommenter: Add your own custom formats or override the defaults
+let g:NERDCustomDelimiters = { 'swift': { 'left': '//'} }
 
 set hidden
 set background=dark
@@ -131,7 +138,7 @@ function! LightlineFilename()
 endfunction
 
 "Press \df to get the cached git diff
-nmap <silent> <leader>df :execute "!git diff --cached > diff" <bar> :e diff<cr>
+nmap <silent> <leader>df :silent execute "!git diff --cached > diff" <bar> :e diff<cr>
 
 " Press \gs with cursor undder the commit sha to get the commit detail
 nmap <silent> <leader>gs :exec 'Gsplit '. expand('<cword>')<cr>
@@ -497,7 +504,8 @@ noremap <leader>rl :set relativenumber!<CR>
 noremap <leader>rk :.Rake<CR>
 
 command! Vimrc :vs $MYVIMRC
-command! Terminal :terminal /bin/bash -il
+"command! Terminal :terminal /bin/bash -il
+command! Terminal :terminal zsh -il
 nnoremap <leader>T :Terminal<cr>
 tnoremap <c-q> <c-\><c-n>:bd!<cr>
 tnoremap <c-o> <C-W>N
@@ -728,7 +736,9 @@ if has("gui_running")
 endif
 
 autocmd FileType fugitive setlocal shellcmdflag=-c
-nnoremap <leader>G :Gstatus<cr>
+autocmd FileType fugitive nnoremap <buffer> q :q<cr>
+nnoremap <leader>G :Git<cr>
+
 
 " Zoom / Restore window.
 function! s:ZoomToggle() abort
@@ -753,7 +763,7 @@ endfunction
 function! s:RunCommandAsync(cmd)
 	if exists('s:async_job')
     if job_status(s:async_job) == 'run'
-      if job_stop(s:async_job, 'term')
+      if job_stop(s:async_job, 'kill')
         unlet s:async_job
       end
     endif
@@ -771,7 +781,7 @@ function! s:RunCommandAsync(cmd)
 
   setlocal buftype=nofile filetype= bufhidden=wipe noswapfile nobuflisted nomodified
   autocmd! * <buffer>
-  autocmd BufWinLeave <buffer> if exists('s:async_job') && job_status(s:async_job) == 'run' | call job_stop(s:async_job, 'term') | endif
+  autocmd BufWinLeave <buffer> if exists('s:async_job') && job_status(s:async_job) == 'run' | call job_stop(s:async_job, 'kill') | sleep 100m | echo job_status(s:async_job) | endif
   silent put=('$ '. a:cmd)
   silent put=''
   noremap <buffer> q ZZ
@@ -969,7 +979,8 @@ inoremap <expr> <c-j> pumvisible() ? "\<C-n>" : "\<down>"
 inoremap <expr> <c-k> pumvisible() ? "\<C-p>" : "\<up>"
 "inoremap <C-j> <down>
 "inoremap <C-k> <up>
-inoremap <C-l> <right>
+inoremap <expr> <C-l> pumvisible() ? coc#_select_confirm() : "\<right>"
+
 
 " don't highlight search
 nnoremap <Leader><space> :nohlsearch<Enter>
@@ -991,8 +1002,8 @@ nnoremap <silent> <leader><leader>y  :<C-u>CocList -A --normal yank<cr>
 
 "coc-translator
 " popup
-nmap <Leader><Leader>t <Plug>(coc-translator-p)
-vmap <Leader><Leader>t <Plug>(coc-translator-pv)
+nmap <Leader><Leader>p <Plug>(coc-translator-p)
+vmap <Leader><Leader>p <Plug>(coc-translator-pv)
 " echo
 nmap <Leader><Leader>e <Plug>(coc-translator-e)
 vmap <Leader><Leader>e <Plug>(coc-translator-ev)
@@ -1040,3 +1051,44 @@ function! s:changebranch(branch)
   "call feedkeys("i")
 endfunction
 command! -bang Gbranch call fzf#run(fzf#wrap({ 'source': 'git branch -a --no-color | grep -v "^\* " ', 'sink': function('s:changebranch') }))
+
+" option + c to use autojump + fzf to cd previous entered dir
+function! s:jcd(path)
+  execute 'lcd' . a:path
+  "call feedkeys("i")
+endfunction
+command! -bang Jcd call fzf#run(fzf#wrap({ 'source': 'autojump -s | sort -k1gr | cut -f2 | ruby -ne "print if %r{\/}"', 'sink': function('s:jcd') }))
+nnoremap ç :<c-u>Jcd<cr>
+
+"Override lcd command to store path to autojump
+function! s:lcd(path)
+  execute 'lch ' . a:path
+  execute('silent !autojump --add $(pwd)')
+endfunction
+command -nargs=1 -complete=dir Lcd call s:lcd('<args>')
+cabbrev lcd Lcd
+
+command OpenTerminal :silent !open -a iTerm $(pwd)
+command! Gblame :Git blame
+
+
+" ctrl-f/ctrl-b to scroll in floating window
+if has('nvim-0.4.0') || has('patch-8.2.0750')
+  nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+  nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+  inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+  inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+  vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+  vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+endif
+
+" Map function and class text objects
+" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
+xmap if <Plug>(coc-funcobj-i)
+omap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap af <Plug>(coc-funcobj-a)
+xmap ic <Plug>(coc-classobj-i)
+omap ic <Plug>(coc-classobj-i)
+xmap ac <Plug>(coc-classobj-a)
+omap ac <Plug>(coc-classobj-a)

@@ -99,3 +99,4 @@ export GOPATH=$HOME/Workspace/gocode
 # To link Rubies to Homebrew's OpenSSL 1.1 (which is upgraded) add the following
 # to your /Users/Cantin/.bash_profile:
 export RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@1.1)"
+#[[ -s "$HOME/.avn/bin/avn.sh" ]] && source "$HOME/.avn/bin/avn.sh" # load avn

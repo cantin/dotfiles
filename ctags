@@ -16,3 +16,29 @@
 
 --regex-ruby=/^[[:blank:]]+private[[:blank:]]+def[[:blank:]]+([a-zA-Z0-9_]+[?!]?)/\1/f,method/
 --regex-ruby=/^[[:blank:]]+protected[[:blank:]]+def[[:blank:]]+([a-zA-Z0-9_]+[?!]?)/\1/f,method/
+
+
+
+--regex-javascript=/[ \t.]([A-Z][A-Z0-9._$]+)[ \t]*[=:][ \t]*([0-9"'\[\{]|null)/\1/n,constant/
+--regex-javascript=/\.([A-Za-z0-9._$]+)[ \t]*=[ \t]*\{/\1/o,object/
+--regex-javascript=/['"]*([A-Za-z0-9_$]+)['"]*[ \t]*:[ \t]*\{/\1/o,object/
+--regex-javascript=/([A-Za-z0-9._$]+)\[["']([A-Za-z0-9_$]+)["']\][ \t]*=[ \t]*\{/\1\.\2/o,object/
+--regex-javascript=/([A-Za-z0-9._$]+)[ \t]*=[ \t]*\(function\(\)/\1/c,class/
+--regex-javascript=/['"]*([A-Za-z0-9_$]+)['"]*:[ \t]*\(function\(\)/\1/c,class/
+--regex-javascript=/class[ \t]+([A-Za-z0-9._$]+)[ \t]*/\1/c,class/
+--regex-javascript=/([A-Za-z$][A-Za-z0-9_$()]+)[ \t]*=[ \t]*[Rr]eact.createClass[ \t]*\(/\1/c,class/
+--regex-javascript=/([A-Z][A-Za-z0-9_$]+)[ \t]*=[ \t]*[A-Za-z0-9_$]*[ \t]*[{(]/\1/c,class/
+--regex-javascript=/([A-Z][A-Za-z0-9_$]+)[ \t]*:[ \t]*[A-Za-z0-9_$]*[ \t]*[{(]/\1/c,class/
+--regex-javascript=/([A-Za-z$][A-Za-z0-9_$]+)[ \t]*=[ \t]*function[ \t]*\(/\1/f,function/
+--regex-javascript=/[ \t]*(if)[ \t]*\([^)]*\)[ \t]*\{//{exclusive}
+--regex-javascript=/(function)*[ \t]*([A-Za-z$_][A-Za-z0-9_$]+)[ \t]*\([^)]*\)[ \t]*\{/\2/f,function/
+--regex-javascript=/['"]*([A-Za-z$][A-Za-z0-9_$]+)['"]*:[ \t]*function[ \t]*\(/\1/m,method/
+--regex-javascript=/([A-Za-z0-9_$]+)\[["']([A-Za-z0-9_$]+)["']\][ \t]*=[ \t]*function[ \t]*\(/\2/m,method/
+
+--regex-javascript=/^[ \t]*async[ \t]\{1,\}\([A-Za-z0-9_$]\{1,\}\)[ \t]*(/\1/M,Method,Methods/b
+--regex-javascript=/^[ \t]*const[ \t]*\([A-Za-z0-9_$]\{1,\}\)[ \t]*=[ \t]*async[ \t]*(/\1/M,Method,Methods/b
+--regex-javascript=/^[ \t]*\([A-Za-z0-9_$]\{1,\}\)[ \t]*[:=][ \t]\{1,\}async[ \t](\{1,\}/\1/M,Method,Methods/b
+
+
+--regex-javascript=/([A-Za-z0-9_$]+)[ \t]*[=:][ \t]*\([^)]*\)[ \t]*\=\>[ \t]*\{/\1/f,function/
+
