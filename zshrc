@@ -156,3 +156,31 @@ alias a="arch -x86_64"
 alias ibrew="arch -x86_64 brew"
 
 export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
+
+# Usage:
+# $ fshow
+# $ fshow ${filename}
+# Press enter to see the diff with diff-so-fancy
+# Press ctrl-d to copy the sha to clipboard
+fshow() {
+  local out shas sha q k
+  while out=$(
+      git log --graph --color=always \
+          --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
+      fzf --ansi --multi --no-sort --reverse --query="$q" \
+          --print-query --expect=ctrl-d --toggle-sort=\`); do
+    q=$(head -1 <<< "$out")
+    k=$(head -2 <<< "$out" | tail -1)
+    shas=$(sed '1,2d;s/^[^a-z0-9]*//;/^$/d' <<< "$out" | awk '{print $1}')
+    [ -z "$shas" ] && continue
+    if [ "$k" = ctrl-d ]; then
+      echo $shas
+      echo $shas | pbcopy
+      break
+    else
+      for sha in $shas; do
+        git show --color=always $sha
+      done
+    fi
+  done
+}

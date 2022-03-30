@@ -19,7 +19,34 @@ fi
 
 # Install softwares
 brew install --cask macvim
-brew install fzf autojump the_silver_searcher vim bash bash-completion yarn ctags watchman wget readline rbenv ruby-build postgresql node
+brew install fzf autojump the_silver_searcher vim bash bash-completion yarn ctags watchman wget readline rbenv ruby-build postgresql node diff-so-fancy
+
+# git config
+cat << EOF >> ~/.gitconfig
+[http]
+	postBuffer = 524288000
+[pull]
+	rebase = false
+[core]
+	pager = diff-so-fancy | less --tabs=4 -RFX
+[interactive]
+	diffFilter = diff-so-fancy --patch
+[color]
+	ui = true
+[color "diff-highlight"]
+  oldNormal = red bold
+  oldHighlight = red reverse
+  newNormal = green bold
+  newHighlight = green bold 22
+[color "diff"]
+	new = green bold
+[alias]
+	d = difftool
+[difftool]
+  prompt = false
+[difftool "mvimdiff"]
+  cmd = mvim -f -d \"\$LOCAL\" \"\$REMOTE\"
+EOF
 
 # zsh alternative, run command zsh manually
 brew install zsh
