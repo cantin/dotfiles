@@ -20,5 +20,6 @@
     "google",
     "youdao",
     "haici"
-  ]
+  ],
+  "typescript.updateImportsOnFileMove.enable": false
 }

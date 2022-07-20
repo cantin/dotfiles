@@ -1,6 +1,8 @@
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
-source ~/.antigen.zsh
+source /opt/homebrew/share/antigen/antigen.zsh
+
+#source ~/.antigen.zsh
 
 # Load the oh-my-zsh's library.
 antigen use oh-my-zsh
@@ -11,11 +13,11 @@ antigen bundles <<EOBUNDLES
   rbenv
   rails
   autojump
-  cp
-  ruby
-  bundler
   rake-fast
 EOBUNDLES
+  #ruby
+  #cp
+  #bundler
 
 # Syntax highlighting bundle.
 antigen bundle zsh-users/zsh-completions
@@ -31,7 +33,7 @@ antigen list | grep $THEME; if [ $? -ne 0 ]; then antigen theme $THEME; fi
 # Tell Antigen that you're done.
 antigen apply
 
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ff00ff,bg=transparent,bold,underline"
+export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ff00ff,bg=transparent,bold,underline"
 
 #⌥ + ← or → - move one word backward/forward
 bindkey "[D" backward-word
@@ -63,6 +65,7 @@ export LC_CTYPE=C
 export LC_ALL=en_US.UTF-8
 
 export EDITOR=mvim
+export BUNDLER_EDITOR=mvim
 export GIT_EDITOR=vim
 export THOR_MERGE=mvimdiff
 #export PS1="\u:\W\$ "
@@ -108,8 +111,8 @@ export FZF_DEFAULT_COMMAND='ag -l -U'
 #export FZF_DEFAULT_OPTS="--height=70% --reverse --inline-info --preview 'head -200 {} 2>/dev/null' --preview-window=right:60%:wrap -m --bind='ctrl-d:half-page-down,ctrl-u:half-page-up,ctrl-y:execute-silent(echo {+} | pbcopy)'"
 #export FZF_CTRL_T_OPTS="-m --preview 'head -200 {} 2>/dev/null'"
 
-export FZF_DEFAULT_OPTS="--height=70% --reverse --inline-info -m --preview 'head -200 {} 2>/dev/null' --preview-window 'right:hidden:wrap' --bind 'ctrl-o:toggle-preview,ctrl-f:half-page-down,ctrl-b:half-page-up,ctrl-y:execute-silent(echo {+} | pbcopy)'"
-export FZF_CTRL_T_OPTS="-m --preview 'head -200 {} 2>/dev/null'"
+export FZF_DEFAULT_OPTS="--height=70% --reverse --inline-info -m --preview 'head -500 {} 2>/dev/null' --preview-window 'right:hidden:wrap' --bind 'ctrl-o:toggle-preview,<:preview-up,>:preview-down,ctrl-f:half-page-down,ctrl-b:half-page-up,ctrl-y:execute-silent(echo {+} | pbcopy)'"
+export FZF_CTRL_T_OPTS="-m --preview 'head -500 {} 2>/dev/null'"
 
 psall() {
   ps aux | grep "${1}" | grep -v "grep"
@@ -140,8 +143,11 @@ j() {
     return
   fi
   doc="$(autojump -s | sort -k1gr | awk '$1 ~ /[0-9]:/ && $2 ~ /^\// { for (i=2; i<=NF; i++) { print $(i) } }' |  fzf --height 40% --reverse --inline-info)" 
-  cd $doc
-  echo "Entered $doc"
+  if [[ ! -z "$doc" ]]
+  then
+    cd $doc
+    echo "Entered $doc"
+  fi
 }
 
 zle -N j

@@ -26,6 +26,7 @@ Plug 'mbbill/undotree'
 "Plug 'cantin/vim-ruby-runner'
 "Plug 'ervandew/supertab'
 Plug 'godlygeek/tabular'
+Plug 'junegunn/vim-peekaboo' "Quickly review registers
 "Plug 'vim-scripts/ZoomWin'
 "Plug 'regedarek/ZoomWin' "v25
 Plug 'bronson/vim-trailing-whitespace'
@@ -50,6 +51,7 @@ Plug 'fatih/vim-go', { 'for': 'go' }
 Plug '/opt/homebrew/opt/fzf'
 "Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
+Plug 'arcticicestudio/nord-vim'
 
 Plug 'tpope/vim-bundler'
 Plug 'othree/eregex.vim' "Use Perl/Ruby style regexp
@@ -119,6 +121,9 @@ hi link EasyMotionTarget Search
 
 let g:eregex_default_enable = 0
 
+" setup peekaboo window to 60 chars
+let g:peekaboo_window = "vert bo 60new"
+
 noremap <leader>/ :M/
 noremap <leader>? :M?
 
@@ -150,9 +155,11 @@ set updatetime=500
 " Remap keys for gotos
 nmap <silent> <leader>gh :call CocActionAsync('highlight')<cr>
 nmap <silent> <leader>gd <Plug>(coc-definition)
+nmap <silent> <leader>gc <Plug>(coc-codeaction)
 nmap <silent> <leader>gy <Plug>(coc-type-definition)
 nmap <silent> <leader>gi <Plug>(coc-implementation)
 nmap <silent> <leader>gr <Plug>(coc-references)
+nmap <silent> <leader>go :<c-u>CocOutline<cr>
 nmap <leader>rn <Plug>(coc-rename)
 imap <expr> <C-e> pumvisible() ? coc#_select_confirm() : "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand',''])\<CR>"
 "<Plug>(coc-snippets-expand)
@@ -465,7 +472,8 @@ set history=5000
     "\ endif
 
 "colorscheme jellybeans
-colorscheme gruvbox
+colorscheme nord
+"colorscheme gruvbox
 
 "color jellybeans+
 
@@ -553,12 +561,9 @@ augroup customer_my_autocmd
   autocmd BufRead,BufNewFile *.md setlocal omnifunc=
   au FileType markdown setlocal omnifunc=
   au FileType cs setlocal tabstop=4  shiftwidth=4
-  " The tsserver 1.5.1 validation would toggle the signcolumn very quickly. That makes main content jumps.
-  " Make signcolumn always be there fixes the jumps
-  au FileType javascript setlocal signcolumn=yes
-  au FileType javascript.jsx setlocal signcolumn=yes
 augroup END
 
+set signcolumn=number
 
 
 " Open ag.vim
@@ -737,6 +742,9 @@ endif
 
 autocmd FileType fugitive setlocal shellcmdflag=-c
 autocmd FileType fugitive nnoremap <buffer> q :q<cr>
+autocmd FileType coctree nnoremap <buffer> q :q<cr>
+autocmd FileType nerdtree nnoremap <buffer> q :q<cr>
+autocmd FileType git nnoremap <buffer> q :q<cr>
 nnoremap <leader>G :Git<cr>
 
 
@@ -1093,3 +1101,39 @@ omap ic <Plug>(coc-classobj-i)
 xmap ac <Plug>(coc-classobj-a)
 omap ac <Plug>(coc-classobj-a)
 
+" for nord folded fg color
+hi Folded guifg=LightGray
+
+" mvimdiff current file with given path
+" Usage:
+"  :Mvimdiff file_path_to_diff
+"  :Mvimdiff # read from system clipboard if no arguments
+function! s:mvimdiff(path = @+)
+  echom a:path
+  let cmd = '!mvimdiff ' . expand('%') . ' ' . a:path
+  echom(cmd)
+  execute(cmd)
+endfunction
+command -nargs=* -complete=dir MvimDiff call s:mvimdiff(<args>)
+
+" Override fzf buffer_tags function to update columns in preview window
+"function! fzf#vim#buffer_tags(query, ...)
+  "let args = copy(a:000)
+  "let escaped = fzf#shellescape(expand('%'))
+  "let null = s:is_win ? 'nul' : '/dev/null'
+  "let sort = has('unix') && !has('win32unix') && executable('sort') ? '| sort -s -k 5' : ''
+  "let tag_cmds = (len(args) > 1 && type(args[0]) != type({})) ? remove(args, 0) : [
+    "\ printf('ctags -f - --sort=yes --language-force=%s %s 2> %s %s', &filetype, escaped, null, sort),
+    "\ printf('ctags -f - --sort=yes %s 2> %s %s', escaped, null, sort)]
+  "if type(tag_cmds) != type([])
+    "let tag_cmds = [tag_cmds]
+  "endif
+  "try
+    "return s:fzf('btags', {
+    "\ 'source':  s:btags_source(tag_cmds),
+    "\ 'sink*':   s:function('s:btags_sink'),
+    "\ 'options': s:reverse_list(['-m', '-d', '\t', '--with-nth', '1..4', '-n', '1', '--prompt', 'BTags> ', '--query', a:query, '--preview-window', '+{3}-/2'])}, args)
+  "catch
+    "return s:warn(v:exception)
+  "endtry
+"endfunction

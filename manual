@@ -19,7 +19,7 @@ fi
 
 # Install softwares
 brew install --cask macvim
-brew install fzf autojump the_silver_searcher vim bash bash-completion yarn ctags watchman wget readline rbenv ruby-build postgresql node diff-so-fancy
+brew install fzf autojump the_silver_searcher vim bash bash-completion yarn ctags watchman wget readline rbenv ruby-build postgresql node diff-so-fancy antigen
 
 # git config
 cat << EOF >> ~/.gitconfig
