@@ -56,6 +56,9 @@ Plug 'arcticicestudio/nord-vim'
 Plug 'tpope/vim-bundler'
 Plug 'othree/eregex.vim' "Use Perl/Ruby style regexp
 
+"Running command on column level: :B, :S
+Plug 'vim-scripts/vis'
+
 "Plug 'BrandonRoehl/auto-omni'
 
 "Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh', }
@@ -373,7 +376,8 @@ let g:undotree_WindowLayout = 2
 let g:undotree_SetFocusWhenToggle = 1
 
 " Empty value to disable preview window altogether
-let g:fzf_preview_window = ''
+"let g:fzf_preview_window = ''
+let g:fzf_preview_window = ['right:50%:hidden:nowrap', 'ctrl-\']
 let g:fzf_layout = { 'down': '~40%' }
 
 
@@ -504,12 +508,33 @@ noremap <leader>ct :!ctags -R .<CR>
 "Load private gems tags
 noremap <leader>cT :!ctags -R -f gems.tags $(bundle list --paths \| grep bundler)<CR>
 noremap <leader>n :NERDTreeToggle<CR>
-"noremap <leader>rt :TagbarToggle<CR>
 noremap <leader>rl :set relativenumber!<CR>
-"noremap <leader>cp :let g:ctrlptag_type='project' <bar> CtrlPTag<CR>
-"noremap <leader>cP :let g:ctrlptag_type='all' <bar> CtrlPTag<CR>
-"run rake default task, default is running test in current file
-noremap <leader>rk :.Rake<CR>
+
+
+" Run Rails test and system test
+nnoremap <leader>rt :<c-u>call <SID>RunCommandAsync('bundle exec rails test')<cr>
+nnoremap <leader>rst :<c-u>call <SID>RunCommandAsync('bundle exec rails test:system')<cr>
+
+" Run rails test/routes based on the curernt file type
+nnoremap <leader>rk :<c-u>call <SID>RKRunner(expand('%'))<cr>
+function s:RKRunner(path)
+  let s:test = matchstr(a:path, '_test.rb')
+  if !empty(s:test)
+    if line('.') == 1
+      let s:cmd = 'bundle exec rails test '. a:path
+    else
+      let s:cmd = 'bundle exec rails test '. a:path . ':' .line('.')
+    endif
+    call <SID>RunCommandAsync(s:cmd)
+  else
+    let s:routes = matchstr(a:path, 'routes.rb')
+    if !empty(s:routes)
+      call <SID>RunCommandAsync('bundle exec rails routes')
+    else
+      call <SID>RunCommandAsync('bundle exec rails r ' . a:path)
+    endif
+  endif
+endfunction
 
 command! Vimrc :vs $MYVIMRC
 "command! Terminal :terminal /bin/bash -il
@@ -844,7 +869,15 @@ command! Dark set bg=dark transparency=20 | highlight Normal guibg=black | highl
 "command! RunRuby call <SID>RunCommand('!ruby %:p')
 command! RunRuby call <SID>RunCommandAsync('ruby '. expand('%:p'))
 au FileType ruby nnoremap <buffer> <D-r> :RunRuby<CR>
-vnoremap <D-r> :<c-u>call <SID>RunCommandAsync('ruby -e "' . escape(VisualSelection(), '"') . '"')<cr>
+vnoremap <D-r> :<c-u>call <SID>RunCommandAsync('ruby -e "puts begin; ' . escape(VisualSelection(), '"') . '; end"')<cr>
+
+"Use ruby as filter command
+"noremap <leader>rf :<c-u>%!ruby -pe ""<left>
+"noremap <leader>rF :<c-u>%!ruby -pe "gsub //, \%{}"<left><left><left><left><left><left><left><left>
+vnoremap <leader>rf :!ruby -pe ""<left>
+vnoremap <leader>rF :!ruby -pe "gsub //, \%{}"<left><left><left><left><left><left><left><left>
+vnoremap <leader>rr :!ruby<cr>   " Use filter command: The selected code gets run and be replaced with the result
+vnoremap <leader>rR :!rails r<cr>
 
 "Redirect output of ri to buffer when pressing K
 "if has("gui_running") && !has("gui_win32")
@@ -864,7 +897,7 @@ vnoremap <D-r> :<c-u>call <SID>RunCommandAsync('ruby -e "' . escape(VisualSelect
     if gems == '' | let gems = '^rails$' | endif
     exec "SHELL " . "IFS=$''\\n''; bundle exec gem dependency " . gems . "; for gem in $(bundle exec gem dependency " . gems . " --pipe); do name=$(cut -d '' '' -f1 <<< $gem); version=$(cut -d '' '' -f3-10 <<< $gem);" . "eval \"gem rdoc --ri $name -v $version; yard gems $name\"; done;
           \ if [ ! -e .solargraph.yml ]; then bundle exec ruby -e \" require %{yaml}; names = Bundler.load.specs.select { |s| s.loaded_from =~ /bundler\\/gems/ }.map(&:name); File.write(%{.solargraph.yml}, { %{include} => [%{\"**/*.rb\"}] + names.map { |n| %{../#{n}/**/*.rb}}, %{exclude} => names.map { |n| %{../#{n}/test/**/*}} }.to_yaml) \";
-          \ fi; echo Done"
+          \ fi; solargraph download-core; solargraph bundle; echo Done"
 
           "\ if [ ! -e .solargraph.yml ]; then echo --- > .solargraph.yml; echo include: >> .solargraph.yml; echo " . a . "  >> .solargraph.yml; bundle list --paths  | grep bundler | rev |  cut -d / -f 1 | cut -d - -f 2-5 | rev | xargs -I {} echo ''  - ../{}/**/*.rb'' >> .solargraph.yml;
           "\ echo exclude: >> .solargraph.yml; bundle list --paths  | grep bundler | rev |  cut -d / -f 1 | cut -d - -f 2-5 | rev | xargs -I {} echo ''  - ../{}/test/**/*'' >> .solargraph.yml;
@@ -883,7 +916,7 @@ vnoremap <D-r> :<c-u>call <SID>RunCommandAsync('ruby -e "' . escape(VisualSelect
 "command! RunRailsRunner call <SID>RunCommand('!bundle exec rails r %:p')
 command! RunRailsRunner call <SID>RunCommandAsync('bundle exec rails r ' . expand('%:p'))
 au FileType ruby nnoremap <buffer> <D-R> :RunRailsRunner<CR>
-vnoremap <D-R> :<c-u>call <SID>RunCommandAsync('bundle exec rails r "' . escape(VisualSelection(), '"') . '"')<cr>
+vnoremap <D-R> :<c-u>call <SID>RunCommandAsync('bundle exec rails r "puts begin; ' . escape(VisualSelection(), '"') . '; end"')<cr>
 
 "'SHELL shellcommand', redirect output to buffer
 "command! -nargs=* -complete=shellcmd SH new | setlocal buftype=nofile bufhidden=hide noswapfile | r !<args>

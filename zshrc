@@ -92,6 +92,7 @@ alias gdcd="gdc > diff"
 
 alias ts="bc thin start"
 alias tsp="bc thin start -p"
+alias rst="bc rails test:system"
 
 if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 
@@ -111,7 +112,7 @@ export FZF_DEFAULT_COMMAND='ag -l -U'
 #export FZF_DEFAULT_OPTS="--height=70% --reverse --inline-info --preview 'head -200 {} 2>/dev/null' --preview-window=right:60%:wrap -m --bind='ctrl-d:half-page-down,ctrl-u:half-page-up,ctrl-y:execute-silent(echo {+} | pbcopy)'"
 #export FZF_CTRL_T_OPTS="-m --preview 'head -200 {} 2>/dev/null'"
 
-export FZF_DEFAULT_OPTS="--height=70% --reverse --inline-info -m --preview 'head -500 {} 2>/dev/null' --preview-window 'right:hidden:wrap' --bind 'ctrl-o:toggle-preview,<:preview-up,>:preview-down,ctrl-f:half-page-down,ctrl-b:half-page-up,ctrl-y:execute-silent(echo {+} | pbcopy)'"
+export FZF_DEFAULT_OPTS="--height=70% --reverse --inline-info -m --preview 'head -500 {} 2>/dev/null' --preview-window 'right:60%:hidden:nowrap' --bind 'ctrl-o:toggle-preview,<:preview-up,>:preview-down,ctrl-f:half-page-down,ctrl-b:half-page-up,ctrl-y:execute-silent(echo {+} | pbcopy)'"
 export FZF_CTRL_T_OPTS="-m --preview 'head -500 {} 2>/dev/null'"
 
 psall() {
