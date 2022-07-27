@@ -1,15 +1,6 @@
-"source ~/.vimrc.vundle
-
-" Don't load matchparens standard plugin
-"let loaded_matchparen = 1
-"autocmd VimEnter * NoMatchParen
-"Call :DoMatchParen to enable it again
-let g:matchparen_timeout=150
-
 call plug#begin('~/.vim/plugged')
 "Plug 'andymass/vim-matchup'
 Plug 'tpope/vim-fugitive'
-"Plug 'bling/vim-airline'
 Plug 'itchyny/lightline.vim'
 Plug 'nanotech/jellybeans.vim'
 Plug 'morhetz/gruvbox'
@@ -32,10 +23,6 @@ Plug 'junegunn/vim-peekaboo' "Quickly review registers
 Plug 'bronson/vim-trailing-whitespace'
 Plug 'scrooloose/nerdcommenter'
 "Plug 'majutsushi/tagbar'
-"Plug 'kien/ctrlp.vim'
-"Plug 'MarcWeber/vim-addon-mw-utils'
-"Plug 'tomtom/tlib_vim'
-"Plug 'garbas/vim-snipmate'
 "Plug 'tpope/vim-endwise'
 Plug 'honza/vim-snippets'
 "Plug 'jeetsukumaran/vim-buffergator'
@@ -51,7 +38,8 @@ Plug 'fatih/vim-go', { 'for': 'go' }
 Plug '/opt/homebrew/opt/fzf'
 "Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
-Plug 'arcticicestudio/nord-vim'
+
+Plug 'arcticicestudio/nord-vim' "Style
 
 Plug 'tpope/vim-bundler'
 Plug 'othree/eregex.vim' "Use Perl/Ruby style regexp
@@ -59,34 +47,8 @@ Plug 'othree/eregex.vim' "Use Perl/Ruby style regexp
 "Running command on column level: :B, :S
 Plug 'vim-scripts/vis'
 
-"Plug 'BrandonRoehl/auto-omni'
-
-"Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh', }
-" (Optional) Multi-entry selection UI.
-"Plug 'junegunn/fzf'
-
-"Plug 'roxma/vim-hug-neovim-rpc'
-"Plug 'ncm2/ncm2'
-"Plug 'roxma/nvim-yarp'
-"Plug 'google/vim-searchindex'
-
-"Plug 'ncm2/ncm2-snipmate'
-"Plug 'ncm2/ncm2-syntax'
-"Plug 'Shougo/neco-syntax'
-"Plug 'ncm2/ncm2-tagprefix'
-"Plug 'fgrsnau/ncm2-otherbuf', { 'branch': 'ncm2' }
-"Plug 'ncm2/ncm2-bufword'
-"Plug 'ncm2/ncm2-cssomni'
-"Plug 'ncm2/ncm2-path'
-
-"Plug 'ncm2/ncm2-ultisnips'
 "Plug 'SirVer/ultisnips'
 Plug 'easymotion/vim-easymotion'
-"Plug 'jiangmiao/auto-pairs'
-
-"Plug 'prabirshrestha/async.vim'
-"Plug 'prabirshrestha/vim-lsp'
-"Plug 'ncm2/ncm2-vim-lsp'
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 "Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
@@ -105,529 +67,31 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 "Plug 'iamcco/coc-spell-checker', {'do': 'yarn install --frozen-lockfile'}
 
 call plug#end()
-set rtp+=/usr/local/opt/fzf
 
-"let g:plug_threads = 2
+" --------------------- Vim Setttings ---------------------------------
+" Don't load matchparens standard plugin
+"let loaded_matchparen = 1
+"autocmd VimEnter * NoMatchParen
+"Call :DoMatchParen to enable it again
+let g:matchparen_timeout=150
 
-let g:coc_global_extensions = ["coc-snippets", "coc-tag", "coc-json", "coc-pairs", "coc-syntax", "coc-css", "coc-html", "coc-solargraph", "coc-tsserver", "coc-translator", "coc-sh", "coc-yank"]
-
-"scrooloose/nerdcommenter: Add your own custom formats or override the defaults
-let g:NERDCustomDelimiters = { 'swift': { 'left': '//'} }
-
-set hidden
+" From coc.nvim. Turn hidden on if editing has issues.
+"set hidden
 set background=dark
 set lazyredraw
 
 set shortmess-=S
 
-hi link EasyMotionTarget Search
-
-let g:eregex_default_enable = 0
-
-" setup peekaboo window to 60 chars
-let g:peekaboo_window = "vert bo 60new"
-
-noremap <leader>/ :M/
-noremap <leader>? :M?
-
-"let g:extradite_resize=0
-"let g:extradite_diff_split='belowright vertical split'
-"let g:extradite_showhash=1
-
-
-"let g:lightline = {
-      "\ 'component_function': {
-      "\   'filename': 'LightlineFilename',
-      "\ }
-      "\ }
-
-function! LightlineFilename()
-  return expand('%:.')
-endfunction
-
-"Press \df to get the cached git diff
-nmap <silent> <leader>df :silent execute "!git diff --cached > diff" <bar> :e diff<cr>
-
-" Press \gs with cursor undder the commit sha to get the commit detail
-nmap <silent> <leader>gs :exec 'Gsplit '. expand('<cword>')<cr>
-
 " You will have bad experience for diagnostic messages when it's default 4000.
 set updatetime=500
-" Highlight symbol under cursor on CursorHold
-"autocmd CursorHold * silent call CocActionAsync('highlight')
-" Remap keys for gotos
-nmap <silent> <leader>gh :call CocActionAsync('highlight')<cr>
-nmap <silent> <leader>gd <Plug>(coc-definition)
-nmap <silent> <leader>gc <Plug>(coc-codeaction)
-nmap <silent> <leader>gy <Plug>(coc-type-definition)
-nmap <silent> <leader>gi <Plug>(coc-implementation)
-nmap <silent> <leader>gr <Plug>(coc-references)
-nmap <silent> <leader>go :<c-u>CocOutline<cr>
-nmap <leader>rn <Plug>(coc-rename)
-imap <expr> <C-e> pumvisible() ? coc#_select_confirm() : "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand',''])\<CR>"
-"<Plug>(coc-snippets-expand)
-" Use <C-j> for select text for visual placeholder of snippet.
-vmap <C-j> <Plug>(coc-snippets-select)
-" Use <C-j> for jump to next placeholder, it's default of coc.nvim
-let g:coc_snippet_next = '<c-j>'
-" Use <C-k> for jump to previous placeholder, it's default of coc.nvim
-let g:coc_snippet_prev = '<c-k>'
-
-"inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-inoremap <expr> <cr> pumvisible() && coc#expandable() ? "\<C-y>" : "\<C-g>u\<CR>"
-inoremap <silent><expr> <d-i> coc#refresh()
-autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
-
-"inoremap <expr> <c-j> pumvisible() ? "\<C-n>" : "\<c-j>"
-"inoremap <expr> <c-k> pumvisible() ? "\<C-p>" : "\<c-k>"
-
-function! CocCurrentFunction()
-    return get(b:, 'coc_current_function', '')
-endfunction
-
-let g:lightline = {
-      \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'cocstatus', 'currentfunction', 'readonly', 'filename', 'modified' ] ]
-      \ },
-      \ 'component_function': {
-      \   'cocstatus': 'coc#status',
-      \   'currentfunction': 'CocCurrentFunction',
-      \   'filename': 'LightlineFilename',
-      \ },
-      \ }
-
-"au User Ncm2Plugin call ncm2#register_source({
-      "\ 'name' : 'ruby',
-      "\ 'priority': 6,
-      "\ 'scope': ['ruby'],
-      "\ 'mark': 'ruby',
-      "\ 'word_pattern': '[\w_]+',
-      "\ 'complete_pattern': '\.',
-      "\ 'on_complete': ['ncm2#on_complete#delay', 180, 'ncm2#on_complete#omni', 'rubycomplete#Complete'],
-      "\ })
-
-"au User Ncm2Plugin call ncm2#register_source({
-      "\ 'name' : 'javascript',
-      "\ 'priority': 6,
-      "\ 'scope': ['javascript', 'javascript.jsx.html', 'javascript.jsx', 'js'],
-      "\ 'mark': 'javascript',
-      "\ 'word_pattern': '[\w_]+',
-      "\ 'complete_pattern': '\.',
-      "\ 'on_complete': ['ncm2#on_complete#delay', 180', ncm2#on_complete#omni', 'javascriptcomplete#CompleteJS'],
-      "\ })
-
-"**********************Plugin
-
-" Required for operations modifying multiple buffers like rename.
-"set hidden
-
-"let g:LanguageClient_serverCommands = {
-    "\ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
-    "\ 'javascript': ['/usr/local/bin/javascript-typescript-stdio'],
-    "\ 'javascript.jsx': ['/usr/local/bin/javascript-typescript-stdio'],
-    "\ 'javascript.jsx.html': ['/usr/local/bin/javascript-typescript-stdio'],
-    "\ 'python': ['/usr/local/bin/pyls'],
-    "\ 'ruby': ['~/.rbenv/shims/solargraph', 'stdio'],
-    "\ }
-
-"nnoremap <F5> :call LanguageClient_contextMenu()<CR>
-"" Or map each action separately
-"nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
-"nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
-"nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
-
-"autocmd FileType ruby setlocal omnifunc=LanguageClient#complete
-"autocmd FileType javascript setlocal omnifunc=LanguageClient#complete
-"autocmd FileType javascript.jsx setlocal omnifunc=LanguageClient#complete
-"autocmd FileType javascript.jsx.html setlocal omnifunc=LanguageClient#complete
-
-
-"gem install solargraph
-"if executable('solargraph')
-  "" gem install solargraph
-  "au User lsp_setup call lsp#register_server({
-        "\ 'name': 'solargraph',
-        "\ 'cmd': {server_info->[&shell, &shellcmdflag, 'solargraph stdio']},
-        "\ 'initialization_options': {"diagnostics": "true"},
-        "\ 'whitelist': ['ruby'],
-        "\ })
-"endif
-
-"if executable('javascript-typescript-stdio')
-  "au User lsp_setup call lsp#register_server({
-        "\ 'name': 'javascript support using typescript-language-server',
-        "\ 'cmd': { server_info->[&shell, &shellcmdflag, 'javascript-typescript-stdio --trace --logfile /Volumes/kude/fsdirect/jslangserver.log']},
-        "\ 'root_uri': { server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_directory(lsp#utils#get_buffer_path(), '.git/..'))},
-        "\ 'whitelist': ['javascript', 'javascript.jsx', 'javascript.jsx.html']
-        "\ })
-"endif
-
-"npm install -g typescript typescript-language-server
-"\ 'cmd': { server_info->[&shell, &shellcmdflag, 'typescript-language-server --stdio --tsserver-log-file /Volumes/kude/fsdirect/jslangserver.log']},
-"if executable('typescript-language-server')
-    "au User lsp_setup call lsp#register_server({
-      "\ 'name': 'javascript support using typescript-language-server',
-      "\ 'cmd': { server_info->[&shell, &shellcmdflag, 'typescript-language-server --stdio']},
-      "\ 'root_uri': { server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_directory(lsp#utils#get_buffer_path(), '.git/..'))},
-      "\ 'whitelist': ['javascript', 'javascript.jsx', 'javascript.jsx.html']
-      "\ })
-"endif
-
-"let g:lsp_diagnostics_enabled = 0         " disable diagnostics support
-
-"autocmd FileType ruby setlocal omnifunc=lsp#complete
-"autocmd FileType javascript setlocal omnifunc=lsp#complete
-"autocmd FileType javascript.jsx setlocal omnifunc=lsp#complete
-"autocmd FileType javascript.jsx.html setlocal omnifunc=lsp#complete
-
-
-"inoremap <silent> <expr> <CR> ncm2_snipmate#expand_or("\<CR>", 'n')
-" wrap <Plug>snipMateTrigger so that it works for both completin and normal snippet
-"inoremap <expr> <c-b> ncm2_snipmate#expand_or("\<Plug>snipMateTrigger", "m")
-"let g:snips_no_mappings = 1
-"vmap <c-j> <Plug>snipMateNextOrTrigger
-"vmap <c-k> <Plug>snipMateBack
-"imap <expr> <c-j> pumvisible() ? "\<c-n>" : "\<Plug>snipMateNextOrTrigger"
-"imap <expr> <c-k> pumvisible() ? "\<c-p>" : "\<Plug>snipMateBack"
-" c-j c-k for moving completion & snippet
-
-" Press enter key to trigger snippet expansion
-" The parameters are the same as `:help feedkeys()`
-"imap <silent> <expr> <CR> pumvisible() ? ncm2_ultisnips#expand_or("\<Plug>(MyCR)", 'im') : "\<CR>"
-
-" c-j c-k for moving in snippet
-" let g:UltiSnipsExpandTrigger		= "<Plug>(ultisnips_expand)"
-"let g:UltiSnipsJumpForwardTrigger	= "<c-]>"
-"let g:UltiSnipsJumpBackwardTrigger	= "<c-[>"
-"let g:UltiSnipsExpandTrigger="<c-b>"
-"let g:UltiSnipsRemoveSelectModeMappings = 0
-"inoremap <expr> <c-j> pumvisible() ? "\<C-n>" : UltiSnips#JumpForwards()
-"inoremap <expr> <c-k> pumvisible() ? "\<C-p>" : UltiSnips#JumpBackwards()
-
-" Map ctrl-x_ctrl-p to keyword completin in complete, so that it matches words in other buffers.
-inoremap <expr> <c-x><c-p> pumvisible() ? "\<c-e>\<c-p>" : "\<c-p>"
-
-"let g:ncm2#complete_delay=60
-"let g:ncm2#popup_delay=100
-
-
-"inoremap <silent> <Plug>(MyCR) <CR><C-R>=AutoPairsReturn()<CR>
-"inoremap <silent> <Plug>(MyCR) <CR>
-"imap <silent> <expr> <CR> ncm2_ultisnips#expand_or("\<Plug>(MyCR)", 'im')
-"inoremap <silent> <Plug>(MyCR) <C-R>=AutoPairsReturn()<CR> "without noselect
-" example
-"imap <expr> <CR> (pumvisible() ? "\<C-Y>\<Plug>(MyCR)" : "\<Plug>(MyCR)")
-"imap <silent> <expr> <CR> pumvisible() ? ncm2_ultisnips#expand_or("\<Plug>(MyCR)", 'im') : "\<CR>"
-"imap <silent> <expr> <CR> ncm2_ultisnips#expand_or("\<CR>\<C-R>=AutoPairsReturn()<CR>", 'im')
-"imap <silent> <expr> <CR> pumvisible() ? ncm2_ultisnips#expand_or("\<Plug>(MyCR)", 'im') : "\<CR>"
-"inoremap <silent> <expr> <CR> ((pumvisible() && empty(v:completed_item)) ?  "\<c-y><c-\>" : (!empty(v:completed_item) ? ncm2_ultisnips#expand_or("\<Plug>(MyCR)", 'im') : "\<CR>" ))
-
-"inoremap <silent> <expr> <c-\> ncm2_ultisnips#expand_or("\<Plug>(MyCR)", 'im')
-
-
-"let g:ncm2#complete_length=[[1,2],[7,2]]
-"autocmd BufEnter * call ncm2#enable_for_buffer()
-"au User Ncm2PopupOpen set completeopt=noinsert,menuone,noselect
-"au User Ncm2PopupClose set completeopt=menuone
-"set shortmess+=c
-set dictionary+=/usr/share/dict/words
-
-"inoremap <Tab> <C-R>=CleverTab()<CR>
-"inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-
-"noremap <leader>lc :LspWorkspaceSymbol<CR>
-"noremap <leader>ls :LspDocumentSymbol<CR>
-"noremap <leader>lh :LspHover<CR>
-"noremap <leader>ld :LspDefinition<CR>
-"noremap <leader>ll :LspReferences<CR>
-"noremap <leader>ln :LspNextReference<CR>
-"noremap <leader>lp :LspPreviousReference<CR>
-autocmd WinEnter * if &buftype == 'quickfix' | nnoremap <buffer> <silent> q :ccl<CR> | endif
-
-let g:stop_autocomplete=0
-
-function! CleverTab(type)
-  if a:type=='omni'
-    if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
-      let g:stop_autocomplete=1
-      return "\<TAB>"
-    elseif !pumvisible() && !!&omnifunc
-      return "\<C-X>\<C-O>"
-    endif
-  elseif a:type=='keyword' && !pumvisible() && !g:stop_autocomplete
-    "return "\<C-X>\<C-N>\<C-P>"
-    return "\<C-N>"
-  elseif a:type=='next'
-    if g:stop_autocomplete
-      let g:stop_autocomplete=0
-    else
-      "return "\<C-N>" "No need because we set it outside in <TAB> mapping
-    endif
-  endif
-  return ''
-endfunction
-
-imap <expr> <TAB> pumvisible() ? "\<C-N>" : "\<C-R>=CleverTab('omni')<CR><C-R>=CleverTab('keyword')<CR><C-R>=CleverTab('next')<CR>"
-"imap <c-o> <C-X><C-O>
-
-nnoremap <leader>u :UndotreeToggle<cr>
-let g:undotree_WindowLayout = 2
-let g:undotree_SetFocusWhenToggle = 1
-
-" Empty value to disable preview window altogether
-"let g:fzf_preview_window = ''
-let g:fzf_preview_window = ['right:50%:hidden:nowrap', 'ctrl-\']
-let g:fzf_layout = { 'down': '~40%' }
-
-
-"function! CleverTab()
-  "if pumvisible()
-    "return "\<C-N>"
-  "endif
-  "if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
-    "return "\<Tab>"
-  "elseif exists('&omnifunc') && &omnifunc != ''
-    "return "\<C-X>\<C-O>"
-  "else
-    "return "\<C-N>"
-  "endif
-"endfunction
-
-noremap <c-p> :Files<cr>
-noremap <leader>cp :Tags<CR>
-"function! s:ag_with_opts(arg, bang)
-  "let tokens  = split(a:arg)
-  "let ag_opts = join(filter(copy(tokens), 'v:val =~ "^-"'))
-  "let query   = join(filter(copy(tokens), 'v:val !~ "^-"'))
-  "call fzf#vim#ag(query, ag_opts, a:bang ? {} : {'down': '40%'})
-"endfunction
-
-"function! s:AgOperator(type)
-  "let prev_saved_val = @@
-  "if a:type ==# 'v'
-    "normal! `<v`>y
-  "elseif a:type ==# 'char'
-    "normal! `[v`]y
-  "else
-    "return
-  "endif
-
-  "silent execute "Ag! " . shellescape(@@) . ""
-  "let @@ = prev_saved_val
-"endfunction
-"nnoremap <leader>a  :call s:ag_with_opts(expand("<cword>")
-"nnoremap <leader>a  :exec "call fzf#vim#ag(expand('<cword>'))"<cr>
-"vnoremap <leader>a  :<c-u>call <SID>AgOperator(visualmode())<cr>
-"nnoremap <leader>A :Ag!<space>
-nnoremap <leader>fd :set foldmethod=syntax<cr>
-nnoremap <leader>fl :BLines<cr>
-nnoremap <leader>fL :Lines<cr>
-nnoremap <leader>m :Marks<cr>
-nnoremap <leader>b :Buffers<cr>
-nnoremap <leader>ft :BTags<cr>
-nnoremap <leader>fT :Tags<cr>
-let g:fzf_history_dir = '~/.vim/fzf-history'
-"autocmd VimEnter * command! -nargs=* -bang Ag call s:ag_with_opts(<q-args>, <bang>0)
-
 set history=5000
-
-"let g:fzf_colors =
-"\ { 'fg':      ['fg', 'Normal'],
-  "\ 'bg':      ['bg', 'Normal'],
-  "\ 'hl':      ['fg', 'IncSearch'],
-  "\ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-  "\ 'bg+':     ['bg', 'TabLine'],
-  "\ 'hl+':     ['fg', 'IncSearch'],
-  "\ 'info':    ['fg', 'PreProc'],
-  "\ 'border':  ['fg', 'Ignore'],
-  "\ 'prompt':  ['fg', 'Cursor'],
-  "\ 'pointer': ['fg', 'Cursor'],
-  "\ 'marker':  ['fg', 'Keyword'],
-  "\ 'spinner': ['fg', 'Label'],
-  "\ 'header':  ['fg', 'Comment'] }
-
-"let g:SuperTabContextDefaultCompletionType = "<c-n>"
-"let g:SuperTabDefaultCompletionType = "context"
-"autocmd FileType *
-      "\ if &omnifunc != '' |
-      "\   call SuperTabChain(&omnifunc, "<c-p>", 1) |
-      "\ endif
-" open omni completion menu closing previous if open and opening new menu without changing the text
-"inoremap <expr> <C-Space> (pumvisible() ? (col('.') > 1 ? '<Esc>i<Right>' : '<Esc>i') : '') .
-            "\ '<C-x><C-o><C-r>=pumvisible() ? "\<lt>C-n>\<lt>C-p>\<lt>Down>" : ""<CR>'
-"" open user completion menu closing previous if open and opening new menu without changing the text
-"inoremap <expr> <S-Space> (pumvisible() ? (col('.') > 1 ? '<Esc>i<Right>' : '<Esc>i') : '') .
-            "\ '<C-x><C-u><C-r>=pumvisible() ? "\<lt>C-n>\<lt>C-p>\<lt>Down>" : ""<CR>'
-
-"function MyTagContext()
-  "if filereadable(expand('%:p:h') . '/tags')
-    "return "\<c-x>\<c-]>"
-  "endif
-  "" no return will result in the evaluation of the next
-  "" configured context
-"endfunction
-"let g:SuperTabCompletionContexts = ['MyTagContext', 's:ContextText', 's:ContextDiscover']
-
-"let g:SuperTabDefaultCompletionType = "context"
-  "autocmd FileType *
-    "\ if &omnifunc != '' |
-    "\   call SuperTabChain(&omnifunc, "<c-p>") |
-    "\ endif
 
 "colorscheme jellybeans
 colorscheme nord
 "colorscheme gruvbox
-
 "color jellybeans+
 
-"let g:syntastic_ruby_exec = 'ruby20'
-"let g:syntastic_html_tidy_exec = 'tidy5'
-
-"let g:ctrlp_by_filename = 1
-"let g:ctrlp_root_markers = ['']
-"let g:ctrlp_cmd = 'CtrlPMixed'
-let g:ctrlp_user_command = 'ag %s -l -U -g ""' " Use custom user command for list files, use .ignore in project to ignore files
-let g:ctrlp_match_window = 'min:0,max:20,results:50'
-let g:ctrlp_working_path_mode = 0
-" g:ctrlp_custom_ignore is not working if g:ctrlp_user_command is set.
-"let g:ctrlp_custom_ignore = {
-      "\ 'dir':  '\v[\/]\.(git|hg|svn)$|\v[\/]tmp$|\v[\/]node_modules$|\v[\/]public/packs|\v[\/]storage$',
-      "\ 'file': '\.gz$\|\.pyc$\|\.pyo$\|\.rbc$|\.rbo$\|\.class$\|\.o$\|\~$\',
-      "\ }
-
-"Airline, always open status bar
-set laststatus=2
-
-noremap gb <c-^>
-noremap ]b :bn<cr>
-noremap [b :bp<cr>
-noremap <leader>fw :FixWhitespace<CR>
-noremap <leader>ct :!ctags -R .<CR>
-"noremap <leader>cT :!ctags -R -f gems.tags $(bundle show --paths)<CR>
-"Load private gems tags
-noremap <leader>cT :!ctags -R -f gems.tags $(bundle list --paths \| grep bundler)<CR>
-noremap <leader>n :NERDTreeToggle<CR>
-noremap <leader>rl :set relativenumber!<CR>
-
-
-" Run Rails test and system test
-nnoremap <leader>rt :<c-u>call <SID>RunCommandAsync('bundle exec rails test')<cr>
-nnoremap <leader>rst :<c-u>call <SID>RunCommandAsync('bundle exec rails test:system')<cr>
-
-" Run rails test/routes based on the curernt file type
-nnoremap <leader>rk :<c-u>call <SID>RKRunner(expand('%'))<cr>
-function s:RKRunner(path)
-  let s:test = matchstr(a:path, '_test.rb')
-  if !empty(s:test)
-    if line('.') == 1
-      let s:cmd = 'bundle exec rails test '. a:path
-    else
-      let s:cmd = 'bundle exec rails test '. a:path . ':' .line('.')
-    endif
-    call <SID>RunCommandAsync(s:cmd)
-  else
-    let s:routes = matchstr(a:path, 'routes.rb')
-    if !empty(s:routes)
-      call <SID>RunCommandAsync('bundle exec rails routes')
-    else
-      call <SID>RunCommandAsync('bundle exec rails r ' . a:path)
-    endif
-  endif
-endfunction
-
-command! Vimrc :vs $MYVIMRC
-"command! Terminal :terminal /bin/bash -il
-command! Terminal :terminal zsh -il
-nnoremap <leader>T :Terminal<cr>
-tnoremap <c-q> <c-\><c-n>:bd!<cr>
-tnoremap <c-o> <C-W>N
-
-"set shell=/bin/bash\ -il
-
-augroup numbertoggle
-  autocmd BufEnter,FocusGained,InsertLeave * if &l:number == 1 | set relativenumber | endif
-  autocmd BufLeave,FocusLost,InsertEnter   * if &l:number == 1 | set norelativenumber | endif
-augroup END
-
-" ALE don't linting on every changes
-let g:ale_lint_on_text_changed = 'never'
-let g:ale_lint_on_insert_leave = 1
-"let g:ale_open_list= 1
-" disable rubocop & erb check
-let g:ale_linters = {
-\   'ruby': ['brakeman', 'rails_best_practices', 'reek', 'ruby'],
-\   'eruby': [],
-\}
-
-let g:jsx_ext_required = 1
-
-let g:jellybeans_overrides = {
-\    'rubyRegexp': { 'guifg': 'f0f000',
-\              'ctermfg': 'Yellow', 'ctermbg': 'Black',
-\              'attr': 'bold' },
-\    'rubyRegexpDelimiter': { 'guifg': 'f0f000',
-\              'ctermfg': 'Yellow', 'ctermbg': 'Black',
-\              'attr': 'bold' },
-\    'rubyRegexpSpecial': { 'guifg': 'f0f000',
-\              'ctermfg': 'Yellow', 'ctermbg': 'Black',
-\              'attr': 'bold' },
-\}
-
-augroup customer_my_autocmd
-  "autocmd BufRead,BufNewFile *.js set ft=javascript
-  "autocmd BufRead,BufNewFile *.jsx set ft=javascript.jsx.html
-  autocmd BufRead,BufNewFile *.jsx set ft=javascript.jsx
-  autocmd BufRead,BufNewFile *.rdoc setlocal spell
-  autocmd BufRead,BufNewFile *.md setlocal spell
-  autocmd BufRead,BufNewFile *.rdoc set complete+=kspell
-  autocmd BufRead,BufNewFile *.md set complete+=kspell
-
-  autocmd BufRead,BufNewFile *.md setlocal omnifunc=
-  au FileType markdown setlocal omnifunc=
-  au FileType cs setlocal tabstop=4  shiftwidth=4
-augroup END
-
 set signcolumn=number
-
-
-" Open ag.vim
-nnoremap <leader>a  :<C-u>let cmd = 'Ag! ' . expand('<cword>') <bar> call histadd('cmd', cmd) <bar> execute cmd<cr>
-vnoremap <leader>a  :<c-u>call <SID>AgOperator(visualmode())<cr>
-nnoremap <leader>A :Ag!<space>
-" Open quickfix widnow & type AsyncRun in command line
-let g:asyncrun_open = 16
-nnoremap <d-A> :AsyncRun -raw<space>
-"vnoremap <d-r> :<c-u>'<,'>AsyncRun -raw ruby<cr>
-"vnoremap <leader>R :<c-u>'<,'>AsyncRun -raw ruby<cr>
-"nnoremap <leader>R :call asyncrun#quickfix_toggle(8)<cr>:AsyncRun<space>
-
-function! s:AgOperator(type)
-  let prev_saved_val = @@
-  if a:type ==# 'v'
-    normal! `<v`>y
-  elseif a:type ==# 'char'
-    normal! `[v`]y
-  else
-    return
-  endif
-
-  " Add ag command to history
-  call histadd('cmd', "Ag! -Q " . shellescape(@@) . "")
-  silent execute "Ag! -Q " . shellescape(@@) . ""
-  let @@ = prev_saved_val
-endfunction
-
-" Make AsyncRun works with vim-fugitive, comment out because has side effect for rails.vim
-"command! -bang -nargs=* -complete=file Make AsyncRun -program=make @ <args>
-" Let Airline display status of AsyncRun
-"let g:airline_section_error = airline#section#create_right(['%{g:asyncrun_status}'])
-
-"let g:airline_extensions = []
-" cache airline highlight
-"let g:airline_highlighting_cache = 1
-"let g:airline#extensions#tagbar#enabled = 0
-"**********************Plugin
 
 "set undofile
 set undodir=~/.vim/_undodir
@@ -677,56 +141,10 @@ set nowritebackup
 set noswapfile
 
 set mouse=a
+set dictionary+=/usr/share/dict/words
 
 "html indent for vim 7.4
 let g:html_indent_inctags = "html,body,head,tbody"
-
-"D + j/k to move entire line down/up
-nnoremap <D-j> :m .+1<CR>
-nnoremap <D-k> :m .-2<CR>
-
-" When enter command-line mode from visual mode, Vim automatically inserts this range: '<,'>
-" It will make the call to execute the function for each line in the range.
-" Use <c-u> to discard that range
-" Pair ("'[ in selected visual block
-vnoremap <leader>( :<c-u>call SimpleAppendPair('(', ')')<CR>
-vnoremap <leader>{ :<c-u>call SimpleAppendPair('{ ', ' }')<CR>
-vnoremap <leader>[ :<c-u>call SimpleAppendPair('[', ']')<CR>
-vnoremap <leader>" :<c-u>call SimpleAppendPair('"', '"')<CR>
-vnoremap <leader>' :<c-u>call SimpleAppendPair("'", "'")<CR>
-
-" Replace pair in selected visual block
-vnoremap <leader>r( :<c-u>call SimpleAutoPair('(', ')')<CR>
-vnoremap <leader>r{ :<c-u>call SimpleAutoPair('{', '}')<CR>
-vnoremap <leader>r[ :<c-u>call SimpleAutoPair('[', ']')<CR>
-vnoremap <leader>r" :<c-u>call SimpleAutoPair('"', '"')<CR>
-vnoremap <leader>r' :<c-u>call SimpleAutoPair("'", "'")<CR>
-
-
-function! SimpleAppendPair(first, second)
-  execute "normal \<esc>`<i" . a:first  . "\<esc>`>"
-
-  if col(".") == col("$")-1
-    execute "normal a" . a:second  . "\<esc>`>"
-  else
-    if a:first == '{ '
-      execute "normal lla" . a:second  . "\<esc>`>"
-    else
-      execute "normal la" . a:second  . "\<esc>`>"
-    endif
-  endif
-endfunction
-
-function! SimpleAutoPair(first, second)
-  execute "normal \<esc>`<"
-
-  let l:part = matchstr(getline('.'), '\%' . col('.') . 'c.')
-  if (l:part=~'\s')
-    execute 'normal ' "\<esc>lr" . a:first . "\<esc>`>r" . a:second . "\<esc>"
-  else
-    execute 'normal ' "\<esc>r" . a:first . "\<esc>`>r" . a:second . "\<esc>"
-  endif
-endfunction
 
 if has("gui_macvim")
   " Switch to specific tab numbers with Command-number
@@ -752,193 +170,13 @@ if has("gui_running")
   "set showtabline=2        " 开启自带的tab栏
   set linespace=2
 
-  "call Rand()
-  "hi Normal guibg=Black guifg=White
-  "hi Normal guibg=White guifg=Black
-
   " Don't beep
   set visualbell
   "set lines=999 columns=999
 
   "set shell command options 'bash -ilc' so ~/.bash_profile get loaded
   "set shellcmdflag=-ilc
-
 endif
-
-autocmd FileType fugitive setlocal shellcmdflag=-c
-autocmd FileType fugitive nnoremap <buffer> q :q<cr>
-autocmd FileType coctree nnoremap <buffer> q :q<cr>
-autocmd FileType nerdtree nnoremap <buffer> q :q<cr>
-autocmd FileType git nnoremap <buffer> q :q<cr>
-nnoremap <leader>G :Git<cr>
-
-
-" Zoom / Restore window.
-function! s:ZoomToggle() abort
-    if exists('t:zoomed') && t:zoomed
-        execute t:zoom_winrestcmd
-        let t:zoomed = 0
-    else
-        let t:zoom_winrestcmd = winrestcmd()
-        resize
-        vertical resize
-        let t:zoomed = 1
-    endif
-endfunction
-command! ZoomToggle call s:ZoomToggle()
-noremap <C-W>o :ZoomToggle<CR>
-
-function ExitCb(job, status)
-  "exec 'keepjumps' bufwinnr('Asynccmdbuf') 'wincmd W'
-  "normal gg
-  "exec 'wincmd p'
-endfunction
-function! s:RunCommandAsync(cmd)
-	if exists('s:async_job')
-    if job_status(s:async_job) == 'run'
-      if job_stop(s:async_job, 'kill')
-        unlet s:async_job
-      end
-    endif
-  endif
-  "echom '/bin/bash -ilc ' . escape(a:cmd) . '"'
-  "echom ['/bin/bash -ilc', a:cmd]
-  let s:async_job = job_start(['/bin/bash', '-ilc', a:cmd], {'out_io': 'buffer', 'out_name': 'Asynccmdbuf', 'err_io': 'buffer', 'err_name': 'Asynccmdbuf', 'exit_cb': 'ExitCb'})
-  if bufwinnr('Asynccmdbuf') > 0
-    exec 'keepjumps' bufwinnr('Asynccmdbuf') 'wincmd W'
-    exec 'normal! ggdG'
-  else
-    sbuffer Asynccmdbuf
-    silent normal gg
-  endif
-
-  setlocal buftype=nofile filetype= bufhidden=wipe noswapfile nobuflisted nomodified
-  autocmd! * <buffer>
-  autocmd BufWinLeave <buffer> if exists('s:async_job') && job_status(s:async_job) == 'run' | call job_stop(s:async_job, 'kill') | sleep 100m | echo job_status(s:async_job) | endif
-  silent put=('$ '. a:cmd)
-  silent put=''
-  noremap <buffer> q ZZ
-  exec 'wincmd p'
-endfunction
-
-function! VisualSelection()
-  try
-    let a_save = @a
-    silent! normal! gv"ay
-    return @a
-  finally
-    let @a = a_save
-  endtry
-endfunction
-
-"run command and redirect output to buffer on top
-function! s:RunCommand(cmd)
-  let temp_reg = @"
-  redir @"
-  silent execute a:cmd
-  redir END
-  let output = copy(@")
-  let @" = temp_reg
-
-  "silent execute '' a:cmd ' > ' s:output_file '2>&1'
-
-  " Reuse or create new buffer. Based on code in Decho
-  " http://www.vim.org/scripts/script.php?script_id=120
-  if exists('t:rrbufnr') && bufwinnr(t:rrbufnr) > 0
-    exec 'keepjumps' bufwinnr(t:rrbufnr) 'wincmd W'
-    exec 'normal! ggdG'
-  else
-    exec 'keepjumps silent! new'
-    let t:rrbufnr=bufnr('%')
-  end
-
-  setlocal buftype=nofile bufhidden=wipe noswapfile nobuflisted nomodified
-  silent put=output
-  silent exec '%s/$//'
-  silent normal gg
-  "exec 'read' s:output_file
-
-  noremap <buffer> q ZZ
-endfunction
-
-command! Light set bg=light transparency=0
-command! Dark set bg=dark transparency=20 | highlight Normal guibg=black | highlight Normal ctermbg=None
-
-
-"run ruby by CMD + r
-"command! RunRuby call <SID>RunCommand('!ruby %:p')
-command! RunRuby call <SID>RunCommandAsync('ruby '. expand('%:p'))
-au FileType ruby nnoremap <buffer> <D-r> :RunRuby<CR>
-vnoremap <D-r> :<c-u>call <SID>RunCommandAsync('ruby -e "puts begin; ' . escape(VisualSelection(), '"') . '; end"')<cr>
-
-"Use ruby as filter command
-"noremap <leader>rf :<c-u>%!ruby -pe ""<left>
-"noremap <leader>rF :<c-u>%!ruby -pe "gsub //, \%{}"<left><left><left><left><left><left><left><left>
-vnoremap <leader>rf :!ruby -pe ""<left>
-vnoremap <leader>rF :!ruby -pe "gsub //, \%{}"<left><left><left><left><left><left><left><left>
-vnoremap <leader>rr :!ruby<cr>   " Use filter command: The selected code gets run and be replaced with the result
-vnoremap <leader>rR :!rails r<cr>
-
-"Redirect output of ri to buffer when pressing K
-"if has("gui_running") && !has("gui_win32")
-  au FileType ruby,haml setlocal keywordprg=:SHELL\ ri\ -T\ -f\ markdown
-
-  "Generate ri documentation for gems in Gemfile. Note: bundler list --name-only is not working
-  "let g:ri_command='for gem in $(bc ruby -e "Bundler.load.specs.each {|s| puts s.name.to_s + ''&'' + s.version.to_s }"); do name=$(cut -d''&'' -f1 <<< $gem); version=$(cut -d''&'' -f2 <<< $gem); gem rdoc --ri $name -v $version ;done'
-  "command! Ri call asyncrun#quickfix_toggle(8) | execute "AsyncRun " . g:ri_command
-  command! RiAll :SHELL for gem in $(bc ruby -e "Bundler.load.specs.each {|s| puts s.name.to_s + ''&'' + s.version.to_s }"); do name=$(cut -d''&'' -f1 <<< $gem); version=$(cut -d''&'' -f2 <<< $gem); gem rdoc --ri $name -v $version; yard gems $name; done
-  command! RubyDoc setlocal keywordprg=:SHELL\ ri\ -T\ -f\ markdown
-
-  "Generate ri, yard documentation and .solargraph.yml for specific gems
-  ":Ri rails
-  command! -nargs=* Ri call <SID>GenerateRi('<args>')
-  function! s:GenerateRi(gems)
-    let gems = a:gems
-    if gems == '' | let gems = '^rails$' | endif
-    exec "SHELL " . "IFS=$''\\n''; bundle exec gem dependency " . gems . "; for gem in $(bundle exec gem dependency " . gems . " --pipe); do name=$(cut -d '' '' -f1 <<< $gem); version=$(cut -d '' '' -f3-10 <<< $gem);" . "eval \"gem rdoc --ri $name -v $version; yard gems $name\"; done;
-          \ if [ ! -e .solargraph.yml ]; then bundle exec ruby -e \" require %{yaml}; names = Bundler.load.specs.select { |s| s.loaded_from =~ /bundler\\/gems/ }.map(&:name); File.write(%{.solargraph.yml}, { %{include} => [%{\"**/*.rb\"}] + names.map { |n| %{../#{n}/**/*.rb}}, %{exclude} => names.map { |n| %{../#{n}/test/**/*}} }.to_yaml) \";
-          \ fi; solargraph download-core; solargraph bundle; echo Done"
-
-          "\ if [ ! -e .solargraph.yml ]; then echo --- > .solargraph.yml; echo include: >> .solargraph.yml; echo " . a . "  >> .solargraph.yml; bundle list --paths  | grep bundler | rev |  cut -d / -f 1 | cut -d - -f 2-5 | rev | xargs -I {} echo ''  - ../{}/**/*.rb'' >> .solargraph.yml;
-          "\ echo exclude: >> .solargraph.yml; bundle list --paths  | grep bundler | rev |  cut -d / -f 1 | cut -d - -f 2-5 | rev | xargs -I {} echo ''  - ../{}/test/**/*'' >> .solargraph.yml;
-    "exec 'normal \cT'
-  endfunction
-
-  command! -nargs=* RTags call <SID>GenerateTag('<args>')
-  function! s:GenerateTag(gems)
-    let gems = a:gems
-    if strlen(gems) == 0 | let gems = 'actioncable actionmailbox actionmailer actionpack actiontext actionview activejob activemodel activerecord activestorage activesupport' | endif
-    exec "SHELL " . " for gem in " . gems . "; do path=$(bundle info --paths $gem) && cd $path; echo $path; ctags -R .\; cd -; done; echo Done;"
-  endfunction
-"endif
-
-"run rails runner by CMD + R
-"command! RunRailsRunner call <SID>RunCommand('!bundle exec rails r %:p')
-command! RunRailsRunner call <SID>RunCommandAsync('bundle exec rails r ' . expand('%:p'))
-au FileType ruby nnoremap <buffer> <D-R> :RunRailsRunner<CR>
-vnoremap <D-R> :<c-u>call <SID>RunCommandAsync('bundle exec rails r "puts begin; ' . escape(VisualSelection(), '"') . '; end"')<cr>
-
-"'SHELL shellcommand', redirect output to buffer
-"command! -nargs=* -complete=shellcmd SH new | setlocal buftype=nofile bufhidden=hide noswapfile | r !<args>
-"command! -nargs=* -complete=shellcmd SHELL call <SID>RunCommand('!<args>')
-command! -nargs=* -complete=shellcmd SHELL call <SID>RunCommandAsync('<args>')
-noremap <D-H> :SHELL<space>
-vnoremap <D-H> :<c-u>call <SID>RunCommandAsync('' . escape(VisualSelection(), '"'))<cr>
-
-command! LcdToCurrentFilePath lcd %:p:h
-noremap <leader>cd :LcdToCurrentFilePath<CR>
-
-nnoremap <leader>fn :!echo -n %:. \| pbcopy<cr>
-nnoremap <leader>fN :!echo -n %:p \| pbcopy<cr>
-
-" Comment it out because of slowness even less than 100 lines
-"Set vertical line indicator for yaml & haml files
-"au FileType yaml,haml setlocal cursorcolumn
-
-"copy selected area to system clipboard for cli vi
-"+y :w !pbcopy<CR><CR>
-"noremap <leader>y :w !pbcopy<CR><CR>
-noremap <leader>y "+y
 
 set wildmenu " visual autocomplete for command menu
 "set showmatch " highlight matching [{()}]
@@ -946,22 +184,281 @@ set wildmenu " visual autocomplete for command menu
 " set highlight style for quickfix & cursorcolumn
 highlight! link QuickFixLine StatusLineNC
 highlight! link CursorColumn StatusLineNC
-
 highlight! link CocDiagnosticsError ModeMsg
 highlight! link CocErrorFloat ModeMsg
+"Set background to black for gruvbox
+highlight Normal guibg=black
+highlight Normal ctermbg=None
+" for nord folded fg color
+hi Folded guifg=LightGray
 
-" press // in visual mode will search visual selected area
-vnoremap // :<c-u>set hlsearch \| :call <SID>searchVirualSelected()<cr>
-function! s:searchVirualSelected()
-  let prev_saved_val = @"
-  normal! `<v`>y
-  let @/ = @"
-  let @" = prev_saved_val
+" -------------------- Plugin Setttings --------------------------------
+
+" Plugin fzf.vim
+" Add fzf to run time path
+set rtp+=/usr/local/opt/fzf
+" ctrl-\ to enable preview window
+let g:fzf_preview_window = ['right:50%:hidden:nowrap', 'ctrl-\']
+let g:fzf_layout = { 'down': '~40%' }
+noremap <c-p> :Files<cr>
+noremap <leader>cp :Tags<CR>
+nnoremap <leader>fd :set foldmethod=syntax<cr>
+nnoremap <leader>fl :BLines<cr>
+nnoremap <leader>fL :Lines<cr>
+nnoremap <leader>m :Marks<cr>
+nnoremap <leader>b :Buffers<cr>
+nnoremap <leader>ft :BTags<cr>
+nnoremap <leader>fT :Tags<cr>
+let g:fzf_history_dir = '~/.vim/fzf-history'
+"Use fzf to search in command history
+nnoremap <leader>C :<c-U>History:<cr>
+"nnoremap <leader>C q:?
+" Change branch by fugitive & fzf
+function! s:changebranch(branch)
+  execute 'Git checkout' . a:branch
+  "call feedkeys("i")
+endfunction
+command! -bang Gbranch call fzf#run(fzf#wrap({ 'source': 'git branch -a --no-color | grep -v "^\* " ', 'sink': function('s:changebranch') }))
+
+" option + c to use autojump + fzf to cd previous entered dir
+function! s:jcd(path)
+  execute 'lcd' . a:path
+  "call feedkeys("i")
+endfunction
+command! -bang Jcd call fzf#run(fzf#wrap({ 'source': 'autojump -s | sort -k1gr | cut -f2 | ruby -ne "print if %r{\/}"', 'sink': function('s:jcd') }))
+nnoremap ç :<c-u>Jcd<cr>
+"let g:fzf_colors =
+"\ { 'fg':      ['fg', 'Normal'],
+  "\ 'bg':      ['bg', 'Normal'],
+  "\ 'hl':      ['fg', 'IncSearch'],
+  "\ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  "\ 'bg+':     ['bg', 'TabLine'],
+  "\ 'hl+':     ['fg', 'IncSearch'],
+  "\ 'info':    ['fg', 'PreProc'],
+  "\ 'border':  ['fg', 'Ignore'],
+  "\ 'prompt':  ['fg', 'Cursor'],
+  "\ 'pointer': ['fg', 'Cursor'],
+  "\ 'marker':  ['fg', 'Keyword'],
+  "\ 'spinner': ['fg', 'Label'],
+  "\ 'header':  ['fg', 'Comment'] }
+" Override fzf buffer_tags function to update columns in preview window
+"function! fzf#vim#buffer_tags(query, ...)
+  "let args = copy(a:000)
+  "let escaped = fzf#shellescape(expand('%'))
+  "let null = s:is_win ? 'nul' : '/dev/null'
+  "let sort = has('unix') && !has('win32unix') && executable('sort') ? '| sort -s -k 5' : ''
+  "let tag_cmds = (len(args) > 1 && type(args[0]) != type({})) ? remove(args, 0) : [
+    "\ printf('ctags -f - --sort=yes --language-force=%s %s 2> %s %s', &filetype, escaped, null, sort),
+    "\ printf('ctags -f - --sort=yes %s 2> %s %s', escaped, null, sort)]
+  "if type(tag_cmds) != type([])
+    "let tag_cmds = [tag_cmds]
+  "endif
+  "try
+    "return s:fzf('btags', {
+    "\ 'source':  s:btags_source(tag_cmds),
+    "\ 'sink*':   s:function('s:btags_sink'),
+    "\ 'options': s:reverse_list(['-m', '-d', '\t', '--with-nth', '1..4', '-n', '1', '--prompt', 'BTags> ', '--query', a:query, '--preview-window', '+{3}-/2'])}, args)
+  "catch
+    "return s:warn(v:exception)
+  "endtry
+"endfunction
+
+" Plugin coc.nvim
+" setting up extensions
+let g:coc_global_extensions = ["coc-snippets", "coc-tag", "coc-json", "coc-pairs", "coc-syntax", "coc-css", "coc-html", "coc-solargraph", "coc-tsserver", "coc-translator", "coc-sh", "coc-yank"]
+" Remap keys for gotos
+nmap <silent> <leader>gh :call CocActionAsync('highlight')<cr>
+nmap <silent> <leader>gd <Plug>(coc-definition)
+nmap <silent> <leader>gc <Plug>(coc-codeaction)
+nmap <silent> <leader>gy <Plug>(coc-type-definition)
+nmap <silent> <leader>gi <Plug>(coc-implementation)
+nmap <silent> <leader>gr <Plug>(coc-references)
+nmap <silent> <leader>go :<c-u>CocOutline<cr>
+nmap <leader>rn <Plug>(coc-rename)
+" Press ctrl-e to complete the autocomplete
+imap <expr> <C-e> pumvisible() ? coc#_select_confirm() : "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand',''])\<CR>"
+" Use <C-j> for select text for visual placeholder of snippet.
+vmap <C-j> <Plug>(coc-snippets-select)
+" Use <C-j> for jump to next placeholder, it's default of coc.nvim
+let g:coc_snippet_next = '<c-j>'
+" Use <C-k> for jump to previous placeholder, it's default of coc.nvim
+let g:coc_snippet_prev = '<c-k>'
+inoremap <expr> <cr> pumvisible() && coc#expandable() ? "\<C-y>" : "\<C-g>u\<CR>"
+inoremap <silent><expr> <d-i> coc#refresh()
+autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
+autocmd FileType coctree nnoremap <buffer> q :q<cr>
+"coc-translator
+" popup
+nmap <Leader><Leader>p <Plug>(coc-translator-p)
+vmap <Leader><Leader>p <Plug>(coc-translator-pv)
+" echo
+nmap <Leader><Leader>e <Plug>(coc-translator-e)
+vmap <Leader><Leader>e <Plug>(coc-translator-ev)
+" replace
+nmap <Leader><Leader>r <Plug>(coc-translator-r)
+vmap <Leader><Leader>r <Plug>(coc-translator-rv)
+"coc-spell-checker
+vmap <leader><leader>a <Plug>(coc-codeaction-selected)
+nmap <leader><leader>a <Plug>(coc-codeaction-selected)
+"coc-yank
+nnoremap <silent> <leader><leader>y  :<C-u>CocList -A --normal yank<cr>
+" Use coc to get documentation
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+" Map \K to original keyword lookup
+nnoremap <leader>K :<C-u>exec &keywordprg . " " . expand('<cword>')<cr>
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
+  else
+    execute &keywordprg . " " . expand('<cword>')
+  endif
+endfunction
+" Search workspace symbols.
+nnoremap <silent><nowait> <leader><leader>s  :<C-u>CocList -I symbols<cr>
+" ctrl-f/ctrl-b to scroll in floating window
+if has('nvim-0.4.0') || has('patch-8.2.0750')
+  nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+  nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+  inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+  inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+  vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+  vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+endif
+" Map function and class text objects
+" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
+xmap if <Plug>(coc-funcobj-i)
+omap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap af <Plug>(coc-funcobj-a)
+xmap ic <Plug>(coc-classobj-i)
+omap ic <Plug>(coc-classobj-i)
+xmap ac <Plug>(coc-classobj-a)
+omap ac <Plug>(coc-classobj-a)
+
+
+" Plugin scrooloose/nerdcommenter
+" Add your own custom formats or override the defaults
+let g:NERDCustomDelimiters = { 'swift': { 'left': '//'} }
+
+hi link EasyMotionTarget Search
+
+" Plugin othree/eregex.vim
+let g:eregex_default_enable = 0 " Disable eregex by default
+noremap <leader>/ :M/
+noremap <leader>? :M?
+
+" Plugin peekaboo
+" setup peekaboo window to 60 chars
+let g:peekaboo_window = "vert bo 60new"
+
+" Plugin fugitive
+"Press \df to get the cached git diff
+nmap <silent> <leader>df :silent execute "!git diff --cached > diff" <bar> :e diff<cr>
+" Press \gs with cursor undder the commit sha to get the commit detail
+nmap <silent> <leader>gs :exec 'Gsplit '. expand('<cword>')<cr>
+command! Gblame :Git blame
+nnoremap <leader>G :Git<cr>
+autocmd FileType fugitive setlocal shellcmdflag=-c
+autocmd FileType fugitive nnoremap <buffer> q :q<cr>
+autocmd FileType git nnoremap <buffer> q :q<cr>
+
+
+" Plugin lightline
+function! CocCurrentFunction()
+    return get(b:, 'coc_current_function', '')
+endfunction
+function! LightlineFilename()
+  return expand('%:.')
+endfunction
+let g:lightline = {
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'cocstatus', 'currentfunction', 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'component_function': {
+      \   'cocstatus': 'coc#status',
+      \   'currentfunction': 'CocCurrentFunction',
+      \   'filename': 'LightlineFilename',
+      \ },
+      \ }
+" Always open status bar
+set laststatus=2
+
+"Plugin undotree
+nnoremap <leader>u :UndotreeToggle<cr>
+let g:undotree_WindowLayout = 2
+let g:undotree_SetFocusWhenToggle = 1
+
+" Plugin vim-trailing-whitespace
+" \fw to clear up all trailing whitespace
+noremap <leader>fw :FixWhitespace<CR>
+
+" Plugin nerdtree
+noremap <leader>n :NERDTreeToggle<CR>
+autocmd FileType nerdtree nnoremap <buffer> q :q<cr>
+
+" Plugin ale
+" ALE don't linting on every changes
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_insert_leave = 1
+"let g:ale_open_list= 1
+" disable rubocop & erb check
+let g:ale_linters = {
+\   'ruby': ['brakeman', 'rails_best_practices', 'reek', 'ruby'],
+\   'eruby': [],
+\}
+
+" Plugin vim-jsx
+let g:jsx_ext_required = 1
+
+" Plugin jellybeans
+let g:jellybeans_overrides = {
+\    'rubyRegexp': { 'guifg': 'f0f000',
+\              'ctermfg': 'Yellow', 'ctermbg': 'Black',
+\              'attr': 'bold' },
+\    'rubyRegexpDelimiter': { 'guifg': 'f0f000',
+\              'ctermfg': 'Yellow', 'ctermbg': 'Black',
+\              'attr': 'bold' },
+\    'rubyRegexpSpecial': { 'guifg': 'f0f000',
+\              'ctermfg': 'Yellow', 'ctermbg': 'Black',
+\              'attr': 'bold' },
+\}
+
+" Plugin asyncrun
+" Open quickfix widnow & type AsyncRun in command line
+let g:asyncrun_open = 16
+nnoremap <d-A> :AsyncRun -raw<space>
+"vnoremap <d-r> :<c-u>'<,'>AsyncRun -raw ruby<cr>
+"vnoremap <leader>R :<c-u>'<,'>AsyncRun -raw ruby<cr>
+"nnoremap <leader>R :call asyncrun#quickfix_toggle(8)<cr>:AsyncRun<space>
+
+" Plugin ag.vim
+nnoremap <leader>a  :<C-u>let cmd = 'Ag! ' . expand('<cword>') <bar> call histadd('cmd', cmd) <bar> execute cmd<cr>
+vnoremap <leader>a  :<c-u>call <SID>AgOperator(visualmode())<cr>
+nnoremap <leader>A :Ag!<space>
+function! s:AgOperator(type)
+  let prev_saved_val = @@
+  if a:type ==# 'v'
+    normal! `<v`>y
+  elseif a:type ==# 'char'
+    normal! `[v`]y
+  else
+    return
+  endif
+
+  " Add ag command to history
+  call histadd('cmd', "Ag! -Q " . shellescape(@@) . "")
+  silent execute "Ag! -Q " . shellescape(@@) . ""
+  let @@ = prev_saved_val
 endfunction
 
-" Map ctrl + a to navigate to beginning of command line
-cnoremap <C-a> <Home>
+" Plugin go.vim
+nnoremap <D-g> :GoRun %<cr>
 
+
+" ------------------- Folding -------------------
 " set fold method to syntax, default fold on top level
 set foldmethod=syntax
 set foldlevelstart=1
@@ -1004,6 +501,148 @@ function! s:toggleFold()
   endif
 endfunction
 
+" ------------------------------------ auto command --------------------------
+
+autocmd WinEnter * if &buftype == 'quickfix' | nnoremap <buffer> <silent> q :ccl<CR> | endif
+
+augroup numbertoggle
+  autocmd BufEnter,FocusGained,InsertLeave * if &l:number == 1 | set relativenumber | endif
+  autocmd BufLeave,FocusLost,InsertEnter   * if &l:number == 1 | set norelativenumber | endif
+augroup END
+
+augroup customer_my_autocmd
+  "autocmd BufRead,BufNewFile *.js set ft=javascript
+  "autocmd BufRead,BufNewFile *.jsx set ft=javascript.jsx.html
+  autocmd BufRead,BufNewFile *.jsx set ft=javascript.jsx
+  autocmd BufRead,BufNewFile *.rdoc setlocal spell
+  autocmd BufRead,BufNewFile *.md setlocal spell
+  autocmd BufRead,BufNewFile *.rdoc set complete+=kspell
+  autocmd BufRead,BufNewFile *.md set complete+=kspell
+
+  autocmd BufRead,BufNewFile *.md setlocal omnifunc=
+  au FileType markdown setlocal omnifunc=
+  au FileType cs setlocal tabstop=4  shiftwidth=4
+augroup END
+
+autocmd FileType ruby,haml setlocal keywordprg=:SHELL\ ri\ -T\ -f\ markdown
+autocmd FileType ruby nnoremap <buffer> <D-R> :RunRailsRunner<CR>
+
+" Comment it out because of slowness even less than 100 lines
+"Set vertical line indicator for yaml & haml files
+"au FileType yaml,haml setlocal cursorcolumn
+
+" -------------------------------------- command and mapping ----------------------------
+
+" Map ctrl-x_ctrl-p to keyword completin in complete, so that it matches words in other buffers.
+inoremap <expr> <c-x><c-p> pumvisible() ? "\<c-e>\<c-p>" : "\<c-p>"
+
+" Prese tab to cleverTab when coc.nvim has no autocomplete
+imap <expr> <TAB> pumvisible() ? "\<C-N>" : "\<C-R>=CleverTab('omni')<CR><C-R>=CleverTab('keyword')<CR><C-R>=CleverTab('next')<CR>"
+
+" gb to alternative file
+noremap gb <c-^>
+noremap ]b :bn<cr>
+noremap [b :bp<cr>
+
+" ct to generate ctags
+noremap <leader>ct :!ctags -R .<CR>
+"noremap <leader>cT :!ctags -R -f gems.tags $(bundle show --paths)<CR>
+" cT to generate private gems tags
+noremap <leader>cT :!ctags -R -f gems.tags $(bundle list --paths \| grep bundler)<CR>
+
+" rl to setup relativenumber
+noremap <leader>rl :set relativenumber!<CR>
+
+" Run Rails test and system test
+nnoremap <leader>rt :<c-u>call <SID>RunCommandAsync('bundle exec rails test')<cr>
+nnoremap <leader>rst :<c-u>call <SID>RunCommandAsync('bundle exec rails test:system')<cr>
+
+" Run rails test/routes based on the curernt file type
+nnoremap <leader>rk :<c-u>call <SID>RKRunner(expand('%'))<cr>
+
+command! Vimrc :vs $MYVIMRC
+command! Terminal :terminal zsh -il
+nnoremap <leader>T :Terminal<cr>
+" ctrl-q to quit terminal
+tnoremap <c-q> <c-\><c-n>:bd!<cr>
+" ctrl-o to enter normal mode in terminal
+tnoremap <c-o> <C-W>N
+command OpenTerminal :silent !open -a iTerm $(pwd)
+
+"D + j/k to move entire line down/up
+nnoremap <D-j> :m .+1<CR>
+nnoremap <D-k> :m .-2<CR>
+
+command! Light set bg=light transparency=0
+command! Dark set bg=dark transparency=20 | highlight Normal guibg=black | highlight Normal ctermbg=None
+
+" When enter command-line mode from visual mode, Vim automatically inserts this range: '<,'>
+" It will make the call to execute the function for each line in the range.
+" Use <c-u> to discard that range
+" Pair ("'[ in selected visual block
+vnoremap <leader>( :<c-u>call SimpleAppendPair('(', ')')<CR>
+vnoremap <leader>{ :<c-u>call SimpleAppendPair('{ ', ' }')<CR>
+vnoremap <leader>[ :<c-u>call SimpleAppendPair('[', ']')<CR>
+vnoremap <leader>" :<c-u>call SimpleAppendPair('"', '"')<CR>
+vnoremap <leader>' :<c-u>call SimpleAppendPair("'", "'")<CR>
+
+" Replace pair in selected visual block
+vnoremap <leader>r( :<c-u>call SimpleAutoPair('(', ')')<CR>
+vnoremap <leader>r{ :<c-u>call SimpleAutoPair('{', '}')<CR>
+vnoremap <leader>r[ :<c-u>call SimpleAutoPair('[', ']')<CR>
+vnoremap <leader>r" :<c-u>call SimpleAutoPair('"', '"')<CR>
+vnoremap <leader>r' :<c-u>call SimpleAutoPair("'", "'")<CR>
+
+" zoom the current buffer
+command! ZoomToggle call s:ZoomToggle()
+noremap <C-W>o :ZoomToggle<CR>
+
+"run ruby by CMD + r
+command! RunRuby call <SID>RunCommandAsync('ruby '. expand('%:p'))
+au FileType ruby nnoremap <buffer> <D-r> :RunRuby<CR>
+vnoremap <D-r> :<c-u>call <SID>RunCommandAsync('ruby -e "puts begin; ' . escape(VisualSelection(), '"') . '; end"')<cr>
+
+"Use ruby as filter command
+"noremap <leader>rf :<c-u>%!ruby -pe ""<left>
+"noremap <leader>rF :<c-u>%!ruby -pe "gsub //, \%{}"<left><left><left><left><left><left><left><left>
+vnoremap <leader>rf :!ruby -pe ""<left>
+vnoremap <leader>rF :!ruby -pe "gsub //, \%{}"<left><left><left><left><left><left><left><left>
+vnoremap <leader>rr :!ruby<cr>   " Use filter command: The selected code gets run and be replaced with the result
+vnoremap <leader>rR :!rails r<cr>
+
+"Generate ri documentation for gems in Gemfile. Note: bundler list --name-only is not working
+command! RiAll :SHELL for gem in $(bc ruby -e "Bundler.load.specs.each {|s| puts s.name.to_s + ''&'' + s.version.to_s }"); do name=$(cut -d''&'' -f1 <<< $gem); version=$(cut -d''&'' -f2 <<< $gem); gem rdoc --ri $name -v $version; yard gems $name; done
+command! RubyDoc setlocal keywordprg=:SHELL\ ri\ -T\ -f\ markdown
+
+"Generate ri, yard documentation and .solargraph.yml for specific gems
+":Ri rails
+command! -nargs=* Ri call <SID>GenerateRi('<args>')
+
+command! -nargs=* RTags call <SID>GenerateTag('<args>')
+
+"run rails runner by CMD + R
+command! RunRailsRunner call <SID>RunCommandAsync('bundle exec rails r ' . expand('%:p'))
+vnoremap <D-R> :<c-u>call <SID>RunCommandAsync('bundle exec rails r "puts begin; ' . escape(VisualSelection(), '"') . '; end"')<cr>
+
+"'SHELL shellcommand', redirect output to buffer
+command! -nargs=* -complete=shellcmd SHELL call <SID>RunCommandAsync('<args>')
+noremap <D-H> :SHELL<space>
+vnoremap <D-H> :<c-u>call <SID>RunCommandAsync('' . escape(VisualSelection(), '"'))<cr>
+
+command! LcdToCurrentFilePath lcd %:p:h
+noremap <leader>cd :LcdToCurrentFilePath<CR>
+
+nnoremap <leader>fn :!echo -n %:. \| pbcopy<cr>
+nnoremap <leader>fN :!echo -n %:p \| pbcopy<cr>
+
+"copy selected area to system clipboard for cli vi
+noremap <leader>y "+y
+
+" press // in visual mode will search visual selected area
+vnoremap // :<c-u>set hlsearch \| :call <SID>searchVirualSelected()<cr>
+
+" Map ctrl + a to navigate to beginning of command line
+cnoremap <C-a> <Home>
 
 " jump to split without press ctrl-w
 "nnoremap <leader>v <C-w>v<C-w>l
@@ -1014,7 +653,6 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
-
 inoremap <C-h> <left>
 inoremap <expr> <c-j> pumvisible() ? "\<C-n>" : "\<down>"
 inoremap <expr> <c-k> pumvisible() ? "\<C-p>" : "\<up>"
@@ -1022,9 +660,18 @@ inoremap <expr> <c-k> pumvisible() ? "\<C-p>" : "\<up>"
 "inoremap <C-k> <up>
 inoremap <expr> <C-l> pumvisible() ? coc#_select_confirm() : "\<right>"
 
-
 " don't highlight search
 nnoremap <Leader><space> :nohlsearch<Enter>
+
+"Override lcd command to store path to autojump
+command -nargs=1 -complete=dir Lcd call s:lcd('<args>')
+cabbrev lcd Lcd
+
+" mvimdiff current file with given path
+" Usage:
+"  :Mvimdiff file_path_to_diff
+"  :Mvimdiff # read from system clipboard if no arguments
+command -nargs=* -complete=dir MvimDiff call s:mvimdiff(<args>)
 
 " Profile shortcut
 "nnoremap <silent> <leader>DD :exe ":profile start profile.log"<cr>:exe ":profile func *"<cr>:exe ":profile file *"<cr>
@@ -1032,110 +679,184 @@ nnoremap <Leader><space> :nohlsearch<Enter>
 "nnoremap <silent> <leader>DC :exe ":profile continue"<cr>
 "nnoremap <silent> <leader>DQ :exe ":profile pause"<cr>:noautocmd qall!<cr>
 
-nnoremap <D-g> :GoRun %<cr>
+" -------------------------------- misc functions -----------------------
 
-"Set background to black for gruvbox
-highlight Normal guibg=black
-highlight Normal ctermbg=None
+let g:stop_autocomplete=0
+function! CleverTab(type)
+  if a:type=='omni'
+    if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
+      let g:stop_autocomplete=1
+      return "\<TAB>"
+    elseif !pumvisible() && !!&omnifunc
+      return "\<C-X>\<C-O>"
+    endif
+  elseif a:type=='keyword' && !pumvisible() && !g:stop_autocomplete
+    "return "\<C-X>\<C-N>\<C-P>"
+    return "\<C-N>"
+  elseif a:type=='next'
+    if g:stop_autocomplete
+      let g:stop_autocomplete=0
+    else
+      "return "\<C-N>" "No need because we set it outside in <TAB> mapping
+    endif
+  endif
+  return ''
+endfunction
 
-"coc-yank
-nnoremap <silent> <leader><leader>y  :<C-u>CocList -A --normal yank<cr>
-
-"coc-translator
-" popup
-nmap <Leader><Leader>p <Plug>(coc-translator-p)
-vmap <Leader><Leader>p <Plug>(coc-translator-pv)
-" echo
-nmap <Leader><Leader>e <Plug>(coc-translator-e)
-vmap <Leader><Leader>e <Plug>(coc-translator-ev)
-" replace
-nmap <Leader><Leader>r <Plug>(coc-translator-r)
-vmap <Leader><Leader>r <Plug>(coc-translator-rv)
-
-"coc-spell-checker
-vmap <leader><leader>a <Plug>(coc-codeaction-selected)
-nmap <leader><leader>a <Plug>(coc-codeaction-selected)
-
-
-"Use fzf to search in command history
-nnoremap <leader>C :<c-U>History:<cr>
-"nnoremap <leader>C q:?
-
-" Use coc to get documentation
-nnoremap <silent> K :call <SID>show_documentation()<CR>
-" Map \K to original keyword lookup
-nnoremap <leader>K :<C-u>exec &keywordprg . " " . expand('<cword>')<cr>
-
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  elseif (coc#rpc#ready())
-    call CocActionAsync('doHover')
+function s:RKRunner(path)
+  let s:test = matchstr(a:path, '_test.rb')
+  if !empty(s:test)
+    if line('.') == 1
+      let s:cmd = 'bundle exec rails test '. a:path
+    else
+      let s:cmd = 'bundle exec rails test '. a:path . ':' .line('.')
+    endif
+    call <SID>RunCommandAsync(s:cmd)
   else
-    execute &keywordprg . " " . expand('<cword>')
+    let s:routes = matchstr(a:path, 'routes.rb')
+    if !empty(s:routes)
+      call <SID>RunCommandAsync('bundle exec rails routes')
+    else
+      call <SID>RunCommandAsync('bundle exec rails r ' . a:path)
+    endif
   endif
 endfunction
 
-" Remap <C-f> and <C-b> for scroll float windows/popups.
-" Note coc#float#scroll works on neovim >= 0.4.0 or vim >= 8.2.0750
-nnoremap <nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-nnoremap <nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-inoremap <nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
-inoremap <nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+function! SimpleAppendPair(first, second)
+  execute "normal \<esc>`<i" . a:first  . "\<esc>`>"
 
-" Search workspace symbols.
-nnoremap <silent><nowait> <leader><leader>s  :<C-u>CocList -I symbols<cr>
-
-" Change branch by fugitive & fzf
-function! s:changebranch(branch)
-  execute 'Git checkout' . a:branch
-  "call feedkeys("i")
+  if col(".") == col("$")-1
+    execute "normal a" . a:second  . "\<esc>`>"
+  else
+    if a:first == '{ '
+      execute "normal lla" . a:second  . "\<esc>`>"
+    else
+      execute "normal la" . a:second  . "\<esc>`>"
+    endif
+  endif
 endfunction
-command! -bang Gbranch call fzf#run(fzf#wrap({ 'source': 'git branch -a --no-color | grep -v "^\* " ', 'sink': function('s:changebranch') }))
 
-" option + c to use autojump + fzf to cd previous entered dir
-function! s:jcd(path)
-  execute 'lcd' . a:path
-  "call feedkeys("i")
+function! SimpleAutoPair(first, second)
+  execute "normal \<esc>`<"
+
+  let l:part = matchstr(getline('.'), '\%' . col('.') . 'c.')
+  if (l:part=~'\s')
+    execute 'normal ' "\<esc>lr" . a:first . "\<esc>`>r" . a:second . "\<esc>"
+  else
+    execute 'normal ' "\<esc>r" . a:first . "\<esc>`>r" . a:second . "\<esc>"
+  endif
 endfunction
-command! -bang Jcd call fzf#run(fzf#wrap({ 'source': 'autojump -s | sort -k1gr | cut -f2 | ruby -ne "print if %r{\/}"', 'sink': function('s:jcd') }))
-nnoremap ç :<c-u>Jcd<cr>
+
+" Zoom / Restore window.
+function! s:ZoomToggle() abort
+    if exists('t:zoomed') && t:zoomed
+        execute t:zoom_winrestcmd
+        let t:zoomed = 0
+    else
+        let t:zoom_winrestcmd = winrestcmd()
+        resize
+        vertical resize
+        let t:zoomed = 1
+    endif
+endfunction
+
+function RunCommandAsyncCallbackToAppendMessageToR(channel, msg)
+  let @r=@r . "\n" . a:msg
+endfunction
+function s:KillWhilQuit()
+  let l:bufname = 'Asynccmdbuf-tab' . tabpagenr()
+  let l:async_job = getbufvar(l:bufname, 'async_job')
+  "echom '-------'
+  "echom l:async_job
+  "echom '-------'
+  if !empty(l:async_job) && job_status(l:async_job) == 'run'
+    call job_stop(l:async_job, 'kill')
+    sleep 100m
+    echo job_status(l:async_job)
+  endif
+endfunction
+function! s:RunCommandAsync(cmd)
+  let @r=''
+  let l:bufname = 'Asynccmdbuf-tab' . tabpagenr()
+  if bufwinnr(l:bufname) > 0
+    let l:async_job = getbufvar(l:bufname, 'async_job')
+  else
+    let l:async_job = ''
+  end
+
+  "echom '>>>>'
+  "echom l:async_job
+  "echom '>>>>'
+
+	if !empty(l:async_job)
+    if job_status(l:async_job) == 'run'
+      if job_stop(l:async_job, 'kill')
+        let l:async_job = setbufvar(l:bufname, 'async_job', '')
+        unlet l:async_job
+      end
+    endif
+  endif
+
+  let l:async_job = job_start(['/bin/bash', '-ilc', a:cmd], {'out_io': 'buffer', 'out_name': l:bufname, 'err_io': 'buffer', 'err_name': l:bufname, 'callback': 'RunCommandAsyncCallbackToAppendMessageToR'})
+  call setbufvar(l:bufname, 'async_job', l:async_job)
+
+  "echom '<<<<<'
+  "echom getbufvar(l:bufname, 'async_job')
+  "echom '<<<<<'
+
+  if bufwinnr(l:bufname) > 0
+    exec 'keepjumps' bufwinnr(l:bufname) 'wincmd W'
+    exec 'normal! ggdG'
+  else
+    exec 'new '. l:bufname
+    silent normal gg
+  endif
+
+  setlocal buftype=nofile filetype= bufhidden=wipe noswapfile nobuflisted nomodified
+  autocmd! * <buffer>
+  autocmd BufWinLeave <buffer> call <SID>KillWhilQuit()
+  silent put=('$ '. a:cmd)
+  silent put=''
+  noremap <buffer> q ZZ
+  exec 'wincmd p'
+endfunction
+
+function! VisualSelection()
+  try
+    let a_save = @a
+    silent! normal! gv"ay
+    return @a
+  finally
+    let @a = a_save
+  endtry
+endfunction
+
+function! s:GenerateRi(gems)
+  let gems = a:gems
+  if gems == '' | let gems = '^rails$' | endif
+  exec "SHELL " . "IFS=$''\\n''; bundle exec gem dependency " . gems . "; for gem in $(bundle exec gem dependency " . gems . " --pipe); do name=$(cut -d '' '' -f1 <<< $gem); version=$(cut -d '' '' -f3-10 <<< $gem);" . "eval \"gem rdoc --ri $name -v $version; yard gems $name\"; done;
+        \ if [ ! -e .solargraph.yml ]; then bundle exec ruby -e \" require %{yaml}; names = Bundler.load.specs.select { |s| s.loaded_from =~ /bundler\\/gems/ }.map(&:name); File.write(%{.solargraph.yml}, { %{include} => [%{\"**/*.rb\"}] + names.map { |n| %{../#{n}/**/*.rb}}, %{exclude} => names.map { |n| %{../#{n}/test/**/*}} }.to_yaml) \";
+        \ fi; solargraph download-core; solargraph bundle; echo Done"
+endfunction
+
+function! s:GenerateTag(gems)
+  let gems = a:gems
+  if strlen(gems) == 0 | let gems = 'actioncable actionmailbox actionmailer actionpack actiontext actionview activejob activemodel activerecord activestorage activesupport' | endif
+  exec "SHELL " . " for gem in " . gems . "; do path=$(bundle info --paths $gem) && cd $path; echo $path; ctags -R .\; cd -; done; echo Done;"
+endfunction
+
+function! s:searchVirualSelected()
+  let prev_saved_val = @"
+  normal! `<v`>y
+  let @/ = @"
+  let @" = prev_saved_val
+endfunction
 
 "Override lcd command to store path to autojump
 function! s:lcd(path)
   execute 'lch ' . a:path
   execute('silent !autojump --add $(pwd)')
 endfunction
-command -nargs=1 -complete=dir Lcd call s:lcd('<args>')
-cabbrev lcd Lcd
-
-command OpenTerminal :silent !open -a iTerm $(pwd)
-command! Gblame :Git blame
-
-
-" ctrl-f/ctrl-b to scroll in floating window
-if has('nvim-0.4.0') || has('patch-8.2.0750')
-  nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-  nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-  inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
-  inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
-  vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-  vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-endif
-
-" Map function and class text objects
-" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
-xmap if <Plug>(coc-funcobj-i)
-omap if <Plug>(coc-funcobj-i)
-xmap af <Plug>(coc-funcobj-a)
-omap af <Plug>(coc-funcobj-a)
-xmap ic <Plug>(coc-classobj-i)
-omap ic <Plug>(coc-classobj-i)
-xmap ac <Plug>(coc-classobj-a)
-omap ac <Plug>(coc-classobj-a)
-
-" for nord folded fg color
-hi Folded guifg=LightGray
 
 " mvimdiff current file with given path
 " Usage:
@@ -1147,26 +868,3 @@ function! s:mvimdiff(path = @+)
   echom(cmd)
   execute(cmd)
 endfunction
-command -nargs=* -complete=dir MvimDiff call s:mvimdiff(<args>)
-
-" Override fzf buffer_tags function to update columns in preview window
-"function! fzf#vim#buffer_tags(query, ...)
-  "let args = copy(a:000)
-  "let escaped = fzf#shellescape(expand('%'))
-  "let null = s:is_win ? 'nul' : '/dev/null'
-  "let sort = has('unix') && !has('win32unix') && executable('sort') ? '| sort -s -k 5' : ''
-  "let tag_cmds = (len(args) > 1 && type(args[0]) != type({})) ? remove(args, 0) : [
-    "\ printf('ctags -f - --sort=yes --language-force=%s %s 2> %s %s', &filetype, escaped, null, sort),
-    "\ printf('ctags -f - --sort=yes %s 2> %s %s', escaped, null, sort)]
-  "if type(tag_cmds) != type([])
-    "let tag_cmds = [tag_cmds]
-  "endif
-  "try
-    "return s:fzf('btags', {
-    "\ 'source':  s:btags_source(tag_cmds),
-    "\ 'sink*':   s:function('s:btags_sink'),
-    "\ 'options': s:reverse_list(['-m', '-d', '\t', '--with-nth', '1..4', '-n', '1', '--prompt', 'BTags> ', '--query', a:query, '--preview-window', '+{3}-/2'])}, args)
-  "catch
-    "return s:warn(v:exception)
-  "endtry
-"endfunction

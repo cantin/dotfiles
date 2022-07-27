@@ -13,7 +13,7 @@
   "javascript.suggestionActions.enabled": false,
   "yank.highlight.enable": false,
   "yank.priority": 1,
-  "solargraph.transport": "socket",
+  //"solargraph.transport": "socket",
   "translator.engines": [
     "bing",
     "google",
