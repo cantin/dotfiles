@@ -76,7 +76,7 @@ call plug#end()
 let g:matchparen_timeout=150
 
 " From coc.nvim. Turn hidden on if editing has issues.
-"set hidden
+set hidden
 set background=dark
 set lazyredraw
 
@@ -96,7 +96,7 @@ set signcolumn=number
 "set undofile
 set undodir=~/.vim/_undodir
 set undofile
-set undolevels=500 "maximum number of changes that can be undone
+set undolevels=2000 "maximum number of changes that can be undone
 
 "be able to C-] into definitions for any gem in your Gemfile
 set tags+=./gems.tags
@@ -272,21 +272,26 @@ nmap <silent> <leader>gd <Plug>(coc-definition)
 nmap <silent> <leader>gc <Plug>(coc-codeaction)
 nmap <silent> <leader>gy <Plug>(coc-type-definition)
 nmap <silent> <leader>gi <Plug>(coc-implementation)
+vnoremap <silent> <leader>gf <Plug>(coc-format-selected)
 nmap <silent> <leader>gr <Plug>(coc-references)
 nmap <silent> <leader>go :<c-u>CocOutline<cr>
 nmap <leader>rn <Plug>(coc-rename)
 " Press ctrl-e to complete the autocomplete
-imap <expr> <C-e> pumvisible() ? coc#_select_confirm() : "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand',''])\<CR>"
+imap <expr> <C-e> coc#pum#visible() ? coc#_select_confirm() : "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand',''])\<CR>"
+inoremap <expr> <c-j> coc#pum#visible() ? coc#pum#next(1) : "\<down>"
+inoremap <expr> <c-k> coc#pum#visible() ? coc#pum#prev(1) : "\<up>"
+inoremap <expr> <C-l> coc#pum#visible() ? coc#_select_confirm() : "\<right>"
+"inoremap <silent><expr> <c-e> coc#refresh()
 " Use <C-j> for select text for visual placeholder of snippet.
 vmap <C-j> <Plug>(coc-snippets-select)
 " Use <C-j> for jump to next placeholder, it's default of coc.nvim
 let g:coc_snippet_next = '<c-j>'
 " Use <C-k> for jump to previous placeholder, it's default of coc.nvim
 let g:coc_snippet_prev = '<c-k>'
-inoremap <expr> <cr> pumvisible() && coc#expandable() ? "\<C-y>" : "\<C-g>u\<CR>"
 inoremap <silent><expr> <d-i> coc#refresh()
-autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
+autocmd! CompleteDone * if coc#pum#visible() == 0 | pclose | endif
 autocmd FileType coctree nnoremap <buffer> q :q<cr>
+autocmd FileType vue vnoremap <buffer> == <Plug>(coc-format-selected)
 "coc-translator
 " popup
 nmap <Leader><Leader>p <Plug>(coc-translator-p)
@@ -336,6 +341,18 @@ xmap ic <Plug>(coc-classobj-i)
 omap ic <Plug>(coc-classobj-i)
 xmap ac <Plug>(coc-classobj-a)
 omap ac <Plug>(coc-classobj-a)
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
+" Prese tab to cleverTab when coc.nvim has no autocomplete
+"imap <expr> <TAB> coc#pum#visible() ? "\<C-N>" : "\<C-R>=CleverTab('omni')<CR><C-R>=CleverTab('keyword')<CR><C-R>=CleverTab('next')<CR>"
+inoremap <silent><expr> <TAB>
+\ coc#pum#visible() ? coc#pum#next(1):
+\ <SID>check_back_space() ?  "\<C-R>=CleverTab('omni')<CR><C-R>=CleverTab('keyword')<CR><C-R>=CleverTab('next')<CR>" :
+\ coc#refresh()
+" Press enter to complete the completion
+inoremap <silent><expr> <cr> coc#pum#visible() ? coc#_select_confirm() : "\<cr>"
 
 
 " Plugin scrooloose/nerdcommenter
@@ -536,9 +553,6 @@ autocmd FileType ruby nnoremap <buffer> <D-R> :RunRailsRunner<CR>
 " Map ctrl-x_ctrl-p to keyword completin in complete, so that it matches words in other buffers.
 inoremap <expr> <c-x><c-p> pumvisible() ? "\<c-e>\<c-p>" : "\<c-p>"
 
-" Prese tab to cleverTab when coc.nvim has no autocomplete
-imap <expr> <TAB> pumvisible() ? "\<C-N>" : "\<C-R>=CleverTab('omni')<CR><C-R>=CleverTab('keyword')<CR><C-R>=CleverTab('next')<CR>"
-
 " gb to alternative file
 noremap gb <c-^>
 noremap ]b :bn<cr>
@@ -654,11 +668,8 @@ nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
 inoremap <C-h> <left>
-inoremap <expr> <c-j> pumvisible() ? "\<C-n>" : "\<down>"
-inoremap <expr> <c-k> pumvisible() ? "\<C-p>" : "\<up>"
 "inoremap <C-j> <down>
 "inoremap <C-k> <up>
-inoremap <expr> <C-l> pumvisible() ? coc#_select_confirm() : "\<right>"
 
 " don't highlight search
 nnoremap <Leader><space> :nohlsearch<Enter>

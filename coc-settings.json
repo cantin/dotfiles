@@ -20,5 +20,7 @@
     "youdao",
     "haici"
   ],
-  "typescript.updateImportsOnFileMove.enable": false
+  "typescript.updateImportsOnFileMove.enable": false,
+  "suggest.noselect": true,
+  "suggest.selection": "first"
 }
