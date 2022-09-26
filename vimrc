@@ -265,6 +265,7 @@ nnoremap ç :<c-u>Jcd<cr>
 
 " Plugin coc.nvim
 " setting up extensions
+let g:coc_filetype_map = { "haml": "haml"}
 let g:coc_global_extensions = ["coc-snippets", "coc-tag", "coc-json", "coc-pairs", "coc-syntax", "coc-css", "coc-html", "coc-solargraph", "coc-tsserver", "coc-translator", "coc-sh", "coc-yank"]
 " Remap keys for gotos
 nmap <silent> <leader>gh :call CocActionAsync('highlight')<cr>
@@ -292,6 +293,7 @@ inoremap <silent><expr> <d-i> coc#refresh()
 autocmd! CompleteDone * if coc#pum#visible() == 0 | pclose | endif
 autocmd FileType coctree nnoremap <buffer> q :q<cr>
 autocmd FileType vue vnoremap <buffer> == <Plug>(coc-format-selected)
+autocmd BufRead,BufNewFile .*nvue set filetype=vue
 "coc-translator
 " popup
 nmap <Leader><Leader>p <Plug>(coc-translator-p)
@@ -411,6 +413,7 @@ let g:undotree_SetFocusWhenToggle = 1
 " Plugin vim-trailing-whitespace
 " \fw to clear up all trailing whitespace
 noremap <leader>fw :FixWhitespace<CR>
+noremap <leader>fW mf:%s/\r//g<cr>'f
 
 " Plugin nerdtree
 noremap <leader>n :NERDTreeToggle<CR>
@@ -879,3 +882,7 @@ function! s:mvimdiff(path = @+)
   echom(cmd)
   execute(cmd)
 endfunction
+
+command! RunSQL call <SID>RunCommandAsync('psql -f '. expand('%:p') . ' sql_test')
+au FileType sql nnoremap <buffer> <D-r> :RunSQL<CR>
+au FileType sql vnoremap <buffer> <D-r> :<c-u>call <SID>RunCommandAsync('psql -c "' . escape(VisualSelection(), '"') . '" sql_test')<cr>

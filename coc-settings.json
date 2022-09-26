@@ -22,5 +22,16 @@
   ],
   "typescript.updateImportsOnFileMove.enable": false,
   "suggest.noselect": true,
-  "suggest.selection": "first"
+  "suggest.selection": "first",
+  "tailwindCSS.includeLanguages": {
+    "plaintext": "html",
+    "haml": "haml"
+  },
+  "html-css-support.enabledLanguages": [
+    "html",
+    "haml"
+  ],
+  "html.filetypes": [
+    "html","handlebars","htmldjango","blade","haml"
+  ]
 }
